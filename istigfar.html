@@ -173,12 +173,12 @@ body.noar .ar, body.notr .tr, body.nobg .bg{display:none}
   .hero{padding-top:36px}
 }
 </style>
-<style id="zk-nav">.zk-home{flex:none;display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 12px 0 10px;border-radius:8px;border:1px solid var(--rule);background:var(--sheet);color:var(--ink);text-decoration:none;font-weight:600;font-size:15px;white-space:nowrap}.zk-home svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.zk-home:hover,.zk-flag:hover{border-color:var(--gold)}.zk-flag{flex:none;display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:8px;border:1px solid var(--rule);background:var(--sheet)}.zk-flag svg{width:24px;height:16px;border-radius:2px;box-shadow:0 0 0 1px rgba(0,0,0,.15)}@media (max-width:479px){.bar-title{display:none}.bar-in .sel{flex:1 1 auto;min-width:0;max-width:none}}</style>
+<style id="zk-nav">.bar-in .bar-title{display:none}.zk-home{flex:0 1 auto;min-width:0;max-width:min(52vw,340px);display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 12px 0 10px;border-radius:8px;border:1px solid var(--rule);background:var(--sheet);color:var(--ink);text-decoration:none;font-weight:600;font-size:15px;white-space:nowrap}.zk-home span{overflow:hidden;text-overflow:ellipsis}.zk-home svg{flex:none;width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.zk-home:hover,.zk-flag:hover{border-color:var(--gold)}.zk-flag{flex:none;display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:8px;border:1px solid var(--rule);background:var(--sheet)}.zk-flag svg{width:24px;height:16px;border-radius:2px;box-shadow:0 0 0 1px rgba(0,0,0,.15)}.bar-in .sel{flex:1 1 0;min-width:0}@media (max-width:479px){.bar-in .sel{max-width:none;min-width:84px}.zk-home{max-width:40vw}}</style>
 </head>
 <body>
 <header class="bar">
   <div class="bar-in">
-    <a class="zk-home" href="index.html" title="Начална страница"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11 12 4l8 7"/><path d="M6 9.5V20h4.5v-5h3v5H18V9.5"/></svg>Зикирь</a>
+    <a class="zk-home" id="zkHome" href="index.html" title="Зикирь – начална страница"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11 12 4l8 7"/><path d="M6 9.5V20h4.5v-5h3v5H18V9.5"/></svg><span>Зикирь</span></a>
     <a class="bar-title" href="#top">Молитви за опрощение</a>
     <select class="sel" id="jump" aria-label="Отиди на"></select>
     <button class="ib" id="focusBtn" aria-label="Молитва по молитва" title="Молитва по молитва">
@@ -394,6 +394,24 @@ fb.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].cli
 fb.addEventListener('touchend',e=>{if(tx==null)return;const dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;tx=null;if(Math.abs(dx)>70&&Math.abs(dx)>Math.abs(dy)*1.5){dx<0?$('#fNext').click():$('#fPrev').click();}});
 })();
 
+</script>
+<script id="zk-nav-js">
+(function(){
+  var a=document.getElementById('zkHome'), hero=document.getElementById('top');
+  if(!a||!hero) return;
+  var t=document.querySelector('.bar-title'), name=(t&&t.textContent.trim())||document.title;
+  var lab=a.querySelector('span'), ic=a.querySelector('svg');
+  var HOME=ic.innerHTML, BOOK='<path d="M5 5a2 2 0 0 1 2-2h12v14H7a2 2 0 0 0-2 2z"/><path d="M5 19a2 2 0 0 0 2 2h12v-4"/>';
+  function set(atStart){
+    if(atStart){a.href='index.html';lab.textContent='Зикирь';ic.innerHTML=HOME;a.title='Зикирь – начална страница';}
+    else{a.href='#top';lab.textContent=name;ic.innerHTML=BOOK;a.title=name+' – към началото';}
+  }
+  function check(){var r=hero.getBoundingClientRect();set(r.bottom>80);}
+  check();
+  window.addEventListener('scroll',check,{passive:true});
+  window.addEventListener('resize',check);
+  window.addEventListener('hashchange',function(){setTimeout(check,50);});
+})();
 </script>
 </body>
 </html>
