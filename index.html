@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Зикирь</title>
+<meta name="description" content="Мевлид-и Шериф, Рамазанска дюа, Молитви за опрощение, Саляту селям и Градините на Рая – с арабски текст, транскрипция и превод.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,600&family=Golos+Text:wght@400;500;600&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/* Layout: one centered column; calligraphic masthead, then a stacked list of collections, each tinted with its own app's accent */
+:root{
+  --paper:#F5F4F0; --sheet:#FFFFFF; --ink:#1C1F24; --muted:#60656E; --gold:#9A7A2C; --rule:#E0DDD5;
+  --c-mevlid:#21406A; --c-ramazan:#6A3F86; --c-istigfar:#2D4A7A; --c-salat:#7A3B2E; --c-gradinite:#3E6B35;
+  --serif:"Literata","PT Serif",Georgia,serif;
+  --sans:"Golos Text","PT Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --arf:"Amiri","Noto Naskh Arabic","Traditional Arabic",serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#111318; --sheet:#181B22; --ink:#E7E5DF; --muted:#A0A5AF; --gold:#D8B867; --rule:#2A2E37;
+    --c-mevlid:#9DB9E0; --c-ramazan:#C9A6E6; --c-istigfar:#9DB8E8; --c-salat:#E3A08F; --c-gradinite:#A9D29B;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#111318; --sheet:#181B22; --ink:#E7E5DF; --muted:#A0A5AF; --gold:#D8B867; --rule:#2A2E37;
+  --c-mevlid:#9DB9E0; --c-ramazan:#C9A6E6; --c-istigfar:#9DB8E8; --c-salat:#E3A08F; --c-gradinite:#A9D29B;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.55;
+  padding:env(safe-area-inset-top,0px) 16px env(safe-area-inset-bottom,0px)}
+.wrap{max-width:700px;margin:0 auto;padding-block:56px 56px}
+header{text-align:center;margin-bottom:44px}
+.ar{font-family:var(--arf);font-size:clamp(64px,16vw,96px);line-height:1.1;color:var(--gold);margin:0}
+h1{font-family:var(--serif);font-weight:600;font-size:clamp(34px,8vw,46px);line-height:1.1;margin:6px 0 12px;letter-spacing:.01em}
+.lead{margin:0 auto;color:var(--muted);max-width:46ch;text-wrap:balance}
+.verse{margin:22px auto 0;max-width:44ch;color:var(--muted);font-family:var(--serif);font-style:italic;font-size:16px}
+.verse b{display:block;font-family:var(--arf);font-style:normal;font-weight:400;font-size:24px;color:var(--ink);margin-bottom:4px}
+.list{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.app{--c:var(--gold);display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center;padding:18px 18px;
+  background:var(--sheet);border:1px solid var(--rule);border-radius:12px;color:var(--ink);text-decoration:none;transition:border-color .15s}
+.app:hover{border-color:var(--c)}
+.app:focus-visible{outline:2px solid var(--c);outline-offset:2px}
+.glyph{width:64px;height:56px;border-radius:12px;display:grid;place-items:center;font-family:var(--arf);font-size:18px;white-space:nowrap;line-height:1;
+  color:var(--c);background:color-mix(in srgb,var(--c) 12%,transparent)}
+.txt{min-width:0}
+.name{display:block;font-family:var(--serif);font-weight:600;font-size:20px;line-height:1.25}
+.desc{display:block;color:var(--muted);font-size:15px;margin-top:3px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.tag{font-size:12px;font-weight:500;letter-spacing:.03em;padding:2px 8px;border-radius:999px;border:1px solid var(--rule);color:var(--c)}
+.go{color:var(--muted)}
+.go svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.app:hover .go{color:var(--c)}
+.m{--c:var(--c-mevlid)} .r{--c:var(--c-ramazan)} .i{--c:var(--c-istigfar)} .s{--c:var(--c-salat)} .g{--c:var(--c-gradinite)}
+footer{margin-top:48px;text-align:center;color:var(--muted);font-size:14px}
+@media (max-width:440px){.go{display:none}.app{grid-template-columns:auto 1fr;gap:14px;padding:16px}.glyph{width:58px;height:50px;font-size:16px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="ar" lang="ar" dir="rtl">ذِكْر</p>
+    <h1>Зикирь</h1>
+    <p class="verse"><b lang="ar" dir="rtl">أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ</b>О, да, при споменаването на Аллах сърцата се успокояват. (Ер-Ра‘д, 28)</p>
+  </header>
+
+  <ul class="list">
+    <li><a class="app m" href="mevlid.html">
+      <span class="glyph" lang="ar">مولد</span>
+      <span class="txt"><span class="name">Мевлид-и Шериф</span>
+        <span class="desc">Поемата на Сюлейман Челеби – оригинален текст, транскрипция и превод</span>
+        <span class="tags"><span class="tag">Български</span><span class="tag">Türkçe</span></span></span>
+      <span class="go"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
+    </a></li>
+    <li><a class="app r" href="ramazanskadua.html">
+      <span class="glyph" lang="ar">دعاء</span>
+      <span class="txt"><span class="name">Рамазанска дюа</span>
+        <span class="desc">Дюа за месец Рамазан</span></span>
+      <span class="go"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
+    </a></li>
+    <li><a class="app i" href="istigfar.html">
+      <span class="glyph" lang="ar">استغفار</span>
+      <span class="txt"><span class="name">Молитви за опрощение</span>
+        <span class="desc">Седемдесетте молитви на имам Хасен ел-Басри</span></span>
+      <span class="go"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
+    </a></li>
+    <li><a class="app s" href="salatsalam.html">
+      <span class="glyph" lang="ar">صلاة</span>
+      <span class="txt"><span class="name">Саляту селям</span>
+        <span class="desc">Благослов и приветствие към Пратеника Мухаммед ﷺ</span></span>
+      <span class="go"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
+    </a></li>
+    <li><a class="app g" href="gradinite.html">
+      <span class="glyph" lang="ar">رياض</span>
+      <span class="txt"><span class="name">Градините на Рая</span>
+        <span class="desc">Четиридесетте градини на имам Юсуф ен-Небхани</span></span>
+      <span class="go"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
+    </a></li>
+  </ul>
+
+</div>
+</body>
+</html>
