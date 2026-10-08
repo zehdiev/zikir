@@ -1,6 +1,6 @@
 /* Зикирь – service worker за работа без интернет.
-   Този файл се генерира автоматично. Версия: 4125811bc8 */
-const VERSION = 'zikir-4125811bc8';
+   Този файл се генерира автоматично. Версия: 35a05c7e91 */
+const VERSION = 'zikir-35a05c7e91';
 const FILES = [
  "./",
  "index.html",
