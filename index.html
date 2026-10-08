@@ -72,6 +72,7 @@ footer{margin-top:48px;text-align:center;color:var(--muted);font-size:14px}
 @media (max-width:440px){.go{display:none}.app{grid-template-columns:auto 1fr;gap:14px;padding:16px}.glyph{width:58px;height:50px;font-size:16px}}
 
 /* install + offline */
+[hidden]{display:none!important}
 .inst{display:grid;gap:10px;justify-items:center;margin:-16px 0 36px;text-align:center}
 .inst-btn{display:inline-flex;align-items:center;gap:10px;padding:12px 20px;border-radius:999px;border:0;background:var(--ink);color:var(--paper);font:600 16px var(--sans);cursor:pointer}
 .inst-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
@@ -156,13 +157,27 @@ footer{margin-top:48px;text-align:center;color:var(--muted);font-size:14px}
 (function(){
   var btn=document.getElementById('instBtn'), how=document.getElementById('how'),
       off=document.getElementById('off'), offTxt=document.getElementById('offTxt');
-  var standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+  function isApp(){
+    return ['standalone','fullscreen','minimal-ui','window-controls-overlay'].some(function(m){return matchMedia('(display-mode: '+m+')').matches;})
+      ||navigator.standalone===true||document.referrer.indexOf('android-app://')===0;
+  }
+  var standalone=isApp();
+  var KEY='zikir:installed';
+  function wasInstalled(){try{return localStorage.getItem(KEY)==='1';}catch(e){return false;}}
+  function markInstalled(){try{localStorage.setItem(KEY,'1');}catch(e){}}
   var ua=navigator.userAgent, ios=/iphone|ipad|ipod/i.test(ua)||(/macintosh/i.test(ua)&&'ontouchend' in document);
   var deferred=null;
 
-  if(!standalone) btn.hidden=false;
-  addEventListener('beforeinstallprompt',function(e){e.preventDefault();deferred=e;btn.hidden=false;});
-  addEventListener('appinstalled',function(){btn.hidden=true;how.hidden=true;deferred=null;});
+  if(standalone) markInstalled();
+  if(!standalone&&!wasInstalled()) btn.hidden=false;
+  addEventListener('beforeinstallprompt',function(e){
+    e.preventDefault(); deferred=e;
+    // the browser offers install only when the app is not installed
+    try{localStorage.removeItem(KEY);}catch(_){}
+    if(!isApp()) btn.hidden=false;
+  });
+  addEventListener('appinstalled',function(){markInstalled();btn.hidden=true;how.hidden=true;deferred=null;});
+  matchMedia('(display-mode: standalone)').addEventListener&&matchMedia('(display-mode: standalone)').addEventListener('change',function(e){if(e.matches){btn.hidden=true;how.hidden=true;}});
 
   btn.addEventListener('click',function(){
     if(deferred){deferred.prompt();deferred.userChoice.finally(function(){deferred=null;});return;}
