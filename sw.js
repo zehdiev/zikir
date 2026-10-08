@@ -1,6 +1,8 @@
-/* Зикирь – service worker за работа без интернет.
-   Този файл се генерира автоматично. Версия: 1eafc0bc1d */
-const VERSION = 'zikir-1eafc0bc1d';
+/* Зикирь – service worker.
+   В браузъра нищо не се тегли предварително. Пълното изтегляне за офлайн
+   става само в инсталираното приложение (страницата праща съобщение 'download').
+   Този файл се генерира автоматично. Версия: 6f68d159db */
+const VERSION = 'zikir-6f68d159db';
 const FILES = [
  "./",
  "index.html",
@@ -96,53 +98,75 @@ const FILES = [
  "icons/icon-512.png",
  "manifest.webmanifest"
 ];
+const MARK = '__offline_ready__';   // marks a fully downloaded cache
 
-let progress = { done: 0, total: FILES.length };
+let running = null;
 
-async function cacheAll() {
+async function isFull(cache) { return !!(await cache.match(MARK)); }
+
+async function oldCaches() {
+  return (await caches.keys()).filter(k => k.startsWith('zikir-') && k !== VERSION);
+}
+
+async function download(refresh) {
   const cache = await caches.open(VERSION);
-  const old = (await caches.keys()).filter(k => k.startsWith('zikir-') && k !== VERSION);
-  progress = { done: 0, total: FILES.length };
+  const old = await oldCaches();
   for (const f of FILES) {
-    const req = new Request(f, { cache: 'no-cache' });
+    if (!refresh && await cache.match(f)) continue;
     let ok = false;
     for (let i = 0; i < 3 && !ok; i++) {
       try {
-        const res = await fetch(req);
+        const res = await fetch(new Request(f, { cache: 'no-cache' }));
         if (res.ok) { await cache.put(f, res); ok = true; }
       } catch (e) { /* retry */ }
     }
     if (!ok) {
-      // fall back to a copy from the previous version, if there is one
       for (const k of old) {
         const hit = await (await caches.open(k)).match(f);
         if (hit) { await cache.put(f, hit); ok = true; break; }
       }
     }
-    if (ok) progress.done++;
   }
+  let all = true;
+  for (const f of FILES) if (!(await cache.match(f))) { all = false; break; }
+  if (all) await cache.put(MARK, new Response('1'));
+  return all;
+}
+
+function startDownload(refresh) {
+  if (!running) running = download(refresh).finally(() => { running = null; });
+  return running;
 }
 
 self.addEventListener('install', e => {
-  e.waitUntil(cacheAll().then(() => self.skipWaiting()));
+  e.waitUntil((async () => {
+    // an installed app that was already offline-ready gets the new version in full
+    let wasFull = false;
+    for (const k of await oldCaches()) if (await isFull(await caches.open(k))) { wasFull = true; break; }
+    if (wasFull) await download(true);
+    await self.skipWaiting();
+  })());
 });
 
 self.addEventListener('activate', e => {
   e.waitUntil((async () => {
-    for (const k of await caches.keys()) if (k.startsWith('zikir-') && k !== VERSION) await caches.delete(k);
+    for (const k of await oldCaches()) await caches.delete(k);
     await self.clients.claim();
   })());
 });
 
-self.addEventListener('message', async e => {
-  if (e.data && e.data.type === 'status') {
-    let done = progress.done;
-    if (done < FILES.length) {
+self.addEventListener('message', e => {
+  const d = e.data || {};
+  if (d.type === 'download') {
+    e.waitUntil(startDownload(false));
+  } else if (d.type === 'status') {
+    e.waitUntil((async () => {
       const cache = await caches.open(VERSION);
-      done = 0;
+      let done = 0;
       for (const f of FILES) if (await cache.match(f)) done++;
-    }
-    e.ports[0] && e.ports[0].postMessage({ done, total: FILES.length });
+      const full = await isFull(cache);
+      e.ports[0] && e.ports[0].postMessage({ done, total: FILES.length, full, busy: !!running });
+    })());
   }
 });
 
@@ -154,17 +178,18 @@ self.addEventListener('fetch', e => {
   e.respondWith((async () => {
     const cache = await caches.open(VERSION);
     const hit = await cache.match(req, { ignoreSearch: true });
-    const net = fetch(req).then(res => {
-      if (res.ok && res.type === 'basic') cache.put(req, res.clone());
-      return res;
-    }).catch(() => null);
-    if (hit) { e.waitUntil(net); return hit; }
-    const res = await net;
-    if (res) return res;
-    if (req.mode === 'navigate') {
-      const home = await cache.match('index.html');
-      if (home) return home;
+    if (!hit) {
+      // browser mode (nothing downloaded): plain network
+      try { return await fetch(req); }
+      catch (err) {
+        if (req.mode === 'navigate') { const home = await cache.match('index.html'); if (home) return home; }
+        return new Response('Няма връзка с интернет.', { status: 503, headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
+      }
     }
-    return new Response('Няма връзка с интернет.', { status: 503, headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
+    // offline copy exists: answer from it, refresh it in the background
+    e.waitUntil(fetch(req).then(res => {
+      if (res.ok && res.type === 'basic') return cache.put(req, res);
+    }).catch(() => {}));
+    return hit;
   })());
 });

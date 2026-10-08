@@ -391,6 +391,6 @@ fb.addEventListener('touchend',e=>{if(tx==null)return;const dx=e.changedTouches[
   window.addEventListener('hashchange',function(){setTimeout(check,50);});
 })();
 </script>
-<script>if('serviceWorker' in navigator&&location.protocol!=='file:'){addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
+<script>(function(){if(!('serviceWorker' in navigator)||location.protocol==='file:')return;var app=['standalone','fullscreen','minimal-ui'].some(function(m){return matchMedia('(display-mode: '+m+')').matches;})||navigator.standalone===true;addEventListener('load',function(){navigator.serviceWorker.register('sw.js').then(function(){if(app)navigator.serviceWorker.ready.then(function(r){r.active&&r.active.postMessage({type:'download'});});}).catch(function(){});});})();</script>
 </body>
 </html>

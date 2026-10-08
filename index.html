@@ -215,23 +215,30 @@ footer{margin-top:48px;text-align:center;color:var(--muted);font-size:14px}
 
   if(!('serviceWorker' in navigator)||location.protocol==='file:') return;
   function show(cls,txt){off.hidden=false;off.className='off '+cls;offTxt.textContent=txt;}
-  function ask(reg){
-    var w=reg.active||reg.waiting||reg.installing; if(!w) return;
-    var ch=new MessageChannel();
-    ch.port1.onmessage=function(e){
-      var d=e.data;
-      if(d.done>=d.total){show('ok','Готово – работи и без интернет');}
-      else{show('busy','Изтегляне за офлайн… '+Math.round(d.done*100/d.total)+'%');setTimeout(function(){ask(reg);},1500);}
-    };
-    try{w.postMessage({type:'status'},[ch.port2]);}catch(e){}
+  var asked=false;
+  function poll(){
+    navigator.serviceWorker.ready.then(function(reg){
+      var w=reg.active; if(!w) return setTimeout(poll,1000);
+      if(!asked){w.postMessage({type:'download'});asked=true;}
+      var ch=new MessageChannel();
+      ch.port1.onmessage=function(e){
+        var d=e.data;
+        if(d.full){show('ok','Готово – работи и без интернет');return;}
+        show('busy','Изтегляне за офлайн… '+Math.round(d.done*100/d.total)+'%');
+        if(!d.busy) asked=false;   // restart if the download stopped
+        setTimeout(poll,1500);
+      };
+      w.postMessage({type:'status'},[ch.port2]);
+    });
   }
   addEventListener('load',function(){
-    navigator.serviceWorker.register('sw.js').then(function(reg){
-      show('busy','Подготовка за офлайн…');
-      ask(reg);
-      reg.addEventListener('updatefound',function(){setTimeout(function(){ask(reg);},500);});
+    navigator.serviceWorker.register('sw.js').then(function(){
+      // offline download only in the installed app
+      if(isApp()){show('busy','Подготовка за офлайн…');poll();}
     }).catch(function(){});
   });
+  var mq=matchMedia('(display-mode: standalone)');
+  mq.addEventListener&&mq.addEventListener('change',function(e){if(e.matches)poll();});
 })();
 </script>
 </body>
