@@ -1,6 +1,6 @@
 /* Зикирь – service worker за работа без интернет.
-   Този файл се генерира автоматично. Версия: 9eb6dcb315 */
-const VERSION = 'zikir-9eb6dcb315';
+   Този файл се генерира автоматично. Версия: 1eafc0bc1d */
+const VERSION = 'zikir-1eafc0bc1d';
 const FILES = [
  "./",
  "index.html",
@@ -9,11 +9,14 @@ const FILES = [
  "gradinite.html",
  "hizb.html",
  "hizb_new.html",
+ "irshad.html",
  "istigfar.html",
  "mevlid.html",
  "mevlid_tr.html",
  "ramazanskadua.html",
  "salatsalam.html",
+ "salevati.html",
+ "tainite.html",
  "fonts/files/alegreya-cyrillic-400-italic.woff2",
  "fonts/files/alegreya-cyrillic-400-normal.woff2",
  "fonts/files/alegreya-cyrillic-500-normal.woff2",
