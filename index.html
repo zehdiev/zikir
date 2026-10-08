@@ -4,10 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Зикирь</title>
-<meta name="description" content="Мевлид-и Шериф, Рамазанска дюа, Молитви за опрощение, Саляту селям и Градините на Рая – с арабски текст, транскрипция и превод.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,600&family=Golos+Text:wght@400;500;600&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<meta name="description" content="Мевлид-и Шериф, молитви и дуи – с арабски текст, транскрипция и превод. Работи и без интернет.">
+<link rel="stylesheet" href="fonts/fonts.css">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#F5F4F0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111318" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Зикирь">
+
 <style>
 /* Layout: one centered column; calligraphic masthead, then a stacked list of collections, each tinted with its own app's accent */
 :root{
@@ -63,7 +70,22 @@ div.app{grid-template-columns:auto 1fr}div.app:hover{border-color:var(--rule)}
 .vers a:hover{border-color:var(--c)}.vers a:focus-visible{outline:2px solid var(--c);outline-offset:2px}
 footer{margin-top:48px;text-align:center;color:var(--muted);font-size:14px}
 @media (max-width:440px){.go{display:none}.app{grid-template-columns:auto 1fr;gap:14px;padding:16px}.glyph{width:58px;height:50px;font-size:16px}}
-@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* install + offline */
+.inst{display:grid;gap:10px;justify-items:center;margin:-16px 0 36px;text-align:center}
+.inst-btn{display:inline-flex;align-items:center;gap:10px;padding:12px 20px;border-radius:999px;border:0;background:var(--ink);color:var(--paper);font:600 16px var(--sans);cursor:pointer}
+.inst-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.inst-btn:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.off{display:inline-flex;align-items:center;gap:8px;font-size:14px;color:var(--muted)}
+.off i{width:8px;height:8px;border-radius:50%;background:var(--rule);flex:none}
+.off.ok i{background:var(--c-gradinite)}
+.off.busy i{background:var(--gold);animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.3}}
+.how{max-width:420px;background:var(--sheet);border:1px solid var(--rule);border-radius:12px;padding:14px 16px;text-align:left;font-size:15px}
+.how p{margin:0 0 6px;font-weight:600}
+.how ol{margin:0;padding-left:20px;display:grid;gap:4px;color:var(--ink)}
+.how b{font-weight:600}
+@media (prefers-reduced-motion:reduce){.off.busy i{animation:none}*{transition:none!important}}
 </style>
 </head>
 <body>
@@ -73,6 +95,15 @@ footer{margin-top:48px;text-align:center;color:var(--muted);font-size:14px}
     <h1>Зикирь</h1>
     <p class="verse"><b lang="ar" dir="rtl">أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ</b>О, да, при споменаването на Аллах сърцата се успокояват. (Ер-Ра‘д, 28)</p>
   </header>
+
+  <div class="inst" id="inst">
+    <button class="inst-btn" id="instBtn" type="button" hidden>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M12 7v7M9 11.5l3 3 3-3M10.5 18.5h3"/></svg>
+      Инсталирай на телефона
+    </button>
+    <div class="how" id="how" hidden></div>
+    <span class="off" id="off" hidden><i></i><span id="offTxt"></span></span>
+  </div>
 
   <ul class="list">
     <li><a class="app m" href="mevlid.html">
@@ -121,5 +152,48 @@ footer{margin-top:48px;text-align:center;color:var(--muted);font-size:14px}
   </ul>
 
 </div>
+<script>
+(function(){
+  var btn=document.getElementById('instBtn'), how=document.getElementById('how'),
+      off=document.getElementById('off'), offTxt=document.getElementById('offTxt');
+  var standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+  var ua=navigator.userAgent, ios=/iphone|ipad|ipod/i.test(ua)||(/macintosh/i.test(ua)&&'ontouchend' in document);
+  var deferred=null;
+
+  if(!standalone) btn.hidden=false;
+  addEventListener('beforeinstallprompt',function(e){e.preventDefault();deferred=e;btn.hidden=false;});
+  addEventListener('appinstalled',function(){btn.hidden=true;how.hidden=true;deferred=null;});
+
+  btn.addEventListener('click',function(){
+    if(deferred){deferred.prompt();deferred.userChoice.finally(function(){deferred=null;});return;}
+    if(ios){
+      how.innerHTML='<p>Инсталиране на iPhone / iPad</p><ol><li>Отвори тази страница в <b>Safari</b>.</li><li>Натисни бутона <b>Сподели</b> (квадратче със стрелка нагоре).</li><li>Избери <b>„Добави към началния екран“</b> и потвърди с <b>„Добави“</b>.</li></ol>';
+    }else{
+      how.innerHTML='<p>Инсталиране</p><ol><li>Отвори менюто на браузъра (<b>⋮</b> горе вдясно).</li><li>Избери <b>„Инсталиране на приложението“</b> или <b>„Добавяне към началния екран“</b>.</li></ol>';
+    }
+    how.hidden=!how.hidden;
+  });
+
+  if(!('serviceWorker' in navigator)||location.protocol==='file:') return;
+  function show(cls,txt){off.hidden=false;off.className='off '+cls;offTxt.textContent=txt;}
+  function ask(reg){
+    var w=reg.active||reg.waiting||reg.installing; if(!w) return;
+    var ch=new MessageChannel();
+    ch.port1.onmessage=function(e){
+      var d=e.data;
+      if(d.done>=d.total){show('ok','Готово – работи и без интернет');}
+      else{show('busy','Изтегляне за офлайн… '+Math.round(d.done*100/d.total)+'%');setTimeout(function(){ask(reg);},1500);}
+    };
+    try{w.postMessage({type:'status'},[ch.port2]);}catch(e){}
+  }
+  addEventListener('load',function(){
+    navigator.serviceWorker.register('sw.js').then(function(reg){
+      show('busy','Подготовка за офлайн…');
+      ask(reg);
+      reg.addEventListener('updatefound',function(){setTimeout(function(){ask(reg);},500);});
+    }).catch(function(){});
+  });
+})();
+</script>
 </body>
 </html>
