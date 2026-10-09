@@ -8,7 +8,7 @@
 <style>
 :root{
   --paper:#F4F6F2; --sheet:#FFFFFF; --ink:#18211F; --muted:#5D6966; --deep:#1D5B53; --gold:#9A7428; --rule:#DCE2DD; --wash:#E9EFEA;
-  --s-ar:1; --s-tr:1; --s-bg:1;
+  --s-ar:1.2; --s-tr:1; --s-bg:1;
   --serif:"Literata", "Noto Serif", Georgia, serif;
   --tr:"Noto Serif", "Literata", Georgia, serif;
   --sans:"Golos Text", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -357,7 +357,7 @@ function applyOpt(){
 }
 document.querySelectorAll('[data-opt]').forEach(c=>{c.checked=opt[c.dataset.opt];c.onchange=()=>{opt[c.dataset.opt]=c.checked;store.set('opt',opt);applyOpt();if(F.open)renderF();};});
 applyOpt();
-const sz=Object.assign({ar:0,tr:0,bg:0},store.get('sz')||{});
+const sz=Object.assign({ar:2,tr:0,bg:0},store.get('sz')||{});
 function applySz(){
   document.querySelectorAll('.step').forEach(s=>{const k=s.dataset.k;const f=Math.round((1+sz[k]*0.1)*100);s.querySelector('output').textContent=f+'%';document.documentElement.style.setProperty('--s-'+k,(1+sz[k]*0.1).toFixed(2));});
 }

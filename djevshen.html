@@ -8,7 +8,7 @@
 <style>
 :root{
   --paper:#F7F4F5; --sheet:#FFFFFF; --ink:#211A1D; --muted:#675C61; --deep:#9C1A5E; --gold:#9A7430; --rule:#E7DEE2; --wash:#F3E8ED; --pink:#D0127B;
-  --s-ar:1; --s-tr:1; --s-bg:1;
+  --s-ar:1.2; --s-tr:1; --s-bg:1;
   --serif:"Literata", "Noto Serif", Georgia, serif;
   --tr:"Noto Serif", "Literata", Georgia, serif;
   --sans:"Golos Text", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -327,7 +327,7 @@ document.addEventListener('click',e=>{if(panel.classList.contains('open')&&!pane
 const opt=Object.assign({ar:true,bg:true,x:true},store.get('opt')||{});
 function applyOpt(){document.body.classList.toggle('noar',!opt.ar);document.body.classList.toggle('nobg',!opt.bg);document.body.classList.toggle('nox',!opt.x);}
 document.querySelectorAll('[data-opt]').forEach(c=>{c.checked=opt[c.dataset.opt];c.onchange=()=>{opt[c.dataset.opt]=c.checked;store.set('opt',opt);applyOpt();};});applyOpt();
-const sz=Object.assign({ar:0,bg:0},store.get('sz')||{});
+const sz=Object.assign({ar:2,bg:0},store.get('sz')||{});
 function applySz(){document.querySelectorAll('.step').forEach(s=>{const k=s.dataset.k;s.querySelector('output').textContent=Math.round((1+sz[k]*0.1)*100)+'%';document.documentElement.style.setProperty('--s-'+k,(1+sz[k]*0.1).toFixed(2));});}
 document.querySelectorAll('.step button').forEach(b=>b.onclick=()=>{const k=b.closest('.step').dataset.k;sz[k]=Math.max(-4,Math.min(8,sz[k]+ +b.dataset.d));store.set('sz',sz);applySz();});applySz();
 let theme=store.get('theme')||'auto';

@@ -8,7 +8,7 @@
 <style>
 :root{
   --paper:#F6F4F1; --sheet:#FFFFFF; --ink:#211C1A; --muted:#6B625C; --deep:#7A3B2E; --gold:#97702F; --rule:#E4DED7; --wash:#F1E9E3;
-  --s-ar:1; --s-tr:1; --s-bg:1;
+  --s-ar:1.2; --s-tr:1; --s-bg:1;
   --serif:"Literata", "Noto Serif", Georgia, serif;
   --tr:"Noto Serif", "Literata", Georgia, serif;
   --sans:"Golos Text", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -358,7 +358,7 @@ function applyOpt(){
 }
 document.querySelectorAll('[data-opt]').forEach(c=>{c.checked=opt[c.dataset.opt];c.onchange=()=>{opt[c.dataset.opt]=c.checked;store.set('opt',opt);applyOpt();};});
 applyOpt();
-const sz=Object.assign({ar:0,tr:0,bg:0},store.get('sz')||{});
+const sz=Object.assign({ar:2,tr:0,bg:0},store.get('sz')||{});
 function applySz(){document.querySelectorAll('.step').forEach(s=>{const k=s.dataset.k;s.querySelector('output').textContent=Math.round((1+sz[k]*0.1)*100)+'%';document.documentElement.style.setProperty('--s-'+k,(1+sz[k]*0.1).toFixed(2));});}
 document.querySelectorAll('.step button').forEach(b=>b.onclick=()=>{const k=b.closest('.step').dataset.k;sz[k]=Math.max(-4,Math.min(8,sz[k]+ +b.dataset.d));store.set('sz',sz);applySz();});
 applySz();
