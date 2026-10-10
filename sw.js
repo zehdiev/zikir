@@ -1,8 +1,8 @@
 /* Зикирь – service worker.
    В браузъра нищо не се тегли предварително. Пълното изтегляне за офлайн
    става само в инсталираното приложение (страницата праща съобщение 'download').
-   Този файл се генерира автоматично. Версия: f3c47bdeef */
-const VERSION = 'zikir-f3c47bdeef';
+   Този файл се генерира автоматично. Версия: 456389c371 */
+const VERSION = 'zikir-456389c371';
 const FILES = [
  "./",
  "index.html",
@@ -99,7 +99,8 @@ const FILES = [
  "icons/apple-touch-icon.png",
  "icons/icon-192.png",
  "icons/icon-512.png",
- "manifest.webmanifest"
+ "manifest.webmanifest",
+ "search.json"
 ];
 const MARK = '__offline_ready__';   // marks a fully downloaded cache
 
