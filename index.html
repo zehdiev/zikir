@@ -19,7 +19,7 @@
 /* Layout: one centered column; calligraphic masthead, then a stacked list of collections, each tinted with its own app's accent */
 :root{
   --paper:#F5F4F0; --sheet:#FFFFFF; --ink:#1C1F24; --muted:#60656E; --gold:#9A7A2C; --rule:#E0DDD5;
-  --c-mevlid:#21406A; --c-ramazan:#6A3F86; --c-istigfar:#2D4A7A; --c-salat:#7A3B2E; --c-gradinite:#3E6B35; --c-kumayl:#4B3B78; --c-hizb:#2F5D62; --c-abdest:#1F6480; --c-irshad:#7A4A2A; --c-tainite:#5A4632; --c-salevati:#2E6B3F; --c-djevshen:#9C1A5E; --c-lek:#2F6B52; --c-mech:#3B4A6B;
+  --c-mevlid:#21406A; --c-ramazan:#6A3F86; --c-istigfar:#2D4A7A; --c-salat:#7A3B2E; --c-gradinite:#3E6B35; --c-kumayl:#4B3B78; --c-hizb:#2F5D62; --c-abdest:#1F6480; --c-irshad:#7A4A2A; --c-tainite:#5A4632; --c-salevati:#2E6B3F; --c-djevshen:#9C1A5E; --c-lek:#2F6B52; --c-mech:#3B4A6B; --c-sah:#556226;
   --serif:"Literata","PT Serif",Georgia,serif;
   --sans:"Golos Text","PT Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
   --arf:"Amiri","Noto Naskh Arabic","Traditional Arabic",serif;
@@ -27,13 +27,13 @@
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
     --paper:#111318; --sheet:#181B22; --ink:#E7E5DF; --muted:#A0A5AF; --gold:#D8B867; --rule:#2A2E37;
-    --c-mevlid:#9DB9E0; --c-ramazan:#C9A6E6; --c-istigfar:#9DB8E8; --c-salat:#E3A08F; --c-gradinite:#A9D29B; --c-kumayl:#B9A6EA; --c-hizb:#93C6CB; --c-abdest:#8CC7DD; --c-irshad:#E0B08C; --c-tainite:#D9BE9C; --c-salevati:#9DD0AA; --c-djevshen:#F08BBE; --c-lek:#93CDB2; --c-mech:#A9B8DA;
+    --c-mevlid:#9DB9E0; --c-ramazan:#C9A6E6; --c-istigfar:#9DB8E8; --c-salat:#E3A08F; --c-gradinite:#A9D29B; --c-kumayl:#B9A6EA; --c-hizb:#93C6CB; --c-abdest:#8CC7DD; --c-irshad:#E0B08C; --c-tainite:#D9BE9C; --c-salevati:#9DD0AA; --c-djevshen:#F08BBE; --c-lek:#93CDB2; --c-mech:#A9B8DA; --c-sah:#C3CF8E;
     color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
   --paper:#111318; --sheet:#181B22; --ink:#E7E5DF; --muted:#A0A5AF; --gold:#D8B867; --rule:#2A2E37;
-  --c-mevlid:#9DB9E0; --c-ramazan:#C9A6E6; --c-istigfar:#9DB8E8; --c-salat:#E3A08F; --c-gradinite:#A9D29B; --c-kumayl:#B9A6EA; --c-hizb:#93C6CB; --c-abdest:#8CC7DD; --c-irshad:#E0B08C; --c-tainite:#D9BE9C; --c-salevati:#9DD0AA; --c-djevshen:#F08BBE; --c-lek:#93CDB2; --c-mech:#A9B8DA;
+  --c-mevlid:#9DB9E0; --c-ramazan:#C9A6E6; --c-istigfar:#9DB8E8; --c-salat:#E3A08F; --c-gradinite:#A9D29B; --c-kumayl:#B9A6EA; --c-hizb:#93C6CB; --c-abdest:#8CC7DD; --c-irshad:#E0B08C; --c-tainite:#D9BE9C; --c-salevati:#9DD0AA; --c-djevshen:#F08BBE; --c-lek:#93CDB2; --c-mech:#A9B8DA; --c-sah:#C3CF8E;
   color-scheme:dark;
 }
 *,*::before,*::after{box-sizing:border-box}
@@ -62,7 +62,7 @@ h1{font-family:var(--serif);font-weight:600;font-size:clamp(34px,8vw,46px);line-
 .go{color:var(--muted)}
 .go svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .app:hover .go{color:var(--c)}
-.m{--c:var(--c-mevlid)} .r{--c:var(--c-ramazan)} .i{--c:var(--c-istigfar)} .s{--c:var(--c-salat)} .g{--c:var(--c-gradinite)} .k{--c:var(--c-kumayl)} .h{--c:var(--c-hizb)} .a{--c:var(--c-abdest)} .ir{--c:var(--c-irshad)} .tn{--c:var(--c-tainite)} .sv{--c:var(--c-salevati)} .dj{--c:var(--c-djevshen)} .lk{--c:var(--c-lek)} .mc{--c:var(--c-mech)}
+.m{--c:var(--c-mevlid)} .r{--c:var(--c-ramazan)} .i{--c:var(--c-istigfar)} .s{--c:var(--c-salat)} .g{--c:var(--c-gradinite)} .k{--c:var(--c-kumayl)} .h{--c:var(--c-hizb)} .a{--c:var(--c-abdest)} .ir{--c:var(--c-irshad)} .tn{--c:var(--c-tainite)} .sv{--c:var(--c-salevati)} .dj{--c:var(--c-djevshen)} .lk{--c:var(--c-lek)} .mc{--c:var(--c-mech)} .sh{--c:var(--c-sah)}
 div.app{grid-template-columns:auto 1fr}div.app:hover{border-color:var(--rule)}
 .vers{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 .vers a{display:inline-flex;flex-direction:column;padding:8px 14px;border-radius:10px;border:1px solid var(--rule);text-decoration:none;color:var(--ink);font-weight:500;font-size:15px;line-height:1.3;transition:border-color .15s}
@@ -240,6 +240,12 @@ body.searching .list,body.searching .inst{display:none}
         <span class="desc">Магията и уроките и лечението им с рукя – от Уахид Абдусселям Бали</span></span>
       <span class="go"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
     </a></li>
+    <li><a class="app sh" href="sahifa.html">
+      <span class="glyph" lang="ar">صحيفة</span>
+      <span class="txt"><span class="name">Съвършената Сахифа</span>
+        <span class="desc">54-те молитви на имам Зайн ал-Абидин – арабски текст с хараке и превод на Александър Веселинов – Шамсуддин</span></span>
+      <span class="go"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
+    </a></li>
   </ul>
 
 </div>
@@ -322,7 +328,7 @@ body.searching .list,body.searching .inst{display:none}
 </script>
 <script>
 (function(){
-  var CLS={mevlid:'m',ramazanskadua:'r',istigfar:'i',salatsalam:'s',gradinite:'g',dua_kumail:'k',hizb:'h',hizb_new:'h',abdest:'a',irshad:'ir',tainite:'tn',salevati:'sv',djevshen:'dj',lekarstva:'lk',mechsreshtumagiite:'mc'};
+  var CLS={mevlid:'m',ramazanskadua:'r',istigfar:'i',salatsalam:'s',gradinite:'g',dua_kumail:'k',hizb:'h',hizb_new:'h',abdest:'a',irshad:'ir',tainite:'tn',salevati:'sv',djevshen:'dj',lekarstva:'lk',mechsreshtumagiite:'mc',sahifa:'sh'};
   var q=document.getElementById('q'),qx=document.getElementById('qx'),sin=document.getElementById('sinBtn'),lbl=document.getElementById('sinLbl'),
       chips=document.getElementById('chips'),stat=document.getElementById('sstat'),res=document.getElementById('res');
   var DB=null,loading=null,sel=null,shown={},timer=0;

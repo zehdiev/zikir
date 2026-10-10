@@ -1,8 +1,8 @@
 /* Зикирь – service worker.
    В браузъра нищо не се тегли предварително. Пълното изтегляне за офлайн
    става само в инсталираното приложение (страницата праща съобщение 'download').
-   Този файл се генерира автоматично. Версия: 456389c371 */
-const VERSION = 'zikir-456389c371';
+   Този файл се генерира автоматично. Версия: 67e563fb8f */
+const VERSION = 'zikir-67e563fb8f';
 const FILES = [
  "./",
  "index.html",
@@ -19,6 +19,7 @@ const FILES = [
  "mevlid.html",
  "mevlid_tr.html",
  "ramazanskadua.html",
+ "sahifa.html",
  "salatsalam.html",
  "salevati.html",
  "tainite.html",
