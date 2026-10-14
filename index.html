@@ -123,6 +123,24 @@ footer{margin-top:48px;text-align:center;color:var(--muted);font-size:14px}
 .hit mark{background:color-mix(in srgb,var(--gold) 30%,transparent);color:inherit;border-radius:2px;padding:0 1px}
 .more{margin:8px 0 0;padding:8px 14px;border-radius:999px;border:1px solid var(--rule);background:none;color:var(--c);font:500 14px var(--sans);cursor:pointer}
 body.searching .list,body.searching .inst{display:none}
+/* saved */
+.srow{display:flex;align-items:center;gap:8px;margin-top:10px}
+.srow .sin{margin:0}
+.savb{margin-left:auto;display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;border:1px solid var(--rule);background:var(--sheet);color:var(--ink);font:600 15px var(--sans);cursor:pointer}
+.savb svg{width:17px;height:17px;stroke:var(--gold);fill:none;stroke-width:1.8;stroke-linejoin:round}
+.savb.has svg{fill:var(--gold)}
+.savb b{font-weight:600;color:var(--muted)}
+.savb b:not(:empty)::before{content:"· "}
+.savb[aria-expanded="true"]{border-color:var(--gold);background:color-mix(in srgb,var(--gold) 12%,var(--sheet))}
+.savb:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+body.saving .list,body.saving .inst,body.saving #res,body.saving #sstat,body.saving #chips{display:none!important}
+#saved .empty{color:var(--muted);font-size:15px;margin:16px 0 0;line-height:1.5}
+.sv{position:relative}
+.sv .hit{padding-right:46px}
+.sv .rm{position:absolute;top:8px;right:6px;width:36px;height:36px;border:0;border-radius:8px;background:none;color:var(--muted);cursor:pointer;display:grid;place-items:center}
+.sv .rm svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
+.sv .rm:hover{color:var(--ink)}
+
 </style>
 </head>
 <body>
@@ -148,10 +166,14 @@ body.searching .list,body.searching .inst{display:none}
       <input id="q" type="search" placeholder="Търси в книгите…" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search" aria-label="Търси в книгите">
       <button class="qx" id="qx" type="button" aria-label="Изчисти" hidden><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
     </div>
+    <div class="srow">
     <button class="sin" id="sinBtn" type="button" aria-expanded="false" aria-controls="chips">Търси в: <b id="sinLbl">всички книги</b><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+    <button class="savb" id="savBtn" type="button" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></svg>Запазени<b id="savN"></b></button>
+    </div>
     <div class="chips" id="chips" hidden></div>
     <p class="sstat" id="sstat" aria-live="polite"></p>
     <div id="res"></div>
+    <div id="saved" hidden></div>
   </section>
 
   <ul class="list">
@@ -409,6 +431,41 @@ body.searching .list,body.searching .inst{display:none}
   q.addEventListener('keydown',function(e){if(e.key==='Enter'){clearTimeout(timer);run();q.blur();}if(e.key==='Escape'){q.value='';run();}});
   qx.addEventListener('click',function(){q.value='';shown={};run();q.focus();});
   var last=ss('zk:q');if(last){q.value=last;run();}
+})();
+</script>
+<script>
+(function(){
+  var btn=document.getElementById('savBtn'),box=document.getElementById('saved'),nEl=document.getElementById('savN'),q=document.getElementById('q');
+  var CLS={mevlid:'m',mevlid_tr:'m',ramazanskadua:'r',istigfar:'i',salatsalam:'s',gradinite:'g',dua_kumail:'k',hizb:'h',hizb_new:'h',abdest:'a',irshad:'ir',tainite:'tn',salevati:'sv',djevshen:'dj',lekarstva:'lk',mechsreshtumagiite:'mc',sahifa:'sh'};
+  var NAMES={};document.querySelectorAll('.list a[href$=".html"]').forEach(function(a){var f=a.getAttribute('href'),n=a.closest('.app');var nm=n&&n.querySelector('.name');NAMES[f]=(nm?nm.textContent.trim():'')+(a.closest('.vers')?' – '+a.childNodes[0].textContent.trim().toLowerCase():'');});
+  NAMES['mevlid_tr.html']=(NAMES['mevlid.html']||'Мевлид')+' – Türkçe';
+  function load(){try{return JSON.parse(localStorage.getItem('zk:saved'))||[];}catch(e){return [];}}
+  function put(a){try{localStorage.setItem('zk:saved',JSON.stringify(a));}catch(e){}}
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function count(){var n=load().length;nEl.textContent=n?n:'';btn.classList.toggle('has',n>0);}
+  function render(){
+    var a=load();count();
+    if(!a.length){box.innerHTML='<p class="empty">Нямаш запазени места. В някоя книга докосни абзац – дуа, айет или текст – и натисни „Запази“. После ще го намираш тук.</p>';return;}
+    var groups=[],by={};
+    a.forEach(function(it,i){if(!by[it.f]){by[it.f]=[];groups.push(it.f);}by[it.f].push([it,i]);});
+    var h='';
+    groups.forEach(function(f){var nm=NAMES[f]||by[f][0][0].n||f;
+      h+='<div class="rg '+(CLS[f.replace('.html','')]||'')+'"><h2>'+esc(nm)+'<small>'+by[f].length+'</small></h2><div class="hits">';
+      by[f].forEach(function(p){var it=p[0];var t=it.t.length>230?it.t.slice(0,230)+' …':it.t;
+        h+='<div class="sv"><a class="hit" href="'+esc(f)+'?zkq=&zkb='+it.b+'&zkk='+encodeURIComponent(it.k)+'">'+(it.c?'<small>'+esc(it.c)+'</small>':'')+esc(t)+'</a>'+
+           '<button class="rm" type="button" data-i="'+p[1]+'" aria-label="Премахни от запазените" title="Премахни"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>';});
+      h+='</div></div>';});
+    box.innerHTML=h;
+  }
+  function open(o){btn.setAttribute('aria-expanded',String(o));box.hidden=!o;document.body.classList.toggle('saving',o);
+    try{sessionStorage.setItem('zk:sv',o?'1':'');}catch(e){} if(o)render();}
+  btn.addEventListener('click',function(){open(btn.getAttribute('aria-expanded')!=='true');});
+  box.addEventListener('click',function(e){var r=e.target.closest('.rm');if(!r)return;var a=load();a.splice(+r.dataset.i,1);put(a);render();});
+  q.addEventListener('input',function(){if(q.value.trim()&&btn.getAttribute('aria-expanded')==='true')open(false);});
+  addEventListener('storage',function(e){if(e.key==='zk:saved'){count();if(!box.hidden)render();}});
+  addEventListener('pageshow',function(){count();if(!box.hidden)render();});
+  count();
+  try{if(sessionStorage.getItem('zk:sv'))open(true);}catch(e){}
 })();
 </script>
 </body>
