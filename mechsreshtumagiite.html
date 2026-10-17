@@ -145,6 +145,7 @@ body.noar .ar{display:none}
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Зикирь">
+<script>try{var zt=localStorage.getItem('zk:theme');if(zt==='light'||zt==='dark')document.documentElement.setAttribute('data-theme',zt);}catch(e){}</script>
 <style id="zk-nav">.bar-in .bar-title{display:none}.zk-home{flex:0 1 auto;min-width:0;max-width:min(52vw,340px);display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 12px 0 10px;border-radius:8px;border:1px solid var(--rule);background:var(--sheet);color:var(--ink);text-decoration:none;font-weight:600;font-size:15px;white-space:nowrap}.zk-home span{overflow:hidden;text-overflow:ellipsis}.zk-home svg{flex:none;width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.zk-home:hover,.zk-flag:hover{border-color:var(--gold)}.zk-flag{flex:none;display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:8px;border:1px solid var(--rule);background:var(--sheet)}.zk-flag svg{width:24px;height:16px;border-radius:2px;box-shadow:0 0 0 1px rgba(0,0,0,.15)}.bar-in .sel{flex:1 1 0;min-width:0}@media (max-width:479px){.bar-in .sel{max-width:none;min-width:84px}.zk-home{max-width:40vw}}.zk-alt{color:var(--ink)}.zk-alt svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;box-shadow:none;border-radius:0}.zk-ver{display:grid;justify-items:center;gap:8px;margin:22px auto 0;font-family:var(--sans)}.zk-ver small{font-size:13px;color:var(--muted);letter-spacing:.04em}.zk-seg{display:inline-flex;border:1px solid var(--deep);border-radius:999px;overflow:hidden}.zk-seg a,.zk-seg span{padding:8px 16px;font-size:15px;font-weight:500;text-decoration:none;color:var(--deep)}.zk-seg span{background:var(--deep);color:var(--paper)}.zk-seg a:hover{background:color-mix(in srgb,var(--deep) 12%,transparent)}.zk-ver p{margin:0;font-size:14px;color:var(--muted);max-width:40ch;text-align:center}main p,main li{overflow-wrap:break-word}</style>
 </head>
 <body>
@@ -1493,6 +1494,34 @@ if(fbtn&&ITEMS.length){
   /* settings like "hide Arabic" change layout -> re-place */
   new MutationObserver(function(){clearTimeout(rt);rt=setTimeout(place,120);}).observe(document.body,{attributes:true,attributeFilter:['class','style']});
   new MutationObserver(function(){clearTimeout(rt);rt=setTimeout(place,120);}).observe(document.documentElement,{attributes:true,attributeFilter:['style','data-theme']});
+})();
+(function(){
+  var K='zk:theme',W='zk:wake';
+  function g(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+  function s(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+  /* one theme for all books */
+  var seg=document.getElementById('themeSeg');
+  if(seg){
+    var t=g(K);
+    if(t){var b=seg.querySelector('[data-t="'+t+'"]');if(b&&b.getAttribute('aria-pressed')!=='true')b.click();}
+    seg.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-t]');if(b)s(K,b.dataset.t);});
+  }
+  /* keep the screen on */
+  var sup=('wakeLock' in navigator),lock=null,on=g(W)==='1',pend=false;
+  function req(){if(!sup||!on||lock||pend||document.visibilityState!=='visible')return;pend=true;
+    navigator.wakeLock.request('screen').then(function(l){pend=false;lock=l;l.addEventListener('release',function(){lock=null;});}).catch(function(){pend=false;});}
+  function rel(){if(lock){try{lock.release();}catch(e){}lock=null;}}
+  document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')req();});
+  document.addEventListener('click',req,{passive:true});
+  window.zkWake={sup:sup,get:function(){return on;},set:function(v){on=!!v;s(W,on?'1':'0');if(on)req();else rel();}};
+  var panel=document.getElementById('panel');
+  if(panel&&sup&&!document.getElementById('zkWake')){
+    var grp=document.createElement('div');grp.className='grp';
+    grp.innerHTML='<h3>Екран</h3><label class="tog"><span>Екранът да не изгасва<small style="display:block;font-size:13px;color:var(--muted);font-weight:400">Докато приложението е отворено</small></span> <input type="checkbox" id="zkWake"></label>';
+    panel.appendChild(grp);
+    var cb=grp.querySelector('input');cb.checked=on;cb.addEventListener('change',function(){window.zkWake.set(cb.checked);});
+  }
+  req();
 })();
 </script>
 <script>(function(){if(!('serviceWorker' in navigator)||location.protocol==='file:')return;var app=['standalone','fullscreen','minimal-ui'].some(function(m){return matchMedia('(display-mode: '+m+')').matches;})||navigator.standalone===true;addEventListener('load',function(){navigator.serviceWorker.register('sw.js').then(function(){if(app)navigator.serviceWorker.ready.then(function(r){r.active&&r.active.postMessage({type:'download'});});}).catch(function(){});});})();</script>

@@ -15,6 +15,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Зикирь">
 
+<script>try{var zt=localStorage.getItem('zk:theme');if(zt==='light'||zt==='dark')document.documentElement.setAttribute('data-theme',zt);}catch(e){}</script>
 <style>
 /* Layout: one centered column; calligraphic masthead, then a stacked list of collections, each tinted with its own app's accent */
 :root{
@@ -141,10 +142,34 @@ body.saving .list,body.saving .inst,body.saving #res,body.saving #sstat,body.sav
 .sv .rm svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
 .sv .rm:hover{color:var(--ink)}
 
+
+/* settings (theme + keep screen on) */
+.wrap{position:relative}
+.setb{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:0;width:42px;height:42px;border-radius:10px;border:1px solid var(--rule);background:var(--sheet);color:var(--ink);display:grid;place-items:center;cursor:pointer}
+.setb svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.setb:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.spanel{position:absolute;z-index:20;top:calc(64px + env(safe-area-inset-top,0px));right:0;width:min(320px,calc(100vw - 32px));background:var(--sheet);border:1px solid var(--rule);border-radius:14px;padding:16px;box-shadow:0 14px 40px rgba(0,0,0,.18);text-align:left}
+.spanel h3{margin:0 0 8px;font:500 13px var(--sans);color:var(--muted);letter-spacing:.02em}
+.spanel .g+.g{margin-top:16px;padding-top:14px;border-top:1px solid var(--rule)}
+.tseg{display:flex;border:1px solid var(--rule);border-radius:9px;overflow:hidden}
+.tseg button{flex:1;padding:9px 6px;border:0;background:transparent;color:var(--ink);font:500 15px var(--sans);cursor:pointer}
+.tseg button+button{border-left:1px solid var(--rule)}
+.tseg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.wtog{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:16px;cursor:pointer}
+.wtog small{display:block;font-size:13px;color:var(--muted)}
+.wtog input{flex:none;appearance:none;-webkit-appearance:none;width:42px;height:24px;border-radius:12px;background:var(--rule);position:relative;cursor:pointer}
+.wtog input::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .15s;box-shadow:0 1px 2px rgba(0,0,0,.25)}
+.wtog input:checked{background:var(--gold)}
+.wtog input:checked::after{transform:translateX(18px)}
 </style>
 </head>
 <body>
 <div class="wrap">
+  <button class="setb" id="zkSet" type="button" aria-label="Настройки" aria-expanded="false" aria-controls="zkPanel"><svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg></button>
+  <div class="spanel" id="zkPanel" role="dialog" aria-label="Настройки" hidden>
+    <div class="g"><h3>Тема – за всички книги</h3><div class="tseg" id="zkTheme"><button type="button" data-t="auto">Авто</button><button type="button" data-t="light">Светла</button><button type="button" data-t="dark">Тъмна</button></div></div>
+    <div class="g" id="zkWakeG"><label class="wtog"><span>Екранът да не изгасва<small>Във всички книги, докато са отворени</small></span><input type="checkbox" id="zkWakeI"></label></div>
+  </div>
   <header>
     <p class="ar" lang="ar" dir="rtl">ذِكْر</p>
     <h1>Зикирь</h1>
@@ -466,6 +491,28 @@ body.saving .list,body.saving .inst,body.saving #res,body.saving #sstat,body.sav
   addEventListener('pageshow',function(){count();if(!box.hidden)render();});
   count();
   try{if(sessionStorage.getItem('zk:sv'))open(true);}catch(e){}
+})();
+</script>
+<script>
+(function(){
+  function g(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+  function st(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+  var btn=document.getElementById('zkSet'),pn=document.getElementById('zkPanel'),seg=document.getElementById('zkTheme'),wi=document.getElementById('zkWakeI');
+  function theme(){var t=g('zk:theme')||'auto';if(t==='auto')document.documentElement.removeAttribute('data-theme');else document.documentElement.setAttribute('data-theme',t);
+    seg.querySelectorAll('button').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.t===t));});}
+  seg.addEventListener('click',function(e){var b=e.target.closest('[data-t]');if(!b)return;st('zk:theme',b.dataset.t);theme();});
+  btn.addEventListener('click',function(e){e.stopPropagation();var o=pn.hidden;pn.hidden=!o;btn.setAttribute('aria-expanded',String(o));});
+  document.addEventListener('click',function(e){if(!pn.hidden&&!pn.contains(e.target)&&e.target!==btn){pn.hidden=true;btn.setAttribute('aria-expanded','false');}});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!pn.hidden){pn.hidden=true;btn.setAttribute('aria-expanded','false');btn.focus();}});
+  var sup=('wakeLock' in navigator),lock=null,pend=false;
+  function on(){return g('zk:wake')==='1';}
+  function req(){if(!sup||!on()||lock||pend||document.visibilityState!=='visible')return;pend=true;navigator.wakeLock.request('screen').then(function(l){pend=false;lock=l;l.addEventListener('release',function(){lock=null;});}).catch(function(){pend=false;});}
+  if(!sup)document.getElementById('zkWakeG').hidden=true;
+  wi.checked=on();wi.addEventListener('change',function(){st('zk:wake',wi.checked?'1':'0');if(wi.checked)req();else if(lock){lock.release();lock=null;}});
+  document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')req();});
+  document.addEventListener('click',req,{passive:true});
+  addEventListener('pageshow',function(){theme();wi.checked=on();req();});
+  theme();req();
 })();
 </script>
 </body>
