@@ -485,7 +485,7 @@ fb.addEventListener('touchend',e=>{if(tx==null)return;const dx=e.changedTouches[
   var STAR='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></svg>';
   var st=document.createElement('style');
   st.textContent='.zk-u{position:relative}.zk-pad{padding-left:38px!important}'+
-    '.zk-star{position:absolute;top:50%;transform:translateY(-50%);width:34px;height:34px;padding:0;margin:0;border:0;border-radius:50%;background:none;display:grid;place-items:center;cursor:pointer;color:var(--muted,#888);opacity:.75;-webkit-tap-highlight-color:transparent;z-index:2}'+
+    '.zk-star{position:absolute;top:50%;left:2px;transform:translateY(-50%);width:34px;height:34px;padding:0;margin:0;border:0;border-radius:50%;background:none;display:grid;place-items:center;cursor:pointer;color:var(--muted,#888);opacity:.75;-webkit-tap-highlight-color:transparent;z-index:2}'+
     '.zk-star svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linejoin:round}'+
     '.zk-star:hover{opacity:1}.zk-star.on{color:var(--gold,#c90);opacity:1}.zk-star.on svg{fill:var(--gold,#c90)}'+
     '.zk-star:focus-visible{outline:2px solid var(--gold,#c90);outline-offset:1px;opacity:1}'+
@@ -519,7 +519,7 @@ fb.addEventListener('touchend',e=>{if(tx==null)return;const dx=e.changedTouches[
   }
   function place(){
     units.forEach(function(o){var u=o.u;u.classList.remove('zk-pad');
-      var ur=u.getBoundingClientRect(),cr=o.main.getBoundingClientRect();if(!ur.width)return;
+      var ur=u.getBoundingClientRect(),cr=o.main.getBoundingClientRect();if(!ur.width){if(!place.retry&&(place.n=(place.n||0)+1)<20){place.retry=setTimeout(function(){place.retry=0;place();},500);}return;}if(!cr.width){u.classList.add('zk-pad');o.s.style.left='2px';return;}
       var g=cr.left-ur.left;
       if(g<32){u.classList.add('zk-pad');cr=o.main.getBoundingClientRect();g=cr.left-ur.left;}
       o.s.style.left=Math.max(0,(g-34)/2)+'px';
@@ -555,6 +555,8 @@ fb.addEventListener('touchend',e=>{if(tx==null)return;const dx=e.changedTouches[
     var mo=new MutationObserver(function(){clearTimeout(mo.t);mo.t=setTimeout(syncF,30);});mo.observe(fbody,{childList:true,subtree:true,characterData:true});
   }
   var rt=0;addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(place,150);});
+  addEventListener('orientationchange',function(){setTimeout(place,300);});addEventListener('pageshow',function(){setTimeout(place,100);});document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')setTimeout(place,100);});
+  if(window.ResizeObserver){var ro=new ResizeObserver(function(){clearTimeout(rt);rt=setTimeout(place,150);});ro.observe(document.body);}
   addEventListener('storage',function(e){if(e.key===KEY)paint();});
   function start(){setup();if(document.fonts&&document.fonts.ready)document.fonts.ready.then(place);setTimeout(place,800);}
   if(document.readyState==='complete')setTimeout(start,30);else addEventListener('load',function(){setTimeout(start,30);});
