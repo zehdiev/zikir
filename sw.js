@@ -1,8 +1,8 @@
 /* Зикирь – service worker.
    В браузъра нищо не се тегли предварително. Пълното изтегляне за офлайн
    става само в инсталираното приложение (страницата праща съобщение 'download').
-   Този файл се генерира автоматично. Версия: df1ea3e10f */
-const VERSION = 'zikir-df1ea3e10f';
+   Този файл се генерира автоматично. Версия: f21ecabcf2 */
+const VERSION = 'zikir-f21ecabcf2';
 const FILES = [
  "./",
  "index.html",
@@ -64,6 +64,7 @@ const FILES = [
  "fonts/files/amiri-latin-700-normal.woff2",
  "fonts/files/amiri-latin-ext-400-normal.woff2",
  "fonts/files/amiri-latin-ext-700-normal.woff2",
+ "fonts/files/aref-ruqaa-arabic-400-normal.woff2",
  "fonts/files/golos-text-cyrillic-400-normal.woff2",
  "fonts/files/golos-text-cyrillic-500-normal.woff2",
  "fonts/files/golos-text-cyrillic-600-normal.woff2",
