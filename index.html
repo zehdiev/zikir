@@ -50,8 +50,7 @@ h1{font-family:var(--serif);font-weight:600;font-size:clamp(34px,8vw,46px);line-
 .verse b{display:block;font-family:var(--arf);font-style:normal;font-weight:400;font-size:24px;color:var(--ink);margin-bottom:4px}
 .list{list-style:none;margin:0;padding:0;display:grid;gap:12px}
 .app{--c:var(--gold);display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center;padding:18px 18px;
-  background:var(--sheet);border:1px solid var(--rule);border-radius:12px;color:var(--ink);text-decoration:none;transition:border-color .15s}
-.app:hover{border-color:var(--c)}
+  background:var(--sheet);border:1px solid var(--rule);border-radius:12px;color:var(--ink);text-decoration:none;transition:border-color .15s}@media (hover:hover){.app:hover{border-color:var(--c)}}
 .app:focus-visible{outline:2px solid var(--c);outline-offset:2px}
 .glyph{width:64px;height:56px;border-radius:12px;display:grid;place-items:center;font-family:var(--arf);font-size:18px;white-space:nowrap;line-height:1;
   color:var(--c);background:color-mix(in srgb,var(--c) 12%,transparent)}
@@ -61,14 +60,12 @@ h1{font-family:var(--serif);font-weight:600;font-size:clamp(34px,8vw,46px);line-
 .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .tag{font-size:12px;font-weight:500;letter-spacing:.03em;padding:2px 8px;border-radius:999px;border:1px solid var(--rule);color:var(--c)}
 .go{color:var(--muted)}
-.go svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.app:hover .go{color:var(--c)}
+.go svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}@media (hover:hover){.app:hover .go{color:var(--c)}}
 .m{--c:var(--c-mevlid)} .r{--c:var(--c-ramazan)} .i{--c:var(--c-istigfar)} .s{--c:var(--c-salat)} .g{--c:var(--c-gradinite)} .k{--c:var(--c-kumayl)} .h{--c:var(--c-hizb)} .a{--c:var(--c-abdest)} .ir{--c:var(--c-irshad)} .tn{--c:var(--c-tainite)} .sv{--c:var(--c-salevati)} .dj{--c:var(--c-djevshen)} .lk{--c:var(--c-lek)} .mc{--c:var(--c-mech)} .sh{--c:var(--c-sah)}
-div.app{grid-template-columns:auto 1fr}div.app:hover{border-color:var(--rule)}
+div.app{grid-template-columns:auto 1fr}@media (hover:hover){div.app:hover{border-color:var(--rule)}}
 .vers{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 .vers a{display:inline-flex;flex-direction:column;padding:8px 14px;border-radius:10px;border:1px solid var(--rule);text-decoration:none;color:var(--ink);font-weight:500;font-size:15px;line-height:1.3;transition:border-color .15s}
-.vers a small{font-weight:400;font-size:12.5px;color:var(--muted)}
-.vers a:hover{border-color:var(--c)}.vers a:focus-visible{outline:2px solid var(--c);outline-offset:2px}
+.vers a small{font-weight:400;font-size:12.5px;color:var(--muted)}@media (hover:hover){.vers a:hover{border-color:var(--c)}}.vers a:focus-visible{outline:2px solid var(--c);outline-offset:2px}
 footer{margin-top:48px;text-align:center;color:var(--muted);font-size:14px}
 @media (max-width:440px){.go{display:none}.app{grid-template-columns:auto 1fr;gap:14px;padding:16px}.glyph{width:58px;height:50px;font-size:16px}}
 
@@ -118,8 +115,7 @@ footer{margin-top:48px;text-align:center;color:var(--muted);font-size:14px}
 .rg h2{display:flex;align-items:baseline;gap:8px;margin:0 0 8px;font:600 18px/1.3 var(--serif);color:var(--c)}
 .rg h2 small{font:500 13px var(--sans);color:var(--muted)}
 .hits{display:grid;gap:8px}
-.hit{display:block;padding:12px 14px;border-radius:10px;background:var(--sheet);border:1px solid var(--rule);color:var(--ink);text-decoration:none;font:400 16px/1.5 var(--serif)}
-.hit:hover{border-color:var(--c)}
+.hit{display:block;padding:12px 14px;border-radius:10px;background:var(--sheet);border:1px solid var(--rule);color:var(--ink);text-decoration:none;font:400 16px/1.5 var(--serif)}@media (hover:hover){.hit:hover{border-color:var(--c)}}
 .hit small{display:block;font:500 12.5px/1.35 var(--sans);color:var(--muted);margin-bottom:4px;letter-spacing:.01em}
 .hit mark{background:color-mix(in srgb,var(--gold) 30%,transparent);color:inherit;border-radius:2px;padding:0 1px}
 .more{margin:8px 0 0;padding:8px 14px;border-radius:999px;border:1px solid var(--rule);background:none;color:var(--c);font:500 14px var(--sans);cursor:pointer}
@@ -139,8 +135,7 @@ body.saving .list,body.saving .inst,body.saving #res,body.saving #sstat,body.sav
 .sv{position:relative}
 .sv .hit{padding-right:46px}
 .sv .rm{position:absolute;top:8px;right:6px;width:36px;height:36px;border:0;border-radius:8px;background:none;color:var(--muted);cursor:pointer;display:grid;place-items:center}
-.sv .rm svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
-.sv .rm:hover{color:var(--ink)}
+.sv .rm svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}@media (hover:hover){.sv .rm:hover{color:var(--ink)}}
 
 
 /* settings (theme + keep screen on) */
@@ -173,6 +168,23 @@ body.saving .list,body.saving .inst,body.saving #res,body.saving #sstat,body.sav
 .list.tiles .vers a{padding:6px 10px;font-size:13.5px;align-items:center}
 .list.tiles .vers small{display:none}
 @media (min-width:600px){.list.tiles{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}}
+</style>
+<style id="zk-touch">
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+a,button,label,select,summary,input,output,[role=button],.chip{touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,.06)}
+.panel,#panel,#zkPanel{max-height:calc(100vh - 80px - env(safe-area-inset-top,0px));-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+@supports (height:100dvh){.panel,#panel,#zkPanel{max-height:calc(100dvh - 80px - env(safe-area-inset-top,0px))}}
+@media (pointer:coarse){
+ .ib,.zk-home,.zk-flag,.ctl button,.setb,.savb,.sin{position:relative}
+ .ib::before,.zk-home::before,.zk-flag::before,.ctl button::before,.zk-star::before,.setb::before,.savb::before,.sin::before{content:"";position:absolute;inset:-6px}
+ .ctl button{width:44px;height:40px}
+ .seg button{min-height:44px}
+ .tog{min-height:44px}
+ select.sel,.sel{min-height:40px}
+ .chip{min-height:38px}
+ sup a{display:inline-block;padding:10px 8px;margin:-10px -8px}
+ summary{padding-top:8px;padding-bottom:8px}
+}
 </style>
 </head>
 <body>
