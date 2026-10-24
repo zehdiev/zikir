@@ -549,5 +549,68 @@ a,button,label,select,summary,input,output,[role=button],.chip{touch-action:mani
   apply(g());
 })();
 </script>
+<script id="zk-hist">/* Back button: closes settings / one-by-one mode first, then returns to the book's title page,
+   and only then leaves the book. Settings get a close (×) button. */
+(function(){
+  var H=history;if(!H||!H.pushState)return;
+  var P=H.pushState.bind(H),R=H.replaceState.bind(H);
+  var hero=document.getElementById('top');
+  var panel=document.getElementById('panel')||document.getElementById('zkPanel');
+  var setBtn=document.getElementById('setBtn')||document.getElementById('zkSet');
+  var focus=document.getElementById('focus'),fClose=document.getElementById('fClose');
+  function st(){return (H.state&&H.state.zk)||null;}
+  function atStart(){if(!hero)return true;var r=hero.getBoundingClientRect();return r.bottom>80;}
+  if(hero){try{H.scrollRestoration='manual';}catch(e){}}
+  var cur=st();
+  if(!cur||cur==='panel'||cur==='focus'||cur==='_c'){cur='root';try{R({zk:'root'},'');}catch(e){}}
+  /* app code that used pushState for in-book jumps -> keep a single "inside the book" entry */
+  H.pushState=function(s,t,u){try{if(cur==='root'&&hero){P({zk:'book'},t||'',u);cur='book';}else R(H.state,t||'',u);}catch(e){}};
+  H.replaceState=function(s,t,u){try{R(s&&s.zk?s:H.state,t||'',u);}catch(e){}};
+  function active(){var u=navigator.userActivation;return !u||u.hasBeenActive;}
+  function enter(){if(hero&&cur==='root'&&!atStart()&&active()){try{P({zk:'book'},'');cur='book';}catch(e){}}}
+  addEventListener('scroll',enter,{passive:true});
+  ['click','touchend','keydown'].forEach(function(t){addEventListener(t,function(){setTimeout(enter,60);},{passive:true,capture:true});});
+  function toTop(){try{scrollTo({top:0,left:0,behavior:'instant'});}catch(e){scrollTo(0,0);}}
+  /* in-page links: no extra history entries; "#top" = back to the title page */
+  document.addEventListener('click',function(e){
+    if(e.defaultPrevented||e.button)return;
+    var a=e.target.closest&&e.target.closest('a[href^="#"]');if(!a)return;
+    var h=a.getAttribute('href');
+    if(h==='#top'||h==='#'){if(!hero)return;e.preventDefault();if(cur==='book')H.back();else toTop();return;}
+    var el=document.getElementById(decodeURIComponent(h.slice(1)));if(!el||a.closest('#focus'))return;
+    e.preventDefault();H.pushState(null,'',h);el.scrollIntoView();
+  });
+  /* layers */
+  function pOpen(){return !!panel&&(panel.id==='zkPanel'?!panel.hidden:panel.classList.contains('open'));}
+  function pClose(){if(!panel)return;if(panel.id==='zkPanel')panel.hidden=true;else panel.classList.remove('open');if(setBtn)setBtn.setAttribute('aria-expanded','false');}
+  function fOpen(){return !!focus&&focus.classList.contains('open');}
+  function fShut(){if(fClose)fClose.click();else if(focus)focus.classList.remove('open');}
+  function watch(el,name,isOpen){if(!el)return;var was=isOpen();
+    new MutationObserver(function(){var o=isOpen();if(o===was)return;was=o;
+      if(o){if(cur!==name){try{P({zk:name},'');cur=name;}catch(e){}}}
+      else if(cur===name){cur='_c';H.back();}
+    }).observe(el,{attributes:true,attributeFilter:['class','hidden']});}
+  watch(panel,'panel',pOpen);watch(focus,'focus',fOpen);
+  addEventListener('popstate',function(){
+    var prev=cur;cur=st()||'root';
+    var closed=false;
+    if(cur!=='panel'&&pOpen()){pClose();closed=true;}
+    if(cur!=='focus'&&fOpen()){fShut();closed=true;}
+    if(closed||prev==='_c'||prev==='panel'||prev==='focus')return;
+    if(cur==='root'&&hero)toTop();
+  });
+  /* × button in the settings panel */
+  if(panel){
+    var x=document.createElement('button');x.type='button';x.className='zk-px';x.setAttribute('aria-label','Затвори');x.title='Затвори';
+    x.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>';
+    x.addEventListener('click',function(e){e.stopPropagation();pClose();});
+    panel.insertBefore(x,panel.firstChild);
+    var cs=document.createElement('style');
+    cs.textContent='#'+panel.id+'{padding-top:'+(panel.id==='zkPanel'?'34px':'18px')+'}'+'.zk-px{position:absolute;top:8px;right:8px;z-index:3;width:38px;height:38px;padding:0;border:1px solid var(--rule,#ccc);border-radius:50%;background:var(--sheet,#fff);color:var(--ink,#222);display:grid;place-items:center;cursor:pointer;touch-action:manipulation}'+
+      '.zk-px svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}.zk-px::before{content:"";position:absolute;inset:-6px}';
+    document.head.appendChild(cs);
+  }
+})();
+</script>
 </body>
 </html>
