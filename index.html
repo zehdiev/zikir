@@ -240,12 +240,12 @@ a,button,label,select,summary,input,output,[role=button],.chip{touch-action:mani
         <span class="desc">78-те имена на Аллах с айетите към тях</span></span>
       <span class="go"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
     </a></li>
-    <li><a class="app i" href="istigfar.html">
+    <li><div class="app i">
       <span class="glyph" lang="ar">استغفار</span>
       <span class="txt"><span class="name">Молитви за опрощение</span>
-        <span class="desc">Седемдесетте молитви на имам Хасен ел-Басри</span></span>
-      <span class="go"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
-    </a></li>
+        <span class="desc">Седемдесетте молитви на имам Хасен ел-Басри</span>
+        <span class="vers"><a href="istigfar.html">За самостоятелно четене<small>„…и опрости греха ми“</small></a><a href="istigfar_group.html">За групово четене<small>„…и опрости греха ни“</small></a></span></span>
+    </div></li>
     <li><a class="app s" href="salatsalam.html">
       <span class="glyph" lang="ar">صلاة</span>
       <span class="txt"><span class="name">Саляту селям</span>
@@ -406,7 +406,7 @@ a,button,label,select,summary,input,output,[role=button],.chip{touch-action:mani
 </script>
 <script>
 (function(){
-  var CLS={mevlid:'m',ramazanskadua:'r',istigfar:'i',salatsalam:'s',gradinite:'g',dua_kumail:'k',hizb:'h',hizb_new:'h',abdest:'a',irshad:'ir',tainite:'tn',salevati:'sv',djevshen:'dj',lekarstva:'lk',mechsreshtumagiite:'mc',sahifa:'sh',duazikr:'dz'};
+  var CLS={mevlid:'m',ramazanskadua:'r',istigfar:'i',istigfar_group:'i',salatsalam:'s',gradinite:'g',dua_kumail:'k',hizb:'h',hizb_new:'h',abdest:'a',irshad:'ir',tainite:'tn',salevati:'sv',djevshen:'dj',lekarstva:'lk',mechsreshtumagiite:'mc',sahifa:'sh',duazikr:'dz'};
   var q=document.getElementById('q'),qx=document.getElementById('qx'),sin=document.getElementById('sinBtn'),lbl=document.getElementById('sinLbl'),
       chips=document.getElementById('chips'),stat=document.getElementById('sstat'),res=document.getElementById('res');
   var DB=null,loading=null,sel=null,shown={},timer=0;
@@ -492,7 +492,7 @@ a,button,label,select,summary,input,output,[role=button],.chip{touch-action:mani
 <script>
 (function(){
   var btn=document.getElementById('savBtn'),box=document.getElementById('saved'),nEl=document.getElementById('savN'),q=document.getElementById('q');
-  var CLS={mevlid:'m',mevlid_tr:'m',ramazanskadua:'r',istigfar:'i',salatsalam:'s',gradinite:'g',dua_kumail:'k',hizb:'h',hizb_new:'h',abdest:'a',irshad:'ir',tainite:'tn',salevati:'sv',djevshen:'dj',lekarstva:'lk',mechsreshtumagiite:'mc',sahifa:'sh',duazikr:'dz'};
+  var CLS={mevlid:'m',mevlid_tr:'m',ramazanskadua:'r',istigfar:'i',istigfar_group:'i',salatsalam:'s',gradinite:'g',dua_kumail:'k',hizb:'h',hizb_new:'h',abdest:'a',irshad:'ir',tainite:'tn',salevati:'sv',djevshen:'dj',lekarstva:'lk',mechsreshtumagiite:'mc',sahifa:'sh',duazikr:'dz'};
   var NAMES={};document.querySelectorAll('.list a[href$=".html"]').forEach(function(a){var f=a.getAttribute('href'),n=a.closest('.app');var nm=n&&n.querySelector('.name');NAMES[f]=(nm?nm.textContent.trim():'')+(a.closest('.vers')?' – '+a.childNodes[0].textContent.trim().toLowerCase():'');});
   NAMES['mevlid_tr.html']=(NAMES['mevlid.html']||'Мевлид')+' – Türkçe';
   function load(){try{return JSON.parse(localStorage.getItem('zk:saved'))||[];}catch(e){return [];}}

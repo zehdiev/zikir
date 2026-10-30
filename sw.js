@@ -1,8 +1,8 @@
 /* Зикирь – service worker.
    В браузъра нищо не се тегли предварително. Пълното изтегляне за офлайн
    става само в инсталираното приложение (страницата праща съобщение 'download').
-   Този файл се генерира автоматично. Версия: 2b3e7e5256 */
-const VERSION = 'zikir-2b3e7e5256';
+   Този файл се генерира автоматично. Версия: 189d9df800 */
+const VERSION = 'zikir-189d9df800';
 const FILES = [
  "./",
  "index.html",
@@ -15,6 +15,7 @@ const FILES = [
  "hizb_new.html",
  "irshad.html",
  "istigfar.html",
+ "istigfar_group.html",
  "lekarstva.html",
  "mechsreshtumagiite.html",
  "mevlid.html",
