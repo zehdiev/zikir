@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Дуа и ибадети</title>
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+
+:root{
+  --paper:#F4F6F5; --sheet:#FFFFFF; --ink:#1C2321; --muted:#5D6966; --deep:#1F6B5C; --gold:#A57A2C; --rule:#DCE3E0; --wash:#E9EFEC;
+  --s-ar:1.2; --s-bg:1;
+  --serif:"Literata", "Noto Serif", Georgia, serif;
+  --sans:"Golos Text", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --paper:#101413; --sheet:#171D1B; --ink:#E3EAE7; --muted:#9AA8A4; --deep:#8FD3C1; --gold:#D9B26C; --rule:#26302D; --wash:#1B2321; color-scheme:dark; } }
+:root[data-theme="dark"]{ --paper:#101413; --sheet:#171D1B; --ink:#E3EAE7; --muted:#9AA8A4; --deep:#8FD3C1; --gold:#D9B26C; --rule:#26302D; --wash:#1B2321; color-scheme:dark; }
+*,*::before,*::after{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px);-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:18px;line-height:1.6;padding-bottom:env(safe-area-inset-bottom,0px)}
+button{font:inherit;color:inherit}
+a{color:var(--deep)}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:4px}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;scroll-behavior:auto!important}}
+.bar{position:sticky;top:0;z-index:10;padding-top:env(safe-area-inset-top,0px);background:color-mix(in srgb,var(--paper) 90%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--rule)}
+.bar-in{max-width:820px;margin:0 auto;display:flex;align-items:center;gap:8px;padding:8px 16px;font-family:var(--sans)}
+.bar-title{font:600 16px var(--sans);color:var(--ink);text-decoration:none;margin-right:auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sel{appearance:none;-webkit-appearance:none;background:var(--sheet);border:1px solid var(--rule);border-radius:8px;padding:7px 30px 7px 10px;font:500 15px var(--sans);color:var(--ink);max-width:44vw;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 15px) 52%,calc(100% - 10px) 52%;background-size:5px 5px;background-repeat:no-repeat}
+.ib{flex:none;display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:8px;border:1px solid var(--rule);background:var(--sheet);cursor:pointer}
+.ib svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.panel{position:fixed;z-index:30;right:max(12px,calc((100vw - 820px)/2 + 12px));top:calc(env(safe-area-inset-top,0px) + 60px);width:min(330px,calc(100vw - 24px));max-height:calc(100vh - 80px);overflow:auto;background:var(--sheet);border:1px solid var(--rule);border-radius:14px;padding:16px;font-family:var(--sans);box-shadow:0 14px 40px rgba(8,20,18,.2);display:none}
+.panel.open{display:block}
+.panel h3{margin:0 0 6px;font:500 13px var(--sans);color:var(--muted)}
+.grp+.grp{margin-top:16px;padding-top:14px;border-top:1px solid var(--rule)}
+.tog{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:6px 0;font-size:16px;cursor:pointer}
+.tog input{flex:none;appearance:none;-webkit-appearance:none;width:42px;height:24px;border-radius:12px;background:var(--rule);position:relative;cursor:pointer}
+.tog input::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .15s;box-shadow:0 1px 2px rgba(0,0,0,.25)}
+.tog input:checked{background:var(--deep)}
+.tog input:checked::after{transform:translateX(18px)}
+.step{display:flex;align-items:center;justify-content:space-between;padding:5px 0;font-size:16px}
+.ctl{display:inline-flex;align-items:center;gap:4px}
+.ctl button{width:34px;height:32px;border-radius:8px;border:1px solid var(--rule);background:var(--paper);cursor:pointer;font-size:18px;line-height:1}
+.ctl output{min-width:44px;text-align:center;font-size:14px;color:var(--muted)}
+.seg{display:flex;border:1px solid var(--rule);border-radius:9px;overflow:hidden}
+.seg button{flex:1;padding:8px 6px;border:0;background:transparent;cursor:pointer;font-size:15px}
+.seg button+button{border-left:1px solid var(--rule)}
+.seg button[aria-pressed="true"]{background:var(--deep);color:var(--paper)}
+.hero{max-width:820px;margin:0 auto;padding:56px 20px 24px;text-align:center}
+.hero .author{font:500 15px var(--sans);color:var(--gold);letter-spacing:.04em;margin:0}
+.hero h1{font:400 clamp(28px,6vw,40px)/1.2 var(--serif);margin:14px 0 10px;text-wrap:balance}
+.hero p.sub{margin:0 auto;max-width:34em;color:var(--muted);font-size:17px}
+.cta{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:26px 0 8px}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:11px 20px;border-radius:999px;border:1px solid var(--deep);background:var(--deep);color:var(--paper);font:500 16px var(--sans);text-decoration:none;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--deep)}
+.contents{max-width:760px;margin:24px auto 0;padding:0 20px;text-align:left;font-family:var(--sans)}
+.contents h2{font:500 14px var(--sans);color:var(--muted);margin:26px 0 8px}
+.toc{list-style:none;margin:0;padding:0;border-top:1px solid var(--rule)}
+.toc a{display:flex;justify-content:space-between;gap:12px;padding:11px 2px;border-bottom:1px solid var(--rule);text-decoration:none;color:var(--ink);font-size:16px}
+.toc a span{flex:none;color:var(--muted);font-size:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(44px,1fr));gap:6px}
+.grid a{display:flex;align-items:center;justify-content:center;height:42px;border-radius:8px;background:var(--sheet);border:1px solid var(--rule);text-decoration:none;color:var(--ink);font:500 15px var(--sans)}
+.grid a.cur{background:var(--deep);border-color:var(--deep);color:var(--paper)}
+main{max-width:760px;margin:0 auto;padding:0 20px 80px}
+.sec{padding-top:44px}
+.sec>h2{font:400 clamp(24px,4.4vw,31px)/1.25 var(--serif);margin:0 0 14px;text-wrap:balance}
+.lede{color:var(--muted);font:400 15px/1.5 var(--sans);margin:-6px 0 18px}
+.prose,.body{font-size:calc(18px*var(--s-bg))}
+.prose p,.body p{margin:0 0 1em;hyphens:auto;-webkit-hyphens:auto;overflow-wrap:break-word}
+.prose b,.body b{font-weight:600}
+h3.sub{font:600 calc(19px*var(--s-bg))/1.35 var(--serif);color:var(--deep);margin:1.8em 0 .6em}
+h4.sub2{font:italic 400 calc(18px*var(--s-bg)) var(--serif);color:var(--deep);margin:1.4em 0 .4em}
+sup{font-size:.62em;line-height:0}
+sup a{text-decoration:none}
+.item{display:grid;grid-template-columns:40px 1fr;gap:4px 14px;padding:22px 0;border-bottom:1px solid var(--rule)}
+.item:first-of-type{border-top:1px solid var(--rule)}
+.num{font:600 15px/1 var(--sans);color:var(--gold);padding-top:6px}
+.num a{color:inherit;text-decoration:none}
+.body{min-width:0}
+.ititle{font:500 18px/1.35 var(--sans);margin:2px 0 14px;color:var(--ink)}
+.item.cur{background:linear-gradient(90deg,var(--wash),transparent 85%);margin:0 -12px;padding-left:12px;padding-right:12px;border-radius:6px}
+/* arabic text: every word is drawn from the book's own font with its original glyph positions */
+.ar{margin:.4em 0 1.1em;color:var(--ink);display:flex;gap:10px;align-items:flex-start}
+.ar .lbl{flex:none;font:600 15px var(--sans);color:var(--gold);padding-top:.5em}
+.arw{flex:1;min-width:0;display:flex;flex-wrap:wrap;direction:rtl;font-size:calc(26px*var(--s-ar));column-gap:.3em;row-gap:.15em;line-height:1}
+.zw{flex:none;display:block;height:var(--h)}
+.zw svg,.zi svg{display:block;width:100%;height:100%;overflow:visible;fill:currentColor;direction:ltr;unicode-bidi:isolate}
+.zi{display:inline-block;color:var(--gold);margin:0 .12em;line-height:0}
+.zi svg{display:inline-block}
+.zw text,.zi text{direction:ltr;unicode-bidi:normal;text-anchor:start;letter-spacing:0;word-spacing:0;font-kerning:none;font-variant-ligatures:none;font-style:normal;font-weight:400;font-synthesis:none;white-space:pre}
+body.noar .ar{display:none}
+.fns{font:400 14px/1.5 var(--serif);color:var(--muted);border-top:1px solid var(--rule);margin:1.6em 0 0;padding:14px 0 0 1.6em}
+.fns li{margin:0 0 6px}
+.fns li:target{color:var(--ink);background:var(--wash)}
+.focus{position:fixed;inset:0;z-index:40;background:var(--paper);display:none;flex-direction:column;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.focus.open{display:flex}
+.f-top{display:flex;align-items:center;gap:10px;max-width:820px;width:100%;margin:0 auto;padding:10px 16px;font-family:var(--sans)}
+.f-top .where{margin-right:auto;font-size:15px;color:var(--muted)}
+.prog{height:3px;background:var(--rule);max-width:820px;width:calc(100% - 32px);margin:0 auto;border-radius:3px;overflow:hidden}
+.prog i{display:block;height:100%;background:var(--gold);width:0}
+.f-body{flex:1;overflow:auto;width:100%;max-width:760px;margin:0 auto;padding:24px 20px}
+.f-body .item{border:0;display:block;padding:0}
+.f-body .num{display:none}
+.unit-h{display:none}.f-body .unit-h{display:block;margin-top:0}.f-body .unit>h3.sub:first-child{margin-top:0}
+.f-nav{display:flex;gap:10px;max-width:760px;width:100%;margin:0 auto;padding:10px 16px 14px}
+.f-nav button{flex:1;padding:13px;border-radius:12px;border:1px solid var(--rule);background:var(--sheet);font:500 16px var(--sans);cursor:pointer}
+.f-nav .next{background:var(--deep);border-color:var(--deep);color:var(--paper)}
+.f-nav button:disabled{opacity:.4;cursor:default}
+@media (max-width:520px){body{font-size:17px}.item{grid-template-columns:28px 1fr;gap:4px 10px}.hero{padding-top:36px}}
+
+.art{font-family:"Amiri","Noto Naskh Arabic","Traditional Arabic",serif;font-size:calc(25px*var(--s-ar));line-height:2.05;direction:rtl;text-align:center;margin:.3em 0 .4em;color:var(--ink);font-weight:400}
+.art p{margin:0}
+.vs{padding:12px 0 10px;border-top:1px solid color-mix(in srgb,var(--rule) 70%,transparent);margin:6px 0}
+.vs .pre{margin:0 0 .3em}
+.vs .tr{margin:0 0 .2em;font-style:italic;color:var(--deep);text-align:center}
+.hq{font-style:italic;margin:0 0 .9em}
+.cen{text-align:center;font-weight:600;color:var(--deep)}
+.fnote{font-size:.85em;color:var(--muted);border-top:1px solid var(--rule);padding-top:4px}
+.meta{margin-top:1.2em!important;color:var(--muted);font:400 14px var(--sans)}
+.item .body h4.sub2{margin:1.1em 0 .4em;color:var(--deep)}
+body.noar .art{display:none}
+body.notr .vs .tr{display:none}
+</style>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#F5F4F0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111318" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Зикирь">
+<script>try{var zt=localStorage.getItem('zk:theme');if(zt==='light'||zt==='dark')document.documentElement.setAttribute('data-theme',zt);}catch(e){}</script>
+<style id="zk-nav">.bar-in .bar-title{display:none}.zk-home{flex:0 1 auto;min-width:0;max-width:min(52vw,340px);display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 12px 0 10px;border-radius:8px;border:1px solid var(--rule);background:var(--sheet);color:var(--ink);text-decoration:none;font-weight:600;font-size:15px;white-space:nowrap}.zk-home span{overflow:hidden;text-overflow:ellipsis}.zk-home svg{flex:none;width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}@media (hover:hover){.zk-home:hover,.zk-flag:hover{border-color:var(--gold)}}.zk-flag{flex:none;display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:8px;border:1px solid var(--rule);background:var(--sheet)}.zk-flag svg{width:24px;height:16px;border-radius:2px;box-shadow:0 0 0 1px rgba(0,0,0,.15)}.bar-in .sel{flex:1 1 0;min-width:0}@media (max-width:479px){.bar-in .sel{max-width:none;min-width:84px}.zk-home{max-width:40vw}}.zk-alt{color:var(--ink)}.zk-alt svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;box-shadow:none;border-radius:0}.zk-ver{display:grid;justify-items:center;gap:8px;margin:22px auto 0;font-family:var(--sans)}.zk-ver small{font-size:13px;color:var(--muted);letter-spacing:.04em}.zk-seg{display:inline-flex;border:1px solid var(--deep);border-radius:999px;overflow:hidden}.zk-seg a,.zk-seg span{padding:8px 16px;font-size:15px;font-weight:500;text-decoration:none;color:var(--deep)}.zk-seg span{background:var(--deep);color:var(--paper)}@media (hover:hover){.zk-seg a:hover{background:color-mix(in srgb,var(--deep) 12%,transparent)}}.zk-ver p{margin:0;font-size:14px;color:var(--muted);max-width:40ch;text-align:center}main p,main li{overflow-wrap:break-word}</style>
+<style id="zk-touch">
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+a,button,label,select,summary,input,output,[role=button],.chip{touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,.06)}
+.panel,#panel,#zkPanel{max-height:calc(100vh - 80px - env(safe-area-inset-top,0px));-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+@supports (height:100dvh){.panel,#panel,#zkPanel{max-height:calc(100dvh - 80px - env(safe-area-inset-top,0px))}}
+@media (pointer:coarse){
+ .ib,.zk-home,.zk-flag,.ctl button,.setb,.savb,.sin{position:relative}
+ .ib::before,.zk-home::before,.zk-flag::before,.ctl button::before,.zk-star::before,.setb::before,.savb::before,.sin::before{content:"";position:absolute;inset:-6px}
+ .ctl button{width:44px;height:40px}
+ .seg button{min-height:44px}
+ .tog{min-height:44px}
+ select.sel,.sel{min-height:40px}
+ .chip{min-height:38px}
+ sup a{display:inline-block;padding:10px 8px;margin:-10px -8px}
+ summary{padding-top:8px;padding-bottom:8px}
+}
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="bar-in">
+    <a class="zk-home" id="zkHome" href="index.html" title="Зикирь – начална страница"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11 12 4l8 7"/><path d="M6 9.5V20h4.5v-5h3v5H18V9.5"/></svg><span>Зикирь</span></a>
+    <a class="bar-title" href="#top">Дуа и ибадети</a>
+    <select class="sel" id="jump" aria-label="Отиди на"><option value="top">Начало</option><option value="c1">Уважаеми читатели</option><option value="m1">1. Мухаррем</option><option value="m2">2. Денят Ашуре</option><option value="m3">3. Саферю’л-Хайр</option><option value="m4">4. Ребиу’л-Еввел</option><option value="m5">5. Рожден ден на Мухаммед (С.А.С)</option><option value="m6">6. Ребиу’л Ахър</option><option value="m7">7. Джемазиел еввел</option><option value="m8">8. Джемазиел ахър</option><option value="m9">9. Реджеб-и Шериф</option><option value="m10">10. Лейлат-ир Регаиб</option><option value="m11">11. Лейлат-ил Мирадж</option><option value="m12">12. Свещеният Шабан</option><option value="m13">13. Лейлатил Берат</option><option value="m14">14. Свещеният Рамазан</option><option value="m15">15. Лейлат’ил Кадър</option><option value="m16">16. Месец Шеввал</option><option value="m17">17. Месец Зилка’де</option><option value="m18">18. Месец Зилхиджже</option><option value="m19">19. Намаз „Хусама“</option><option value="m20">20. Намаз „Тесбих“</option><option value="m21">21. Айети „Сежде“</option><option value="m22">22. Молитвите Салават-ъ Шериф</option></select>
+    <button class="ib" id="focusBtn" aria-label="Едно по едно" title="Едно по едно"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M9 12h6M13 9.5 15.5 12 13 14.5"/></svg></button>
+    <button class="ib" id="setBtn" aria-label="Настройки" aria-expanded="false" title="Настройки">
+      <svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>
+    </button>
+  </div>
+</header>
+<div class="panel" id="panel" role="dialog" aria-label="Настройки">
+  <div class="grp">
+    <h3>Показвай</h3>
+    <label class="tog">Арабски текст <input type="checkbox" data-opt="ar" checked></label>
+    <label class="tog">Транскрипция <input type="checkbox" data-opt="tr" checked></label>
+  </div>
+  <div class="grp">
+    <h3>Размер на шрифта</h3>
+    <div class="step" data-k="ar">Арабски текст <span class="ctl"><button data-d="-1" aria-label="По-малък арабски текст">−</button><output></output><button data-d="1" aria-label="По-голям арабски текст">+</button></span></div>
+    <div class="step" data-k="bg">Текст <span class="ctl"><button data-d="-1" aria-label="По-малък текст">−</button><output></output><button data-d="1" aria-label="По-голям текст">+</button></span></div>
+  </div>
+  <div class="grp">
+    <h3>Тема</h3>
+    <div class="seg" id="themeSeg"><button data-t="auto" aria-pressed="true">Авто</button><button data-t="light" aria-pressed="false">Светла</button><button data-t="dark" aria-pressed="false">Тъмна</button></div>
+  </div>
+</div>
+<section class="hero" id="top">
+  <p class="author">Д-р хаджи Недим хафъз Ибрахим Генджев</p>
+  <h1>Дуа и ибадети</h1>
+  <p class="sub">Дуа и ибадети, които се извършват през свещените дни, нощи и месеци на годината</p>
+  <div class="cta">
+    <a class="btn" href="#c2">Към ибадетите</a><a class="btn ghost" href="#c1">Увод</a>
+    <button class="btn ghost" id="resumeBtn" hidden></button>
+  </div>
+  <div class="contents">
+    <h2>Съдържание</h2>
+    <ul class="toc"><li><a href="#c1">Уважаеми читатели<span></span></a></li><li><a href="#c2">Дуа и ибадети през годината<span>22 раздела</span></a></li></ul>
+    <h2>Разделите</h2><div class="grid" id="grid"><a href="#m1" data-i="0" title="1. Мухаррем">1</a><a href="#m2" data-i="1" title="2. Денят Ашуре">2</a><a href="#m3" data-i="2" title="3. Саферю’л-Хайр">3</a><a href="#m4" data-i="3" title="4. Ребиу’л-Еввел">4</a><a href="#m5" data-i="4" title="5. Рожден ден на Мухаммед (С.А.С)">5</a><a href="#m6" data-i="5" title="6. Ребиу’л Ахър">6</a><a href="#m7" data-i="6" title="7. Джемазиел еввел">7</a><a href="#m8" data-i="7" title="8. Джемазиел ахър">8</a><a href="#m9" data-i="8" title="9. Реджеб-и Шериф">9</a><a href="#m10" data-i="9" title="10. Лейлат-ир Регаиб">10</a><a href="#m11" data-i="10" title="11. Лейлат-ил Мирадж">11</a><a href="#m12" data-i="11" title="12. Свещеният Шабан">12</a><a href="#m13" data-i="12" title="13. Лейлатил Берат">13</a><a href="#m14" data-i="13" title="14. Свещеният Рамазан">14</a><a href="#m15" data-i="14" title="15. Лейлат’ил Кадър">15</a><a href="#m16" data-i="15" title="16. Месец Шеввал">16</a><a href="#m17" data-i="16" title="17. Месец Зилка’де">17</a><a href="#m18" data-i="17" title="18. Месец Зилхиджже">18</a><a href="#m19" data-i="18" title="19. Намаз „Хусама“">19</a><a href="#m20" data-i="19" title="20. Намаз „Тесбих“">20</a><a href="#m21" data-i="20" title="21. Айети „Сежде“">21</a><a href="#m22" data-i="21" title="22. Молитвите Салават-ъ Шериф">22</a></div>
+  </div>
+</section>
+<main id="reader">
+<section class="sec" id="c1"><h2>Уважаеми читатели</h2><div class="prose"><p>В тази книга ще ви запознаем с някои ибадети и молитви, които трябва да се извършват в свещените дни и нощи през годината. За тях трябва да се знае, че не са абсолютно задължителни. Всички разяснени ибадети са „Нафиле“. Ако си припомним долупосочения хадиси-шериф, ще разберем значението на ибадетите „Нафиле“ в нашия живот. Чрез тях ние ще измолим от Всевишния Аллах най-голямата награда и опрощение.</p>
+<div class="vs"><p class="pre">Впрочем в свещения хадис се казва:</p><div class="art" lang="ar" dir="rtl"><p>بِالْفَرَائِضِ نَجٰى مِنِّي عَبْدِي وَ بِالنَّوَافِلِ يَتَقَرَّبُ اِلَيَّ</p></div></div>
+<p>„С изпълнение на заповедите — фарз, рабите мои ще се спасят от наказание. Чрез „Нафиле“ ще се доближат до Мен (до моето благоволение).“</p>
+<p>В такъв случай всеки мюслюманин, който иска да е стриктен и се стреми към праведност и благочестивост, трябва да изпълни тези ибадети в рамките на своите възможности и свободно време.</p>
+<p class="cen">Аллах е велик и всеопрощаващ.</p>
+<p class="meta">Д-р хаджи Недим хафъз Ибрахим Генджев, президент на Международната фондация за развитие на ислямската култура – София, 1991. Художник: Надежда Спирова.</p></div></section>
+<section class="sec" id="c2"><h2>Дуа и ибадети през годината</h2><div class="prose"></div><article class="item" id="m1" data-i="0"><div class="num"><a href="#m1">1</a></div><div class="body"><h3 class="ititle">Мухаррем</h3><p>Това е първият месец на годината. Последната нощ на месец Зилхидже, между вечерния намаз и нощния намаз (ятсъ). (Т.е. през нощта срещу първия ден на Мухаррем и последния ден на Зилхидже е за измолване благоволението и одобрението на Аллах (Дж. Дж.) се кланя два рекята намаз.</p>
+<p>Намазът започва с изричането на:</p>
+<p>„Всевишни Аллах! За това, че ни помогна да достигнем новата година и ни удостои с Всевишното си опрощение, за да ни дари земно и небесно щастие, казвам „Аллаху Екбер“.</p>
+<p>При всеки един от двата рекята се чете:</p>
+<p>7 пъти Фатиха-и шериф, седем пъти Айетюл кюрси, седем пъти Ихляс-ъ шериф.</p>
+<div class="vs"><p class="pre">След намаза се чете:</p><p class="pre">Единадесет пъти:</p><div class="art" lang="ar" dir="rtl"><p>لَآ اِلٰهَ اِلَّا اللّٰهُ وَحْدَهُ لَا شَرِيكَ لَهُ لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ يُحْيِي وَيُمِيتُ وَهُوَ حَيٌّ لَا يَمُوتُ بِيَدِهِ الْخَيْرُ وَهُوَ عَلٰى كُلِّ شَيْءٍ قَدِيرٌ</p></div><p class="tr">„Ля иляхе иллаллахю вахдеху; Ля шерике Лех Лехюл-мюлкю ие лехюл-хамдю йухйий ве йумит. Ве хюве хаййун ля йемутю бийедихил хайр ве хюве аля кюлли шей’ин кадир.“</p></div>
+<p>Единадесет пъти Истигфар-ъ шериф, единадесет пъти Салеват-ъ шериф, след което се чете молитва (дуа), с която молим Аллах (Дж. Дж.) да ни опрости греховете от предишната година и да влезем в новата година праведни и чисти.</p>
+<p>Отделно през първата вечер на Мухаррем, след като направим възнамерение (нийет) по следния начин се кланя Тесбих намаз.</p>
+<p>„Велики Аллах, удостой ме през тази нова година с Всевишното си опрощение и одобрение, за да вървя по пътя на свещената вяра. Когато отваряш тетрадката за новите ми деяния, удостой ме с щастието тя да бъде изписана с подходящи дела (деяния). Запази ме от деяния, които ще предизвикат Височайшия ти гняв.</p>
+<p>Аети, които трябва да се четат при Тесбих намаз:</p>
+<p>При първия рекят: сура „Фатиха“ и „Айетюл Кюрси“.</p>
+<p>При втория рекят: „Фатиха“ и „Аменер-ресулю“, като се добавят и първите два аета на сура „Али Имран“.</p>
+<p>При третия рекят: „Фатиха“ и „Хювелляхюллези...“</p>
+<p>При четвъртия рекят: „Фатиха“ и сура „Ихляс“.</p>
+<p>След намаза се прави „Истигфар“, „Салеват-ъ шериф“ и накрая се чете дуа.</p>
+<p>Тези, които през първия ден на м. Мухаррем прочетат 1000 пъти сура „Ихляс“ от Свещения Куран, като при всяко четене започват с „Бесмеле“, ще получат одобрението и благоволението на Всевишния Аллах и той ще ги изпрати от този свят пречистени и безгрешни.</p>
+<p>През този месец, ако се държи последователно оруч в четвъртък, петък и събота, се дава „севаб“ за 900 години „нафиле“ оруч.</p>
+<p>Между първия и десетия ден на м. Мухаррем се чете:</p>
+<p>Молитва за опрощаване на греховете — кланя се шест рекята намаз, като при всеки втори рекят трябва да се даде селям.</p>
+<p>Този намаз би могъл да се кланя както между вечерния намаз и нощния намаз, така може да се кланя и след нощния намаз (ятсъ).</p>
+<p>Възнамерението — (нийет) за този намаз се извършва така:</p>
+<p>„Възнамерявам, о Велики Аллах, да кланям намаз за Височайшото ти благоволение и одобрение. За благодарността на някой съсед, брат по религия или, който и да е човек, казвам: „Аллаху Екбер“.</p>
+<p>При рекят се чете: сура „Фатиха“, „Айетюл Кюрси“ и 11 пъти сура „Ихляс“ от Свещения Куран.</p>
+<p>При втория рекят сура „Фатиха“ и 10 пъти сура „Ихляс“.</p>
+<p>При третия рекят: сура „Фатиха“, сура „Текасюр“ и 11 пъти сура „Ихляс“ от Свещения Куран.</p>
+<p>При четвъртия рекят: сура „Фатиха“ и 10 пъти сура „Ихляс“.</p>
+<p>При петия рекят: сура „Фатиха“, 3 пъти сура „Кяфирун“ и 11 пъти сура „Ихляс“ от Свещения Куран.</p>
+<p>При шестия рекят: сура „Фатиха“ и 10 пъти сура „Ихляс“.</p>
+<p>След намаза да се чете дуа.</p>
+<p>Държането на оруч от първия до десетия ден на м. Мухаррем и приготвянето на ашуре на десетия ден се счита за един от добродетелните ибадети. Тези, които го изпълнят, ще могат да се надяват да влязат в „Дженнет“ заедно с Хз. Хасан и Хз. Хюсеин.</p>
+<p>Тези, които нямат възможност да държат този десетдневен оруч, трябва да държат оруч през 8-я, 9-я и 10-я ден.</p>
+<p>През деветия ден на месеца Пророкът ни Мухаммед (С.А.С.) се намираше на поход, поради това е постил само на десетия ден и е казал: „Ако сме живи догодина, ще постим и през деветия ден“.</p>
+<p>През нощта на 9-я и 10-я ден трябва да се кланя по един Тесбих намаз. А също така за измолване на благоволение на Аллах (Дж. Дж.) във времето техежжют се кланя намаз от четири рекята. При всеки рекят се чете по петдесет пъти сура „Ихляс“,</p>
+<p>Времето техежжют: В колкото часа е обедното време през деня, в толкова започва и времето техежжют през нощта.</p>
+<p>През всичките тези дни Хатми Енбия трябва да продължават. Особено вечерта на 9-я ден задължително да се направи Хатми Енбия.</p>
+<p>По време на м. Мухаррем трябва да се прави колкото се може повече „Истигфар.“</p></div></article>
+<article class="item" id="m2" data-i="1"><div class="num"><a href="#m2">2</a></div><div class="body"><h3 class="ititle">Денят Ашуре</h3><p>Десетият ден на Мухаррем е денят Ашуре (ден за приготвяне на ашуре).</p>
+<p>През този ден са станали големи и важни събития. Някои събития, които са се случили през този ден:</p>
+<p>1. Създаването на земята и небесата.</p>
+<p>2. Приемане на разкаянието на Адем (А. С.)</p>
+<p>3. Освобождаването на Муса (А. С.) от опеката и гнева на Фараона и гибелта на Фараона.</p>
+<p>4. Раждането на Ибрахим (С. А.) и спасението му от огъня.</p>
+<p>5. Изцелението на Ейюб (А.С.)</p>
+<p>6. Избавлението на Юнус (А.С.) от корема на рибата.</p>
+<p>7. Даването на салтанат на Сюлейман (А.С.)</p>
+<p>8. Пристигане на суша на гемията на Нух (А.С.)</p>
+<p>9. Гибелта (шехид) на Хз. Хюсеин</p>
+<p>10. И денят „Къйамет“ ще бъде през деня Ашуре.</p>
+<p>Какво се прави през деня Ашуре:</p>
+<p>а) Ако през този ден се купят за вкъщи хранителни продукти, през цялата година ще има плодородие.</p>
+<p>б) Трябва да се поздравят най-малко десет мюслюмани по един път или десет пъти един мюслюманин.</p>
+<div class="vs"><p class="pre">в) Тези, които през този ден направят гусюл, през цялата година няма да боледуват от дребни болести.</p><p class="pre">г) Десет пъти се чете следната молитва:</p><div class="art" lang="ar" dir="rtl"><p>سُبْحَانَ اللّٰهِ مِلْاءَ الْمِيزَانِ وَمُنْتَهَى الْعِلْمِ وَمَبْلَغَ الرِّضٰى وَزِنَةَ الْعَرْشِ</p></div><p class="tr">„Сюбханаллахи мил ел-мизан ве мюнтехелилми ве меблегарръда ие зинетел арш.“</p></div>
+<p>д) В деня Ашуре да се кланя намаз от два рекята по времето кушлук (времето между сутринта и обеда). При всеки рекят се чете сура „Фатиха“ и 50 пъти сура „Ихляс“.</p>
+<div class="vs"><p class="pre">След намаза се чете 100 пъти следният „Салават-ъ шериф“.</p><div class="art" lang="ar" dir="rtl"><p>اَللّٰهُمَّ صَلِّ عَلٰى سَيِّدِنَا مُحَمَّدٍ وَعَلٰى آلِ سَيِّدِنَا مُحَمَّدٍ وَآدَمَ وَنُوحٍ وَاِبْرٰهِيمَ وَمُوسٰى وَعِيسٰى وَمَا بَيْنَهُمْ مِنَ النَّبِيِّينَ وَالْمُرْسَلِينَ صَلَوَاتُ اللّٰهِ وَسَلَامُهُ عَلَيْهِمْ اَجْمَعِينَ</p></div><p class="tr">„Аллахюмме салли аля сейидина Мухаммедин ве аля али сейидина Мухаммедин ве Адеме ве Нухун ве Ибрахиме ве Муса ве Иса вема бейнехюм минен небиийине ве’ л-мюрселин. Селеватю „аллахи ве селямюху алейхим еджмаин.“</p></div>
+<p>е) Между обедната и следобедната молитва се кланя намаз от четири рекята. При всеки рекят се чете сура „Фатиха“ и 50 пъти Ихляс-ъ шериф.</p>
+<p>След намаза се чете:</p>
+<p>70 пъти Истигфар-и шериф.</p>
+<p>70 пъти Салеват-и шериф.</p>
+<p>70 пъти:</p>
+<p class="hq">„Ля хавле веля куввете илля биллахи л-алиии’ л-азъйн.“</p>
+<p>Чете се молитва за свещената вяра на Мухаммед (С.А.С) и неговите сподвижници.</p></div></article>
+<article class="item" id="m3" data-i="2"><div class="num"><a href="#m3">3</a></div><div class="body"><h3 class="ititle">Саферю’л-Хайр</h3><p>За предпазване от небесните и земните злини и нещастия в последната сряда вечерта или през деня, на този свещен месец се кланя намаз от два рекята.</p>
+<p>При всеки рекят се чете: сура „Фатиха“ и 11 пъти сура „Ихляс“.</p>
+<p>След намаза се чете най-малко 11 пъти „Истигфар“ и 11 пъти „Салят-и Мюнжийе“.</p></div></article>
+<article class="item" id="m4" data-i="3"><div class="num"><a href="#m4">4</a></div><div class="body"><h3 class="ititle">Ребиу’л-Еввел</h3><p>На дванадесетия ден на този месец светът беше удостоен с раждането на избраника на Аллах (Дж.Дж) Пророка ни Мухаммед (С.А.С). Затова първата свещена нощ е 12-та нощ на Ребиу-л-Еввел, рождената дата (нощ) на Пророка Мухаммед (С.А.С).</p></div></article>
+<article class="item" id="m5" data-i="4"><div class="num"><a href="#m5">5</a></div><div class="body"><h3 class="ititle">Рожден ден на Мухаммед (С.А.С)</h3><p>За да се възползуваме от духовното богатство на тази нощ, трябва да се кланя Тесбих намаз и да се извърши Хатми Енбия.</p>
+<p>Възнамерението за Тесбих намаз се извършва така:</p>
+<p>„Всевишни Аллах, възнамерявам да кланям Тесбих намаз за твоето благоволение и слава“. И тъй както чрез тайнството на тази вечер си дарил (удостоил) с Всемогъщата си щедрост и милост многообичания ни Пророк, избраника на Всевишния Аллах Мухаммед (С.А.С), удостоил и мен, безсилния твой раб, с милосърдието и благоволението си.“</p>
+<p>През този месец трябва да се четат колкото е възможно повече салатю селям (салят-и нарийе, салят-и мюнджийе и салят-и фетхиме).</p></div></article>
+<article class="item" id="m6" data-i="5"><div class="num"><a href="#m6">6</a></div><div class="body"><h3 class="ititle">Ребиу’л Ахър</h3><div class="vs"><p class="pre">За благополучен живот, за да победим враговете си, за да се предпазим от скверен</p><p class="pre">живот, сутрин и вечер трябва да се чете следната молитва:</p><div class="art" lang="ar" dir="rtl"><p>سُبْحَانَ اللّٰهِ مِلْاءَ الْمِيزَانِ ? وَمُنْتَهَى الْعِلْمِ وَمَبْلَغَ الرِّضٰى وَزِنَةَ الْعَرْشِ</p></div><p class="tr">„Сюбханаллахи мил’ ел-Мизан ве мюнтехе’ л-ълми ве меблегар — ръза ве зинет’ л-арш.“</p></div></div></article>
+<article class="item" id="m7" data-i="6"><div class="num"><a href="#m7">7</a></div><div class="body"><h3 class="ititle">Джемазиел еввел</h3><p>През този месец трябва да се извършват нормалните молитви и ибадети.</p></div></article>
+<article class="item" id="m8" data-i="7"><div class="num"><a href="#m8">8</a></div><div class="body"><h3 class="ititle">Джемазиел ахър</h3><p>През този месец трябва да се извършват нормалните молитви и ибадети.</p></div></article>
+<article class="item" id="m9" data-i="8"><div class="num"><a href="#m9">9</a></div><div class="body"><h3 class="ititle">Реджеб-и Шериф</h3><p>Месец Реджеб е от месеците „Ешхуру хурум“ и е наречен ШЕХРУЛЛАХ, т.е. това е месецът на Всевишния Аллах. В този месец</p>
+<p>навлизаме с оруч и през този месец трябва да изразим почитанието си към Великия Аллах, за да заслужим неговото благоволение.</p>
+<p class="cen">— ” —</p>
+<p>На тези, които държат оруч през първия ден на м. Реджеб, им се признава благодеяние (севаб) за три години „нафиле оруч“, на тези, които държат оруч през втория ден — две години, а на тези, които държат оруч през третия ден — една година.</p>
+<p>След тези три дни за всеки ден се дава благодеяние за оруч за по един месец.</p>
+<p>Тъй като този месец е свещен на Всевишния Аллах, трябва при всеки удобен случай да се чете сура „Ихляс.“</p>
+<p>За изразяване на особена почит и уважение всеки ден трябва да се чете 11 пъти Ихляс-ъ шериф. Трябва да се чете и „Тевхид“, „Истигфар“ и „Салеват-ъ шериф“.</p>
+<p>През този месец има две свещени нощи:</p>
+<p>„Лейлат-ир Регаиб“ — първата петъчна нощ на месеца. Втората свещена нощ е Лейлят’ ил-Мирадж“ — това е 27-та нощ на м. Реджеб.</p>
+<p>Първата вечер се кланя Тесбих намаз или през първите десет дена на Свещения м. Реджеб може да се кланя намаз от 10 рекята. При този намаз след сура „Фатиха“ се чете три пъти „сура Кяфирун“ и три пъти сура „Ихляс“. Начинът на кланяне ще обясним в следващите страници на тази книга.</p>
+<p class="cen">— ” —</p>
+<p>През месец Реджеб четенето 7 пъти сутрин и вечер на сура „Фатиха“ и 100 пъти на сура „Ихляс“ е добро дело (севаб).</p>
+<p>През този месец колкото е възможно трябва да се прави „Хатми Енбия“ и да се държи оруч. Тези, които държат оруч през 13-ия, 14-ия и 15-ия ден, изпълнявайки сюннет на Мухаммед (С.А.С.), ще намерят изцеление от много болести.</p>
+<p class="cen">— ” —</p>
+<p>Между първия и десетия, единадесетия и двадесетия, двадесет и първия и тридесетия дни трябва веднъж да се кланя намаз от десет рекята. Начинът на кланяне е един и същ.</p>
+<p>Тези намази могат да се кланят както след вечерния намаз, така и след нощния намаз (ятсъ), но най-добродетелно е да се кланя петъците и понеделниците, и то във времето „техежжют“.</p>
+<p>Този намаз от 30 рекята е разказан от бръснаря на Мухаммед (С.А.С.), Хз. Селманъ Пак (Р.А.)</p>
+<h4 class="sub2">НАЧИН НА КЛАНЯНЕ</h4>
+<p>Този намаз се нарича „Намаз Хаджет“.</p>
+<p>Преди да се започне намазът, се прави нийет по следния начин:</p>
+<p>„Всевишни Аллах, удостой ме с уважението, с което даряваш Пророка ни Мухаммед (С.А.С.), за почитта, която изразявам към свещения месец Реджеб. Известна е твоята щедрост, всеопрощението и благоволението Ти. Нека мястото ми бъде между вярващите Ти раби. Избави ме от земните теглила и от теглилата на отвъдния свят. За твоето одобрение и за твоя чест и слава казвам: Аллах е най-велик.“</p>
+<div class="vs"><p class="pre">При всеки рекят се чете един път сура „Фатиха“, три пъти сура „Кяфирун“, три</p><p class="pre">пъти сура „Ихляс“. На всеки втори рекят се дава селям. По този начин се извършват 10-те рекята. След намаза се чете единадесет пъти:</p><div class="art" lang="ar" dir="rtl"><p>لَآ اِلٰهَ اِلَّا اللّٰهُ وَحْدَهُ لَا شَرِيكَ لَهُ لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ يُحْيِي وَيُمِيتُ وَهُوَ حَيٌّ لَا يَمُوتُ بِيَدِهِ الْخَيْرُ وَهُوَ عَلٰى كُلِّ شَيْءٍ قَدِيرٌ</p></div><p class="tr">„Ля иляхе илляллахю вахдехю Ля шерике лех. Лехю’л-мюлкю ве лехюл-хамдю йухйи ве йумит. Ве хюве хайюн ля йемутю бийедихил хайр ве хюве аля кюлли шейин кадир.“</p></div>
+<div class="vs"><p class="pre">При намаза, който се кланя между 11-ия и 20-ия, след десетте рекята се чете единадесет пъти:</p><div class="art" lang="ar" dir="rtl"><p>اِلٰهاً وَاحِداً اَحَداً صَمَداً فَرْداً وِتْراً حَيّاً قَيُّوماً دَائِماً أَبَداً</p></div><p class="tr">„Иляхен вахъден ехаден самеден ферден витрен хайен кайумен даимен ебеден.“</p></div>
+<div class="vs"><p class="pre">При намаза, който се кланя между 21-ия и 30-ия след десетте рекята се чете единадесет пъти:</p><div class="art" lang="ar" dir="rtl"><p>اَللّٰهُمَّ لَا مَانِعَ لِمَا اَعْطَيْتَ وَلَا مُعْطِىَ لِمَا مَنَعْتَ وَلَا رَادَّ لِمَا قَضَيْتَ وَلَا مُبَدِّلَ لِمَا حَكَمْتَ وَلَا يَنْفَعُ ذَا الْجَدِّ مِنْكَ الْجَدُّ سُبْحَانَ رَبِّيَ الْعَلِيِّ الْاَعْلَى الْوَهَّابِ سُبْحَانَ رَبِّيَ الْعَلِيِّ الْاَعْلَى الْوَهَّابِ سُبْحَانَ رَبِّيَ الْعَلِيِّ الْاَعْلَى الْكَرِيمِ الْوَهَّابِ يَا وَهَّابُ يَا وَهَّابُ يَا وَهَّابُ</p></div><p class="tr">„Аллахюмме ля маниа лима а’тайте веля му’ тийе лима мена’те веля радде лима кадайте веля мюбеддиле лима хакемте веля йенфеу залджедди минкел джедю. Субкане раббийел алий алел веххаб. Сюбкане раббийел алийл а’лел керимил веххаб. Я Веххабю я веххаб“.</p></div></div></article>
+<article class="item" id="m10" data-i="9"><div class="num"><a href="#m10">10</a></div><div class="body"><h3 class="ititle">Лейлат-ир Регаиб</h3><p>Това е първата петъчна нощ на свещения месец на Реджеб. Тази нощ трябва да се по-</p>
+<p>срещне, след като сме държали оруч. През нощта Регаиб между вечерния и нощния намаз се кланя намазът „хаджет“ от 12 рекята. При този намаз след всеки втори рекят се дава селям и след сура „Фатиха“ при всеки рекят се чете 3 пъти сура „Кадир“ и 12 пъти Ихлясъ Шериф.</p>
+<div class="vs"><p class="pre">След което се чете 7 пъти Салат-ъ Юммийе и се пристъпва към сежде.</p><p class="pre">Салат - ъ Юммийе:</p><div class="art" lang="ar" dir="rtl"><p>اَللّٰهُمَّ صَلِّ عَلٰى سَيِّدِنَا مُحَمَّدٍ نِ‌النَّبِيِّ الْاُمِّيِّ وَعَلٰى آلِهِ وَصَحْبِهِ وَسَلِّمْ</p></div><p class="tr">„Аллахюмме салли аля сейидина Мухаммединин небийи’л - юммийи<sup>?</sup> ве аля алихи ве сахбихи ве селлим.“</p></div>
+<div class="vs"><p class="pre">При сеждето се чете 70 пъти:</p><div class="art" lang="ar" dir="rtl"><p>سُبُّوحٌ قُدُّوسٌ رَبُّنَا وَرَبُّ الْمَلٰٓئِكَةِ وَالرُّوحِ?</p></div><p class="tr">„Сюббухун куддисюн ве раббю’л - мелякети веррух.“</p></div>
+<div class="vs"><p class="pre">След като се стане от сежде, 1 път се казва:</p><div class="art" lang="ar" dir="rtl"><p>رَبِّ اغْفِرْ وَارْحَمْ وَتَجَاوَزْ عَمَّا تَعْلَمُ اِنَّكَ اَنْتَ الْاَعَزُّ الْاَكْرَمُ</p></div><p class="tr">„Раббигфир верхам ве тежавез амма та’лем иннеке енте’л -еазю’л- екрем.“</p></div>
+<div class="vs"><p class="pre">Отново се пристъпва към сежде и 70 пъти се чете:</p><div class="art" lang="ar" dir="rtl"><p>سُبُّوحٌ قُدُّوسٌ رَبُّنَا وَرَبُّ الْمَلٰٓئِكَةِ وَالرُّوحِ</p></div><p class="tr">„Сюббухун куддусюн раббюна ве раббю’л-меляитети вер-рух.“</p></div>
+<div class="vs"><p class="pre">Изправяме глава от сеждето и четем молитви — дуа.</p><p class="pre">По време на молитвата-дуа, за да се измоли благоволението на Всевишния Аллах, се казва:</p><div class="art" lang="ar" dir="rtl"><p>اَللّٰهُمَّ بَارِكْ لَنَا رَجَبَ وَشَعْبَانَ وَبَلِّغْنَا رَمَضَانَ</p></div><p class="tr">„Аллахюмме барик лена реджебе ве ша’бан ве бебеллична рамазан.“</p></div>
+<p>На следващия ден след нощта Регаиб /тоест в петък/ между обедния и следобедния намаз се кланя намаз Тешеккюр от 4 рекята, като при всеки втори рекят се дава селям. При всеки рекят се чете един път сура „Фатиха“, седем пъти Айетюл кюрси, пет пъти Ихляс-ъ шериф, пет пъти сура „Фелак“, пет пъти сура „Нас“. След намаза се чете 25 пъти:</p>
+<div class="vs"><div class="art" lang="ar" dir="rtl"><p>لَا حَوْلَ وَلَا قُوَّةَ اِلَّا بِاللّٰهِ الْعَلِيِّ الْعَظِيمِ الْكَبِيرِ الْمُتَعَالِ</p></div><p class="tr">„Ля хавле веля куввете илля биляхи’л-алиййий’л-азими’л-кебири’л мютеал.“</p></div>
+<div class="vs"><p class="pre">Двадесет и пет пъти:</p><div class="art" lang="ar" dir="rtl"><p>اَسْتَغْفِرُ اللّٰهَ الْعَظِيمَ وَاَتُوبُ اِلَيْكَ</p></div><p class="tr">„Естагфирулляхе’л-азъйм ве етубю илейи.“</p></div>
+<p>След което се чете молитва-дуа.</p></div></article>
+<article class="item" id="m11" data-i="10"><div class="num"><a href="#m11">11</a></div><div class="body"><h3 class="ititle">Лейлат-ил Мирадж</h3><p>Двадесет и седмата нощ на свещения Реджеб е нощта Мирадж. След нощния намаз се кланят 12 рекята намаз Хаджет. При всеки рекят след сура „Фатиха“ се чете 10 пъти сура „Ихляс“.</p>
+<p>Възнамерение за молитвата Намаз:</p>
+<p>„Всевишни Аллах, възнамерих да кланям намаз за одобрението и славата Ти. Ти, който си разкрил седемте небеса и себе си на любимия Пророк Мухаммед (С.А.С) и си го удостоил с любовта си, удостой и мен, твоя смирен раб, с уважението и почитта му. Удостой ме с опрощението си и благоволението си.“</p>
+<div class="vs"><p class="pre">След намаза се чете:</p><p class="pre">Четири пъти сура „Фатиха“, 100 пъти:</p><div class="art" lang="ar" dir="rtl"><p>سُبْحَانَ اللّٰهِ وَالْحَمْدُ لِلّٰهِ وَلَآ اِلٰهَ اِلَّا اللّٰهُ وَاللّٰهُ اَكْبَرُ وَلَا حَوْلَ وَلَا قُوَّةَ اِلَّا بِاللّٰهِ الْعَلِيِّ الْعَظِيمِ</p></div><p class="tr">„Сибханаллахи велхамдю лилляхи ве ля иляхе илляллахю валлахю екбер. Ве ля хавле ве ля кув вете илля биллахи’л-алиийл<sup>?</sup>-азъйм“.</p></div>
+<p>Сто пъти — Истигфар-ъ шериф; сто пъти Салевай-ъ шериф, с което се прави молитва дуа.</p>
+<p>При този намаз, ако се прочете 100 пъти сура „Ихляс“ или пък този намаз се кланя 100 рекята, мюсюлманинът, който го е извършил, няма да има дългове за намаз пред Всевишния Аллах.</p>
+<p>През следващия ден на нощта Мирадж обезателно трябва да се държи оруч. През този ден между обедния и следобедния намаз се кланя четири рекята намаз. При всеки рекят след сура „Фатиха“ се чете пет пъти Аййетюл кюрси, 5 пъти сура „Кяфирун“, 5 пъти Ихляс-ъ шериф, 5 пъти сура „Фелак“, 5 пъти сура „Нас“.</p></div></article>
+<article class="item" id="m12" data-i="11"><div class="num"><a href="#m12">12</a></div><div class="body"><h3 class="ititle">Свещеният Шабан</h3><p>Месец Шабан е месецът на Пророка ни Муххаммед (С.А.С). Съобразно с това трябва постоянно да продължаваме Салеват-ъ шериф. Колкото е възможно повече трябва да се чете Истигфар. Салеват-ъ шериф, Ихляс-ъ шериф да се кланят намазите техежжют и тесбих и да извършваме Хатми Енбия.</p>
+<div class="vs"><p class="pre">Думата Шабан съдържа 5 букви:</p><div class="art" lang="ar" dir="rtl"><p>ش</p></div></div>
+<div class="vs"><p class="pre">шериф — славен</p><div class="art" lang="ar" dir="rtl"><p>ع</p></div></div>
+<div class="vs"><p class="pre">улви — възвишен</p><div class="art" lang="ar" dir="rtl"><p>ب</p></div></div>
+<div class="vs"><p class="pre">в средата „бе“ е Берает (опрощаване). Буквата „бе“ е в средата на думата, а това съвпада<sup>?</sup> със средата на месеца, т.е. 15-и вечерта е нощта<sup>?</sup> Берает.</p><div class="art" lang="ar" dir="rtl"><p>ا</p></div></div>
+<div class="vs"><p class="pre">Благодеяние<sup>?</sup> на Аллах</p><div class="art" lang="ar" dir="rtl"><p>ن</p></div></div>
+<p>удостояване с неговата светлина. Тази светлина е мрак, мъчение за неверниците.</p>
+<p>27-та вечер на м. Шабан, между вечерния и нощния намаз ще се кланя два рекята намаз Тешеккюр . Като допълнителна сура може да се чете каквото пожелае молещият се. Възнамерението за намаза се прави така:</p>
+<p>„Всевишни Аллах, ти ни доближи към края на месеца на Пророка ни Мухаммед (С.А.С.). Дари ме с с благодеянията, с които дари Мухаммед (С.А.С.) през този свещен месец.</p>
+<div class="vs"><p class="pre">След намаза се чете 70 пъти Истигфар</p><div class="art" lang="ar" dir="rtl"><p>اَسْتَغْفِرُ اللّٰهَ الْعَظِيمَ وَاَتُوبُ اِلَيْكَ</p></div><p class="tr">„Естегфируллахе’л — азъйм ве етюбю илейк“</p></div>
+<div class="vs"><p class="pre">100 пъти се чете следният Салеват-ъ шериф:</p><div class="art" lang="ar" dir="rtl"><p>اَللّٰهُمَّ صَلِّ عَلٰى رُوحِ مُحَمَّدٍ فِي الْاَرْوَاحِ وَصَلِّ عَلٰى جَسَدِ مُحَمَّدٍ فِي الْاَجْسَادِ وَصَلِّ عَلٰى قَبْرِ مُحَمَّدٍ فِي الْقُبُورِ</p></div><p class="tr">„Аллахюмме салли аля рухи Мухаммедин фил - ервах ве салли аля жесдди Мухаммедин фил - еджсад ве салли аля кабри Мухаммедин фил - кубар.“</p></div>
+<p>След намаза се казва: „Всевишни Аллах, подслонявам се към спокойствието на твоето единство и всемогъщество.“</p></div></article>
+<article class="item" id="m13" data-i="12"><div class="num"><a href="#m13">13</a></div><div class="body"><h3 class="ititle">Лейлатил Берат</h3><p>Петнадесетата нощ на свещения месец Шабан е нощта Берат. През тази нощ трябва да се кланя поне един намаз „Тесбих“. През нощта Берат има един намаз от 100 рекята, който се нарича „Хайърлъ намаз“ (намаз за благополучие). Този, който кланя този намаз и почине същата година, се удостоява (се обявява) за мъченик.</p>
+<p>Възнамерението се прави така:</p>
+<p>„Велики Аллах, възнамерих да кланям намаз за одобрението и славата ти. Удостой ме с опрощението и щедростта си. Избави ме от душевните терзания, от теглилата на този и отвъдния свят, запиши ме в тетрадката сюеда“.</p>
+<p>При всеки рекят след сура „Фатиха“ се чете десет пъти сура „Ихляс“. На всеки втори рекят се отдава „селям“. И така се извършват 100 рекята. Ако при всеки рекят се чете 100 пъти Ихлясъ шериф може да се кланят 10 рекята.</p>
+<p>След намаза чрез пресмятане по системата ебджет на свещените имена „Хюсна“ на Аллах (Дж. Дж.) се четат единадесет пъти.</p>
+<p>По същата система се пресмята Таха и се чете 14 пъти. Таха е името на Пророка Мухаммед (С.А.С).</p>
+<p>Това, което трябва да се чете:</p>
+<p>1. Истигфар — 14 пъти.</p>
+<p>2. Салеват-ъ шериф — 14 пъти.</p>
+<p>3. Сура „Фатиха“ (с бесмеле) 14 пъти.</p>
+<p>4. Айетюл кюрси (с бесмеле) 14 пъти.</p>
+<p>5. Лейад джаекюм. . . (с бесмеле) 14 пъти — (последните два аета на сура „Тевбе“).</p>
+<p>6. След като се каже 14 пъти „Ясин“, 1 път сура „Ясин“.</p>
+<p>7. Сура „Ихляс“ (с бесмеле) 14 пъти.</p>
+<div class="vs"><p class="pre">8. Сура „Феляк“ (с бесмеле) 14 пъти.</p><p class="pre">9. Сура „Нас“ (с бесмеле) 14 пъти.</p><div class="art" lang="ar" dir="rtl"><p>سُبْحَانَ اللّٰهِ وَالْحَمْدُ لِلّٰهِ وَلَآ اِلٰهَ اِلَّا اللّٰهُ وَاللّٰهُ اَكْبَرُ وَلَا حَوْلَ وَلَا قُوَّةَ اِلَّا بِاللّٰهِ الْعَلِيِّ الْعَظِيمِ</p></div></div>
+<p>10. 14 пъти „Субханаллахи велхамду лилляхи ве ле иляхе иллаллахю валхю екбер. Веля хавле веля кеввете илля билляхи’л -алиийл’л-азъйм.“.</p>
+<p>11. Салеват-ъ шериф (четенето на „селят-ъ мюнджийе“ е за предпочитане) 14 пъти.</p>
+<p>След тях се чете молитва-дуа.</p></div></article>
+<article class="item" id="m14" data-i="13"><div class="num"><a href="#m14">14</a></div><div class="body"><h3 class="ititle">Свещеният Рамазан</h3><p>Месец Рамазан е господар на единадесетте месеца. Това е месец на обществото на Мухаммед (С.А.С). През деня се държи оруч, а вечерите се съживяват с намаза Теравих. Месец Рамазан е месецът на Свещения Куран. Съобразно с това всеки, който знае да чете Курана, трябва да направи един Хатим. Началото на Рамазан е милосърдие, средата — опрощение, краят — спасение от ада.</p>
+<p>Първата вечер (нощ) на свещения Рамазан (нощта срещу първия ден на Рамазан и последния ден на Шабан), между вечерния и нощния намаз се кланя 2 рекята намаз Тешеккюр . Казва се: „Всевишни Аллах, за това, че ме удостои с честта на м. Рамазан“ и се застава за намаз.</p>
+<p>След сура „Фатиха“ при първия рекят се чете един път сура „Кевсер“, при втория рекят един път сура „Ихляс“.</p>
+<p>След намаза се чете 70 пъти Истигфар-ъ шериф, 70 пъти Салеват-ъ шериф (четенето на Салят-ъ мюнджийе е желателно), след което се чете молитва-дуа.</p>
+<div class="vs"><p class="pre">Ако е възможно, през първите десет дни трябва да се кланя намазът Тесбих и се прави Хатми Енбия.</p><p class="pre">Ако е възможно, през третите десет дни, след тевбе-и-истигфар, Хатми Енбия и еедем салат-ю селям се прави Хатми истигфар. Т.е., след като се каже 100 пъти.</p><div class="art" lang="ar" dir="rtl"><p>اَسْتَغْفِرُ اللّٰهَ الْعَظِيمَ وَاَتُوبُ اِلَيْكَ</p></div><p class="tr">„Естагфируллахе’л-азъйм ве етубю илейк“</p></div>
+<div class="vs"><p class="pre">се чете от 7 до 70 пъти салат-ю селям и молитва дуа малко преди ифтар се чете:</p><div class="art" lang="ar" dir="rtl"><p>اَللّٰهُمَّ يَا وَاسِعَ الْمَغْفِرَةِ اِغْفِرْ لِي</p></div><p class="tr">„Аллахюмме я васиал-магрифети ифирли.“</p></div>
+<div class="vs"><p class="pre">По време на ифтар се чете молитвата-дуа:</p><div class="art" lang="ar" dir="rtl"><p>اَللّٰهُمَّ لَكَ صُمْتُ وَبِكَ آمَنْتُ وَعَلَيْكَ تَوَكَّلْتُ وَعَلٰى رِزْقِكَ اَفْطَرْتُ وَصَوْمَ غَدٍ نَوَيْتُ</p></div><p class="tr">„Аллахюмме леке сюмтю ве бике аментю ве алейке тевеккелтю ве аля ризкъке ефтартю се савме гадин невейтю.“</p></div>
+<p>Мюслюманите, които по време на Рамазана не могат да дадат фътра, в деня „арефе“ (навечерието) кланят два рекята намаз, с който се молят за благосклонността на Аллах (Дж. Дж.). Като сура-заммъ могат да прочетат тази, която предпочитат.</p></div></article>
+<article class="item" id="m15" data-i="14"><div class="num"><a href="#m15">15</a></div><div class="body"><h3 class="ititle">Лейлат’ил Кадър</h3><p>Свещената нощ Кадър</p>
+<p>Относно това, че нощта Кадър е в нечетните нощи след двадесетия ден на свещения месец Рамазан има многобройни свещени хадиси. Има и учени, които твърдят, че трябва да я търсим във всяка нечетна нощ след първо число.</p>
+<p>Хз. Имамъ Шарани е определил настъпването на нощта Кадър според деня на</p>
+<p>настъпването на свещения Рамазан и я е определил така:</p>
+<p>Ако месец Рамазан настъпи в неделя, то нощта „Кадър“ е на 29-то число.</p>
+<p>Ако настъпването на свещения Рамазан е в понеделник, нощта „Кадър“ е на 21-во число.</p>
+<p>Ако свещеният месец Рамазан настъпва във вторник, нощта „Кадър“ е на 27-мо число.</p>
+<p>Ако свещеният месец Рамазан настъпва в сряда, нощта „Кадър“ е на 19-то число.</p>
+<p>Ако свещеният месец настъпва в четвъртък, нощта „Кадър“ е на 25-то число.</p>
+<p>Ако настъпва в петък, нощта „Кадър“ е на 17-то число.</p>
+<p>И ако свещеният м. Рамазан настъпва в събота, нощта „Кадър“ е на 23-то число.</p>
+<p>Хз. Имамъ Шарани в продължение на 30 години е правил изчисления за нощта „Кадър“ и я празнувал според тях.</p>
+<p>Много учени се придържат към този начин на пресмятане и празнуване на нощта „Кадър“.</p>
+<p>През тази нощ „Кадър“ въздухът е чист и прозрачен. През тази нощ всичко и</p>
+<p>всички се покланят пред Аллах (Дж. Дж.). Водите на моретата стават сладки. Мюслюманите се удостояват с опрощението на Аллах (Дж. Дж.).</p>
+<p>Какво се прави през нощта Кадър?</p>
+<p>Тази вечер се кланя 4 рекята намаз, специално посветен на тази нощ.</p>
+<p>При първия рекят се чете: един път сура „Фатиха“, три пъти сура „Кадър“.</p>
+<p>При втория рекят се чете: един път сура „Фатиха“, 3 пъти сура „Ихляс“.</p>
+<p>При третия се чете: един път сура „Фатиха“, 3 пъти сура „Кадър“.</p>
+<div class="vs"><p class="pre">При четвъртия се чете: един път сура „Фатиха“, 3 пъти сура „Ихляс“.</p><p class="pre">След намаза се чете един път:</p><div class="art" lang="ar" dir="rtl"><p>اَللّٰهُ اَكْبَرُ اَللّٰهُ اَكْبَرُ لَا اِلٰهَ اِلَّا اللّٰهُ وَاللّٰهُ اَكْبَرُ اَللّٰهُ اَكْبَرُ وَلِلّٰهِ الْحَمْدُ</p></div><p class="tr">„Аллаху Екбер Аллаху екбер ля иляхе иллал лахи валлахю екбер — Аллахи екбер ве лилляхил хамд.“</p></div>
+<p>100 пъти сура „Инширах“...</p>
+<div class="vs"><p class="pre">100 пъти сура „Кадър“</p><p class="pre">100 пъти молитвата, която Хз. Мухаммед (С.А.С) е научил да чете нашата Майка Хз. Айше.</p><div class="art" lang="ar" dir="rtl"><p>اَللّٰهُمَّ اِنَّكَ عَفُوٌّ كَرِيمٌ تُحِبُّ الْعَفْوَ فَاعْفُ عَنِّي</p></div><p class="tr">„Аллахюмме инеке афиввюн керимюн тюхиббю’л-афве фа’тю анни“.</p></div>
+<p>След която се чете дуа.</p>
+<p>Тъй като е една от свещените нощи, при възможност може да се кланя и един път намаз „Тесбих“.</p></div></article>
+<article class="item" id="m16" data-i="15"><div class="num"><a href="#m16">16</a></div><div class="body"><h3 class="ititle">Месец Шеввал</h3><p>През този месец се държи 6 дена „Нафиле“ оруч. Ако се държи между 12-тия и 17-тия ден Шеввал, все едно, че еййами бъйиз ще премине с оруч, за това благодеянията, ще са много големи.</p>
+<p>Пророкът ни Мухаммед (С.А.С) е съобщил, че който държи 6 дена оруч през м. Шеввал, все едно, че е съблюдавал поста през цялата година.</p></div></article>
+<article class="item" id="m17" data-i="16"><div class="num"><a href="#m17">17</a></div><div class="body"><h3 class="ititle">Месец Зилка’де</h3><p>През този месец от време на време трябва да се кланя техежжют¹, а особено петъчните дни трябва да се кланя намазът „Тесбих.“</p></div></article>
+<article class="item" id="m18" data-i="17"><div class="num"><a href="#m18">18</a></div><div class="body"><h3 class="ititle">Месец Зилхиджже</h3><p>През месец Зилхижже се извършва „хадж“, който е един от заповедите „фарз“ и месец на всеобщото опрощение. Това е свещеният месец, през който мюслюманите се изкачват на Арафат, колят милиони курбани в чест на Всевишния Аллах (Дж. Дж.), денят, през който се пресмятат делата за една година и се приключват тетрадките за делата на всеки вярващ. Нощите от първия до десетия ден на Зилхижже се наричат „Лейалил о шара“ — десетте свещени нощи. През този месец има голямо благодеяние за тези, които продължават да четат Истигфар, салеват-ъ шериф, други молитви и да кланят намаза „Тесбих.“</p>
+<p class="fnote">¹техежжют - намаз, който се кланя след нощния.</p>
+<p>Държането на оруч от тези мюслюмани, които не могат да отидат на хадж е много голямо благодеяние. Те трябва да държат оруч 9 дена преди Курбан Байрам. На десетия ден също не трябва да ядат, докато не се заколи Курбанът и развалянето на оруча да стане с месото от Курбана.</p>
+<p>От сутрешния намаз в деня „Арефе“ на Курбан Байрама до следобедния намаз в 1-я ден на Байрама след всеки намаз вземането на текбир било от мъжете или жените е ваджиб.</p>
+<p>Мюслюманин, който няма възможност да отиде на Хадж с мисълта, че е на Арафат, през деня „Арефе“ между обедния и следобедния намаз за измолване на благоволението на Аллах (Дж. Дж.) кланя 2 рекята намаз.</p>
+<p>При всеки РЕКЯТ ЧЕТЕ СУРА „Фатиха“, 3 пъти сура „Кяфирун“, 10 пъти сура „Ихляс“.</p>
+<p>Намазът започва така:</p>
+<p>„Всевишнии Аллах, когато в този ден, в тези часове хиляди мюслюмани, казвайки Леббейк, се прислоняват при теб — смиреният ти раб не можа да бъде там. Присъедини и мен към тях.“</p>
+<p>След намаза се чете:</p>
+<div class="vs"><p class="pre">70 пъти Истигфар</p><p class="pre">11 или 70 пъти Тевхид.</p><div class="art" lang="ar" dir="rtl"><p>لَآ اِلٰهَ اِلَّا اللّٰهُ وَحْدَهُ لَا شَرِيكَ لَهُ لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ يُحْيِي وَيُمِيتُ وَهُوَ حَيٌّ لَا يَمُوتُ بِيَدِهِ الْخَيْرُ وَهُوَ عَلٰى كُلِّ شَيْءٍ قَدِيرٌ</p></div><p class="tr">„Ля иляхе иллаллахю вахдеху Ля шерике лех. Лехюл-мюлкю ве лехюл-хамдю йухйий ве йумит. Ве хюве всайун ля йемутю бийедихил хайр ве хюве аля кулли кадир.“</p></div>
+<div class="vs"><p class="pre">После 3 или 11 пъти „Текбир“</p><div class="art" lang="ar" dir="rtl"><p>اَللّٰهُ اَكْبَرُ اَللّٰهُ اَكْبَرُ لَا اِلٰهَ اِلَّا اللّٰهُ وَاللّٰهُ اَكْبَرُ اَللّٰهُ اَكْبَرُ وَلِلّٰهِ الْحَمْدُ</p></div><p class="tr">„Аллахю екбер Аллахю екбер Ля иляхе иллал лахю валлахю екбер — Аллахю екбер ве лилляхил хамд.“</p></div>
+<div class="vs"><div class="art" lang="ar" dir="rtl"><p>سُبْحَانَ الَّذِي فِي السَّمَاءِ عَرْشُهُ سُبْحَانَ الَّذِي فِي الْاَرْضِ سُلْطَانُهُ سُبْحَانَ الَّذِي فِي الْاَرْضِ حُكْمُهُ سُبْحَانَ الَّذِي فِي الْجَنَّةِ رَحْمَتُهُ سُبْحَانَ الَّذِي فِي الْقَبْرِ قَضَاءُهُ سُبْحَانَ الَّذِي فِي الْقِيَامَةِ عَدْلُهُ سُبْحَانَ الَّذِي فِي الْبَحْرِ سَبِيلُهُ سُبْحَانَ الَّذِي رَفَعَ السَّمَاءَ سُبْحَانَ الَّذِي بَسَطَ الْاَرْضَ سُبْحَانَ الَّذِي لَا مَلْجَاَ وَلَا مَنْجَاَ مِنْهُ اِلَّا اِلَيْهِ</p></div><p class="tr">„Сюбханеллези фиссемаи аршюху. Сюбханеллези фил’ардъ хукмюху сюбханеллези филдженнети рахметюху сюбханеллези филкабри казаюху сюбханеллези филкъямети адлюху сюбханеллези филбахри себилюху сюбханеллези рафеа’ссемае сюбханеллези бесета’л-арда сюбханеллези ля мелджее веля менджее минку илля илейх.“</p></div>
+<div class="vs"><p class="pre">В деня „Арефе“ след обед, при възможност да се прочете и молитва дуа, която са чели Хъзър (А.С.) и Илйас (А.С.), когато са се срещнали на Арафат.</p><div class="art" lang="ar" dir="rtl"><p>بِسْمِ اللّٰهِ مَا شَآءَ اللّٰهُ لَا يَصْرِفُ السُّوءَ اِلَّا اللّٰهُ</p><p>بِسْمِ اللّٰهِ مَا شَآءَ اللّٰهُ لَا يَسُوقُ الْخَيْرَ اِلَّا اللّٰهُ</p><p>بِسْمِ اللّٰهِ مَا شَآءَ اللّٰهُ لَا حَوْلَ وَلَا قُوَّةَ اِلَّا بِاللّٰهِ الْعَلِيِّ الْعَظِيمِ</p></div><p class="tr">„Бисмилляхи машааллахю ля насрифю’ссуе илляллах Бисмиллахи машаалахю ля ассуку’л-хайре иллалла Бисмиллахи маашаллахю ля хавле веля куввете илля билляхил алийил азъйм.</p></div>
+<p>След това се чете молитва-дуа.</p>
+<p>При възможност през вечерта „Арефе“ и през вечерите на Байрама трябва да се извършват Хатми Енбия, Хатми Истигфар и да се кланя намазът Тесбих.</p>
+<p>Когато се коли Курбан, се прави възнамерение:</p>
+<p>„Велики Аллах, възнамерих да заколя Курбан в твоя чест. Аз съм грешен, за опрощение на греховете трябва аз да ти стана Курбан. Но ти каза, че това е харам. В замяна на моя личен Курбан съгласно свещеното ти благоволение, височайша заповед и за да заслужа опрощение, коля тоз Курбан“.</p>
+<p>След три текбира се казва „Бисмилляхи Аллахю Екбер“ и се коли Курбанът.</p>
+<p>Тези, които не могат да заколят сами Курбана, могат да ползват услугите на други, но правят възнамерение по същия начин.</p>
+<p>След като се заколи Курбанът, се кланят два рекята намаз Тешеккюр.</p>
+<p>Като допълнителна сура при първия рекят се чете един път сура „Кевсер“, при втория рекят един път сура „Ихляс“.</p>
+<p>Тези, които нямат материална възможност да колят Курбан през първия ден на Байрама, след обяд кланят 6 рекята намаз.</p>
+<p>Намазът започва с думите:</p>
+<p>„Всевишни Аллах, смиреният твой раб не можа да заколи Курбан, опрости моите грехове и ме дари с милостите си.“</p>
+<p>При първия рекят се чете един път сура „Фатиха“, един път сура „Кадър“.</p>
+<p>При втория — един път сура „Фатиха“, един път сура „Кевсер“.</p>
+<p>При третия — един път сура „Фатиха“, един път сура „Кяфирун“.</p>
+<p>При четвъртия — един път сура „Фатиха“, един път сура „Ихляс“.</p>
+<p>При петия — един път сура „Фатиха“, един път сура „Фелях“.</p>
+<p>При шестия — един път сура „Фатиха“, един път сура „Нас“.</p>
+<p>При всеки втори рекят отдава поздрав (селям).</p>
+<div class="vs"><p class="pre">От първо до десето число на м. Зилхидже (т.е. до първия ден на Курбан Байрам) всеки ден след сутрешния байрамски намаз се чете:</p><p class="pre">10 пъти: Салаватъ шериф.</p><div class="art" lang="ar" dir="rtl"><p>اَللّٰهُمَّ صَلِّ وَسَلِّمْ وَبَارِكْ عَلٰى سَيِّدِنَا مُحَمَّدٍ وَعَلٰى آلِ سَيِّدِنَا مُحَمَّدٍ</p></div><p class="tr">„Аллахюмме салли ве селлим ве барих аля сеййидина Мухаммедин ве аля али сеййидина Мухаммед.“</p></div>
+<div class="vs"><p class="pre">10 пъти Истигфар:</p><div class="art" lang="ar" dir="rtl"><p>اَسْتَغْفِرُ اللّٰهَ الْعَظِيمَ الْكَرِيمَ الَّذِي لَا اِلٰهَ اِلَّا هُوَ الْحَيَّ الْقَيُّومَ وَاَتُوبُ اِلَيْكَ وَنَسْئَلُهُ التَّوْبَةَ وَالْمَغْفِرَةَ وَالرَّحْمَةَ وَالْهِدَايَةَ لَنَا اِنَّهُ هُوَ التَّوَّابُ الرَّحِيمُ</p></div><p class="tr">„Естагфируллахе-л-азъм елкерим еллези ляиляхе илля хювел-хаййихюл-каййиуме ве етубю илеик ве нес’елюхю’т-тевбете вел-магфирете вел хидайиете лена иннеху хюве’т-теввабю-рахъйм.“</p></div>
+<div class="vs"><p class="pre">10 пъти „Тевхид“.</p><div class="art" lang="ar" dir="rtl"><p>لَآ اِلٰهَ اِلَّا اللّٰهُ وَحْدَهُ لَا شَرِيكَ لَهُ لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ يُحْيِي وَيُمِيتُ وَهُوَ حَيٌّ لَا يَمُوتُ بِيَدِهِ الْخَيْرُ وَهُوَ عَلٰى كُلِّ شَيْءٍ قَدِيرٌ</p></div><p class="tr">„Ля иляхе иллаллахю вахдеху Ля шерике лех. Лехюл-мюлкю ве лехюл-хамдю йухий ве йумит. Ве хюве хайийиун ля йиемютю бийиедихил хайир ве хюве аля кюлли шейи’ин кадир.“</p></div>
+<div class="vs"><p class="pre">По време на Байрама по възможност трябва да се продължи Тевхида:</p><div class="art" lang="ar" dir="rtl"><p>لَآ اِلٰهَ اِلَّا اللّٰهُ وَحْدَهُ لَا شَرِيكَ لَهُ لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ يُحْيِي وَيُمِيتُ وَهُوَ حَيٌّ لَا يَمُوتُ بِيَدِهِ الْخَيْرُ وَهُوَ عَلٰى كُلِّ شَيْءٍ قَدِيرٌ</p></div><p class="tr">„Ля илляллахю вахдеху Ля шерике лех. Лехюл-мюлкю ве лехюл-хамдю ве йухйи ве йумит. Ве хюве хайийиун ля йиемютю би йиедихил хайр ве хюве аля кюлли шейи’ин кадир.“</p></div>
+<p>През нощта на 29 срещу 30 Зилхидже при възможност трябва да се кланя намаз Тесбих.</p>
+<p>Последната вечер на Зилхидже между вечерния намаз трябва да се кланя 10 рекята намаз.</p>
+<p>Възнамерение за намаза се прави така:</p>
+<p>„Всевишни Аллах, разделям се с изминалата година. Дари ме през бъдещата</p>
+<p>година с благодеяния. Удостой ме със свещената вяра и милостите си.“</p>
+<p>При всеки рекят се чете:</p>
+<p>7 пъти сура „Фатиха“</p>
+<p>7 пъти „Айетюл кюрси“</p>
+<p>7 пъти сура „Ихляс“. При всеки втори рекят се отдава поздрав — селям.</p>
+<p>След намаза при възможност се чете най-малко:</p>
+<p>11 пъти Тевхид</p>
+<p>11 пъти Истигфар</p>
+<p>11 пъти Салеват-ъ шериф и се извършва молитва-дуа.</p>
+<p>Последният ден на Зилхидже е и последният ден на годината. През този ден трябва да съблюдаваме пост „Оруч“.</p>
+<h4 class="sub2">За благодарност към родителите.</h4>
+<p>През нощта на сряда срещу четвъртък, между вечерния и нощния намаз се кланят два рекята намаз.</p>
+<p>При всеки рекят се чете:</p>
+<p>7 пъти сура „Фатиха“</p>
+<p>7 пъти „Айетюл Кюрси“</p>
+<p>5 пъти сура „Ихляс“</p>
+<p>5 пъти сура „Феляк“</p>
+<p>5 пъти сура „Нас“</p>
+<p>Севапът на тази молитва е за родителите.</p></div></article>
+<article class="item" id="m19" data-i="18"><div class="num"><a href="#m19">19</a></div><div class="body"><h3 class="ititle">Намаз „Хусама“</h3><p>Този намаз е противопоставяне на тези, които не вярват в Съдния ден. Този намаз трябва да се кланя по време на свещените дни и нощи. Този намаз е от 4 рекята. Поздрав (селям) се отдава след 4-я рекят. Кланя се както сюннета на обедния намаз.</p>
+<p>При първия рекят се чете: сура „Фатиха“, 11 пъти сура „Ихляс“.</p>
+<p>При втория рекят — сура „Фатиха“, 10 пъти „Ихляс“, 3 пъти сура „Кяфирун“</p>
+<p>При третия рекят — сура „Фатиха“, 15 пъти „Ихляс“, 1 път „Айетюл Кюрси“.</p>
+<p>Някои препоръки.</p>
+<p>Ако вечер и сутрин с бесмеле 19 пъти се чете „Джюннетюл Есма“, наградата ще бъде по благодеяние от Аллах (Дж. Дж.) „Джюннетюл Есма“ има деветнадесет букви и се чете 13 пъти:</p>
+<div class="vs"><p class="pre">„Джюннетюл Есма“ е следното изречение:</p><div class="art" lang="ar" dir="rtl"><p>فَرْدٌ حَيٌّ قَيُّومٌ حَكَمٌ عَدْلٌ قُدُّوسٌ</p><p>عَنَتِ الْوُجُوهُ لِلْحَيِّ الْقَيُّومِ</p></div><p class="tr">„Фердюн хаййун каййюмюн Хаксмюн Адлюн Ходдусюн. Анетил вюжжюхю лил хаййил каййум.“</p></div>
+<h4 class="sub2">Намазите Духа Еввабин ве Техежжют</h4>
+<p>Особено тези, които знаят наизуст избрани сури и аети от Свещения Куран, трябва да кланят и от време на време Духа Еввабин и Техежжют. Извършват добри дела.</p>
+<p>Тези, които разполагат с повече време могат и по-често да кланят тези намази.</p>
+<p>Намазите Духа Еввабин и Техежжют се кланят по 6 рекята, въпреки че могат да се кланят и по-малко и повече, но средното е 6 рекята.</p>
+<h4 class="sub2">Възнамерения</h4>
+<p>Възнамерението за първите два рекята е:</p>
+<p>„Възнамерявам да кланям намаза Духа. С признателност смирено Ти благодаря за всичките Ти благодеяния.“</p>
+<p>При вторите два рекята:</p>
+<p>„Възнамерявам да кланям намаза Духа. С признателност смирено благодаря за величието на Исляма.“</p>
+<p>При третите два рекята:</p>
+<p>„Възнамерявам да кланям намаза Духа. За да благодаря смирено и с признателност за това, че принадлежа към обществото (джемата) на Мухаммед (С.А.С).“</p>
+<p>Последните два рекята се кланят седейки:</p>
+<p>За намазите Еввабин и Техежжют едно възнамерение е достатъчно. Не е необходимо след всеки селям да се прави възнамерение.</p>
+<p>Ако намазът Еввабин ще се кланя след вечерния намаз, след сюннета на вечерния намаз, без да се прави Тесбих и дуа, се кланя намазът Еввабин, след което се брои броеница и се чете молитва-дуа.</p></div></article>
+<article class="item" id="m20" data-i="19"><div class="num"><a href="#m20">20</a></div><div class="body"><h3 class="ititle">Намаз „Тесбих“</h3><div class="vs"><p class="pre">Намазът Тесбих, който е повод за опрощаване на греховете, е намаз от четири рекята. За да може да кланяме този намаз, трябва да знаем наизуст следния Тесбих.</p><div class="art" lang="ar" dir="rtl"><p>سُبْحَانَ اللّٰهِ وَالْحَمْدُ لِلّٰهِ وَلَٓا اِلٰهَ اِلَّا اللّٰهُ وَاللّٰهُ اَكْبَرُ</p><p>وَلَا حَوْلَ وَلَا قُوَّةَ اِلَّا بِاللّٰهِ الْعَلِيِّ الْعَظِيمِ</p></div><p class="tr">„Субханеллахи велхамдю лилляхи ве ля иляхе, илляллахю илляллахю валлахю екбер. Ве ля хавле веля куввете илля билляхил алийил азъйм.“</p></div>
+<h4 class="sub2">Как се кланя намазът Тесбих</h4>
+<p>Прави се възнамерение от сърце, казва се Аллаху Екбер и се започва кланянето на намаза. Горният Тесбих:</p>
+<p>След Субханеке се чете 15 пъти.</p>
+<p>След четене на сура по избор 10 пъти.</p>
+<p>След време на Рюкю 10 пъти.</p>
+<p>По време на Сежде 10 пъти.</p>
+<p>След изправяне от Сежде 10 пъти.</p>
+<p>При второто Сежде, 10 пъти.</p>
+<p>По такъв начин кланянето на първия рекят свършва. Започвайки втория рекят, преди сура „Фатиха“ се чете отново 15 пъти, а останалите по 10 пъти, както е обяснен по-горе. По този начин се извършват четирите рекята.</p>
+<p>Всичко останало при намаза Тесбих е както при останалите намази. Разликата е в</p>
+<p>Тесбихите, които се четат. При сядане, при втория рекят след Еттехийатю трябва да се чете „Аллахюмме Салли и Аллахюмме Барик“. А когато се изправи на крака за третия рекят — „Сюбханеке“. Броят на Тесбихите, които се четат при всеки рекят е 75. Така че при четирите рекята се прочитат 300 бр.</p></div></article>
+<article class="item" id="m21" data-i="20"><div class="num"><a href="#m21">21</a></div><div class="body"><h3 class="ititle">Айети „Сежде“</h3><p>За да измолят опрощение от Великия Аллах (С.А.С) мюсюлманите могат да стават през нощта, за да прочетат айетите „Сежде“ — 14 на брой, съдържащи се в Свещения Куран. Когато се прави сежде, се чете:</p>
+<div class="vs"><div class="art" lang="ar" dir="rtl"><p>اَعُوذُ بِرِضَاكَ مِنْ سَخَطِكَ وَاَعُوذُ بِمُعَافَاتِكَ</p><p>مِنْ عُقُوبَتِكَ وَاَعُوذُ بِكَ مِنْكَ</p></div><p class="tr">„Еузю биръзаке мин сехатъке ве еузю бимуафатике мин укубетике ве еузю бике минке.“</p></div>
+<div class="vs"><p class="pre">След като се казва „Аллаху Екбер“, се става от сежде.</p><p class="pre">Преди лягане се чете следната молитва:</p><div class="art" lang="ar" dir="rtl"><p>بِاسْمِكَ اللّٰهُمَّ اَحْيَا وَاَمُوتُ</p></div><p class="tr">„Бисмикеллахюмме ехйа ве емутю“</p></div>
+<div class="vs"><p class="pre">Значение: Всевишни Аллах, (заспивам), споменавайки свещеното Ти име и отново споменавайки светото Ти име, се събуждам.</p><p class="pre">След събуждане се чете следната молитва:</p><div class="art" lang="ar" dir="rtl"><p>اَلْحَمْدُ لِلّٰهِ الَّذِى اَحْيَانَا بَعْدَ مَا اَمَاتَنَا وَاِلَيْهِ النُّشُورُ</p></div><p class="tr">„Ел-хамдюлилляхиллези ехяне баде ма ематена ве илейхи — нюшур.“</p></div>
+<p>Значение: Слава на Всевишния Аллах, който ни събуди, след като ние сме заспали, и завръщането е единствено към него.</p></div></article>
+<article class="item" id="m22" data-i="21"><div class="num"><a href="#m22">22</a></div><div class="body"><h3 class="ititle">Молитвите Салават-ъ Шериф</h3><h4 class="sub2">Салят-ъ тефриджийе — Салят-ъ Нарийе</h4>
+<div class="vs"><div class="art" lang="ar" dir="rtl"><p>اَللّٰهُمَّ صَلِّ صَلَاةً كَامِلَةً وَسَلِّمْ سَلَامًا تَامًّا عَلٰى سَيِّدِنَا مُحَمَّدٍ نِ‌الَّذِى تَنْحَلُّ بِهِ الْعُقَدُ • وَتَنْفَرِجُ بِهِ الْكُرَبُ • وَتُقْضٰى بِهِ الْحَوَٓائِجُ • وَتُنَالُ بِهِ الرَّغَائِبُ • وَحُسْنُ الْخَوَٓاتِيمِ • وَيُسْتَسْقَى الْغَمَامُ بِوَجْهِهِ الْكَرِيمِ • وَعَلٰى اٰلِهِ وَصَحْبِهِ فِى كُلِّ لَمْحَةٍ وَنَفَسٍ بِعَدَدِ كُلِّ مَعْلُومٍ لَكَ •</p></div><p class="tr">„Аллахюмме салли салятен кямилетен ве селлим селямен таммен аля сейидина Мухаммединил-лези тен халлю бихилукадю ве тенфериджю бихил-кюрабю, ве тюкда бихил-хаваиджю, ве тюналю бихир — регаибю ве хюснюл-хаватими, ве юстескалгамамю биведжхихил-керими ве аля алихи, ве сахбихи фи кюлли лейхатин ве нефесин би адед-и кюлли малюмин лек“.</p></div>
+<p>Този, който е последователен в изпълнението на този салават-ъ шериф, всичките му дела ще бъдат улеснени, всичките му затруднения ще се превърнат в радост и веселие. Аллах Теаля ще улеснява делата му. Ще премахне грижите, огорчението, скръбта и печалта му. Всичките му искания и желания ще се сбъднат.</p>
+<p>Този салавет-ъ шериф трябва да се чете след всеки намаз по 11 пъти. Който има малко повече сила (физически), трябва да го чете 21 пъти. Тези, които имат по-големи възможности — 41 пъти, а тези, които имат още по-големи възможности 100 или 1 000 пъти и ще бъдат удостоени със сбъдване на всичките им желания.</p>
+<p>Освен това този салавет-ъ шериф за осъществяване на много важни дела или за предотвратяване на бъдещи нещастия, беди и злополуки се чете 444 пъти.</p>
+<h4 class="sub2">Салятен тюнджина — Салят-и Мюнджийе</h4>
+<div class="vs"><div class="art" lang="ar" dir="rtl"><p>اَللّٰهُمَّ صَلِّ عَلٰى سَيِّدِنَا مُحَمَّدٍ صَلَاةً تُنْجِينَا بِهَا مِنْ جَمِيعِ الْاَهْوَالِ وَالْاٰفَاتِ • وَتَقْضِى لَنَا بِهَا جَمِيعَ الْحَاجَاتِ • وَتُطَهِّرُنَا بِهَا مِنْ جَمِيعِ السَّيِّئَاتِ • وَتَرْفَعُنَا بِهَا اَعْلَى الدَّرَجَاتِ • وَتُبَلِّغُنَا بِهَا اَقْصَى الْغَايَاتِ • مِنْ جَمِيعِ الْخَيْرَاتِ فِى الْحَيَاةِ وَبَعْدَ الْمَمَاتِ • حَسْبُنَا اللّٰهُ وَنِعْمَ الْوَكِيلُ • نِعْمَ الْمَوْلٰى وَنِعْمَ النَّصِيرُ •</p></div><p class="tr">„Аллаххюмме салли аля сейдина Мухаммедин ве ля ал-и Мухаммедин салятен тунджина биха мин сетиилех-вали вел-афат. Ве такдилена биха джиал-хаджад. Ве татххирюна биха мин мемиис-сейат. Ве терфеуна биха аледдераджат. Ве тюбеллигуна биха ексал-чапат, мин джемиилхаййарати фил-хаяти ве бадел мемат. Хасбюхаллахю ве нимел векил нимел-мевля ве нименнасир.“</p></div>
+<p>Този салават-и шериф в болшинството случаи се чете в джамиите и винаги след намаза. Този, който чистосърдечно чете този салават-и шериф, ще бъде сигурен в това, че в бъдеще ще бъде предпазен от беди и нещастия. Този салават-и шериф е като една плътна завеса срещу всички нещастия, беди и злополуки. След намаза винаги трябва да се чете</p>
+<h4 class="sub2">Теджидид-и Иман — Дуа Тевбе</h4>
+<p>Теджидид-и Иман е дуа за опрощаване за греховете.</p>
+<p>Ислямски теолози (улеми) са възприели следната молитва за всеопрощаване на греховете. Молитвата за разкаяние и опрощаване, която се знае от всички мюсюлмани, се чете в джамията от имама заедно с джемата и започва така:</p>
+<div class="vs"><p class="pre">Да се помолим за всичките ни грехове:</p><div class="art" lang="ar" dir="rtl"><p>اَسْتَغْفِرُ اللّٰهَ الْعَظِيمَ وَاَتُوبُ اِلَيْهِ • اَسْتَغْفِرُ اللّٰهَ الْعَظِيمَ وَاَتُوبُ اِلَيْهِ •</p><p>اَسْتَغْفِرُ اللّٰهَ الْعَظِيمَ الْكَرِيمَ الَّذِى لَا اِلٰهَ اِلَّا هُوَ • اَلْحَىَّ الْقَيُّومَ وَاَتُوبُ اِلَيْهِ •</p><p>تَوْبَةَ عَبْدٍ ظَالِمٍ لِنَفْسِهِ لَا يَمْلِكُ لِنَفْسِهِ مَوْتًا وَلَا حَيَاةً وَلَا نُشُورًا •</p><p>وَنَسْاَلُهُ التَّوْبَةَ وَالْمَغْفِرَةَ وَالْهِدَايَةَ لَنَا اِنَّهُ هُوَ التَّوَّابُ الرَّحِيمُ •</p></div><p class="tr">„Естагфируллахел-азъймеве етюбу илейх, Естагфируллахел-азъйме ве етубю илейх. Естагфируллахел азъймел-керимеллези ля иляхе иллаху. Ел-Хайел-Кайюмме ве етюбю илейх.</p><p class="tr">Тевбе абдин залимин линефсихи ля йемлику линессхи мевтен ве ля хайатен веля нюшура.</p><p class="tr">Ве нес’ елюхюттевбете велмагрифете вел хидайете лена иннехю хювветеввабур — Рахим.“</p></div>
+<p>Значение:</p>
+<p>Тевбе я Рабби! Тевбе я Рабби! Тевбе я Рабби! Егер беним елизден, дилимден, гьозумден, кулаъм дан ве диер агзаларъмдан билерек вея билмейерек келиме-и кюфюр, ширк, исйан, хата садър олдуйса бен онларън джюмлесине тевбе еттим, пишман олдум, бир даха ишлемемесине азмю джезми кастеттим.</p>
+<p>Пейгамберлерин еввели Хз. Адем (А.С.) ахири ики джихан сервери Хз. Мухаммед (С.А.С.) ве хер икисинин арасънда да некадар Пейгамбер гелип гечтийсе джюмлесине инандъм иман еттим. Пейгамберимиз, сенин Тараф-ъ иляхиеден хер гетирип хабер вердийсе хепси нактър ве герчектир, дилим иле икрар, калби или тастик еттим.</p></div></article>
+</section>
+</main>
+<div class="focus" id="focus" role="dialog" aria-label="Едно по едно">
+  <div class="f-top"><span class="where" id="fWhere"></span><button class="ib" id="fClose" aria-label="Затвори"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+  <div class="prog"><i id="fProg"></i></div>
+  <div class="f-body" id="fBody"></div>
+  <div class="f-nav"><button id="fPrev">Назад</button><button id="fNext" class="next">Напред</button></div>
+</div>
+<script>
+(function(){
+const $=s=>document.querySelector(s);
+const ITEMS=[{"id": "m1", "n": 1, "t": "Мухаррем"}, {"id": "m2", "n": 2, "t": "Денят Ашуре"}, {"id": "m3", "n": 3, "t": "Саферю’л-Хайр"}, {"id": "m4", "n": 4, "t": "Ребиу’л-Еввел"}, {"id": "m5", "n": 5, "t": "Рожден ден на Мухаммед (С.А.С)"}, {"id": "m6", "n": 6, "t": "Ребиу’л Ахър"}, {"id": "m7", "n": 7, "t": "Джемазиел еввел"}, {"id": "m8", "n": 8, "t": "Джемазиел ахър"}, {"id": "m9", "n": 9, "t": "Реджеб-и Шериф"}, {"id": "m10", "n": 10, "t": "Лейлат-ир Регаиб"}, {"id": "m11", "n": 11, "t": "Лейлат-ил Мирадж"}, {"id": "m12", "n": 12, "t": "Свещеният Шабан"}, {"id": "m13", "n": 13, "t": "Лейлатил Берат"}, {"id": "m14", "n": 14, "t": "Свещеният Рамазан"}, {"id": "m15", "n": 15, "t": "Лейлат’ил Кадър"}, {"id": "m16", "n": 16, "t": "Месец Шеввал"}, {"id": "m17", "n": 17, "t": "Месец Зилка’де"}, {"id": "m18", "n": 18, "t": "Месец Зилхиджже"}, {"id": "m19", "n": 19, "t": "Намаз „Хусама“"}, {"id": "m20", "n": 20, "t": "Намаз „Тесбих“"}, {"id": "m21", "n": 21, "t": "Айети „Сежде“"}, {"id": "m22", "n": 22, "t": "Молитвите Салават-ъ Шериф"}];
+const mem={};
+const store={get(k){try{const v=localStorage.getItem('duaibadet:'+k);if(v!=null)return JSON.parse(v);}catch(e){}return mem[k];},set(k,v){mem[k]=v;try{localStorage.setItem('duaibadet:'+k,JSON.stringify(v));}catch(e){}}};
+const J=$('#jump');
+J.addEventListener('change',()=>{const el=document.getElementById(J.value);if(el)el.scrollIntoView();});
+/* settings */
+const panel=$('#panel'),setBtn=$('#setBtn');
+setBtn.onclick=e=>{e.stopPropagation();const o=panel.classList.toggle('open');setBtn.setAttribute('aria-expanded',o);};
+document.addEventListener('click',e=>{if(panel.classList.contains('open')&&!panel.contains(e.target)&&e.target!==setBtn){panel.classList.remove('open');setBtn.setAttribute('aria-expanded',false);}});
+const opt=Object.assign({ar:true,tr:true},store.get('opt')||{});
+function applyOpt(){document.body.classList.toggle('noar',!opt.ar);document.body.classList.toggle('notr',!opt.tr);}
+document.querySelectorAll('[data-opt]').forEach(c=>{c.checked=opt[c.dataset.opt];c.onchange=()=>{opt[c.dataset.opt]=c.checked;store.set('opt',opt);applyOpt();};});
+applyOpt();
+const sz=Object.assign({ar:2,bg:0},store.get('sz')||{});
+function applySz(){document.querySelectorAll('.step').forEach(s=>{const k=s.dataset.k;s.querySelector('output').textContent=Math.round((1+sz[k]*0.1)*100)+'%';document.documentElement.style.setProperty('--s-'+k,(1+sz[k]*0.1).toFixed(2));});}
+document.querySelectorAll('.step button').forEach(b=>b.onclick=()=>{const k=b.closest('.step').dataset.k;sz[k]=Math.max(-4,Math.min(8,sz[k]+ +b.dataset.d));store.set('sz',sz);applySz();});
+applySz();
+let theme=store.get('theme')||'auto';
+function applyTheme(){if(theme==='auto')document.documentElement.removeAttribute('data-theme');else document.documentElement.setAttribute('data-theme',theme);document.querySelectorAll('#themeSeg button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.t===theme));}
+document.querySelectorAll('#themeSeg button').forEach(b=>b.onclick=()=>{theme=b.dataset.t;store.set('theme',theme);applyTheme();});
+applyTheme();
+/* position memory */
+const marks=[...document.querySelectorAll('.sec,.item,h3.sub[id]')];
+const names={};document.querySelectorAll('#jump option').forEach(o=>names[o.value]=o.textContent.trim());
+const grid=$('#grid');
+let curId=null;
+const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)setCur(e.target.id);});},{rootMargin:'-25% 0px -70% 0px'});
+marks.forEach(m=>io.observe(m));
+function setCur(id){
+  curId=id;store.set('pos',id);
+  if(document.activeElement!==J&&names[id])J.value=id;
+  if(grid){grid.querySelectorAll('a.cur').forEach(a=>a.classList.remove('cur'));const g=grid.querySelector('a[href="#'+id+'"]');if(g)g.classList.add('cur');}
+}
+const saved=store.get('pos');const rb=$('#resumeBtn');
+if(saved&&saved!=='c1'&&document.getElementById(saved)&&names[saved]){rb.hidden=false;rb.textContent='Продължи: '+names[saved].replace(/^ /,'').slice(0,40);rb.onclick=()=>document.getElementById(saved).scrollIntoView();}
+/* focus mode (one item at a time) */
+const fbtn=$('#focusBtn');
+if(fbtn&&ITEMS.length){
+  const F={i:0,open:false};const fb=$('#fBody');
+  function renderF(){const it=ITEMS[F.i];$('#fWhere').textContent='Раздел '+it.n+' от '+ITEMS.length;$('#fProg').style.width=((F.i+1)/ITEMS.length*100)+'%';
+    fb.innerHTML=document.getElementById(it.id).outerHTML.replace(/ id="[^"]*"/g,'');
+    const fl=[...fb.querySelectorAll('sup a[href^="#fn"]')].map(a=>document.getElementById(a.getAttribute('href').slice(1))).filter(Boolean);
+    if(fl.length){const ol=document.createElement('ol');ol.className='fns';fl.forEach(li=>{const c=li.cloneNode(true);c.removeAttribute('id');ol.appendChild(c);});fb.appendChild(ol);}
+    fb.querySelectorAll('sup a').forEach(a=>a.removeAttribute('href'));fb.scrollTop=0;$('#fPrev').disabled=F.i===0;$('#fNext').textContent=F.i===ITEMS.length-1?'Край':'Напред';setCur(it.id);}
+  function openF(){let k=ITEMS.findIndex(x=>x.id===curId);if(k<0&&window.scrollY>200){const lim=innerHeight*0.35;ITEMS.forEach((x,i)=>{const e=document.getElementById(x.id);if(e&&e.getBoundingClientRect().top<lim)k=i;});}F.i=k>=0?k:0;F.open=true;$('#focus').classList.add('open');document.body.style.overflow='hidden';renderF();}
+  function closeF(){F.open=false;$('#focus').classList.remove('open');document.body.style.overflow='';const el=document.getElementById(ITEMS[F.i].id);if(el)el.scrollIntoView();}
+  fbtn.onclick=openF;$('#fClose').onclick=closeF;
+  $('#fPrev').onclick=()=>{if(F.i>0){F.i--;renderF();}};
+  $('#fNext').onclick=()=>{if(F.i<ITEMS.length-1){F.i++;renderF();}else closeF();};
+  document.addEventListener('keydown',e=>{if(!F.open)return;if(e.key==='Escape')closeF();else if(e.key==='ArrowRight')$('#fNext').click();else if(e.key==='ArrowLeft')$('#fPrev').click();});
+  let tx=null,ty=null;fb.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
+  fb.addEventListener('touchend',e=>{if(tx==null)return;const dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;tx=null;if(Math.abs(dx)>70&&Math.abs(dx)>Math.abs(dy)*1.5){dx<0?$('#fNext').click():$('#fPrev').click();}});
+}
+})();
+</script>
+<script id="zk-nav-js">
+(function(){
+  var a=document.getElementById('zkHome'), hero=document.getElementById('top');
+  if(!a||!hero) return;
+  var t=document.querySelector('.bar-title'), name=(t&&t.textContent.trim())||document.title;
+  var lab=a.querySelector('span'), ic=a.querySelector('svg');
+  var HOME=ic.innerHTML, BOOK='<path d="M5 5a2 2 0 0 1 2-2h12v14H7a2 2 0 0 0-2 2z"/><path d="M5 19a2 2 0 0 0 2 2h12v-4"/>';
+  function set(atStart){
+    if(atStart){a.href='index.html';lab.textContent='Зикирь';ic.innerHTML=HOME;a.title='Зикирь – начална страница';}
+    else{a.href='#top';lab.textContent=name;ic.innerHTML=BOOK;a.title=name+' – към началото';}
+  }
+  function check(){var r=hero.getBoundingClientRect();set(r.bottom>80);}
+  check();
+  window.addEventListener('scroll',check,{passive:true});
+  window.addEventListener('resize',check);
+  window.addEventListener('hashchange',function(){setTimeout(check,50);});
+})();
+</script>
+<script id="zk-find">var ZK={
+ SEL:'p,li,h2,h3,h4,.bg,.tr,span.ay,details.src,dd,dt,blockquote,td',
+ EX:'.cont,.rmode,.bar,.panel,.focus,.toc,.grid,nav,header,#top,footer,select,button,label,[role=dialog],.zk-ver,.inst,script,style,svg',
+ blocks:function(){var S=ZK.SEL,E=ZK.EX;return Array.prototype.filter.call(document.querySelectorAll(S),function(e){return !e.closest(E)&&!(e.parentElement&&e.parentElement.closest(S));});},
+ text:function(e){var w=document.createTreeWalker(e,NodeFilter.SHOW_TEXT,{acceptNode:function(n){return n.parentElement.closest('svg,script,style')?2:1;}}),n,o='',pb=null;while(n=w.nextNode()){var bk=n.parentElement;while(bk!==e&&/^inline/.test(getComputedStyle(bk).display))bk=bk.parentElement;if(pb&&bk!==pb)o+=' ';pb=bk;o+=n.nodeValue;}return o.replace(/[-]/g,'').replace(/\s+/g,' ').trim();},
+ DROP:/[’‘'`ʼʻʿʾ´­\-‐‑–]/,
+ norm:function(s,wantMap){var o='',m=wantMap?[]:null,sp=true;for(var i=0;i<s.length;i++){var c=s[i];if(ZK.DROP.test(c))continue;
+   if(/\s/.test(c)){if(!sp){o+=' ';m&&m.push(i);sp=true;}continue;}
+   var l=c.toLowerCase();if(l!=='й'&&l!=='ё'){l=l.normalize('NFD').replace(/[̀-ͯ]/g,'');}if(l==='ı')l='i';else if(/[\u064B-\u065F\u0670\u06D6-\u06ED\u0640]/.test(l))continue;else if(/[أإآٱ]/.test(l))l='ا';else if(l==='ى')l='ي';else if(l==='ة')l='ه';
+   for(var k=0;k<l.length;k++){o+=l[k];m&&m.push(i);}sp=false;}
+  return wantMap?{n:o,m:m}:o;}
+};
+(function(){
+  var q=new URLSearchParams(location.search), qq=q.get('zkq'), bi=q.get('zkb'), kk=q.get('zkk');
+  if(qq===null||bi===null) return;
+  try{history.replaceState(null,'',location.pathname+location.hash);}catch(e){}
+  var st=document.createElement('style');
+  st.textContent='mark.zk-m{background:color-mix(in srgb,var(--gold,#c90) 38%,transparent);color:inherit;border-radius:2px;padding:0 1px}'+
+    '.zk-hit{animation:zkhit 4.5s ease-out 1}@keyframes zkhit{0%,40%{background:color-mix(in srgb,var(--gold,#c90) 16%,transparent);box-shadow:0 0 0 6px color-mix(in srgb,var(--gold,#c90) 16%,transparent)}100%{background:transparent;box-shadow:0 0 0 6px transparent}}';
+  document.head.appendChild(st);
+  var words=ZK.norm(qq).split(' ').filter(Boolean), user=false, target=null;
+  ['wheel','touchstart','keydown','mousedown'].forEach(function(t){addEventListener(t,function(){user=true;},{passive:true,once:true});});
+  function find(){
+    var bs=ZK.blocks(), e=bs[+bi];
+    var ok=function(x){if(!x)return false;var n=ZK.norm(ZK.text(x));if(kk&&n.slice(0,kk.length)!==kk)return false;return words.every(function(w){return n.indexOf(w)>=0;});};
+    if(!ok(e)){e=null;for(var i=0;i<bs.length;i++){if(ok(bs[i])){e=bs[i];break;}}}
+    return e;
+  }
+  function mark(e){
+    var w=document.createTreeWalker(e,NodeFilter.SHOW_TEXT,{acceptNode:function(n){return n.parentElement.closest('svg,script,style,mark')?2:1;}}),ns=[],n;
+    while(n=w.nextNode())ns.push(n);
+    ns.forEach(function(t){var r=ZK.norm(t.nodeValue,true),hits=[];
+      words.forEach(function(wd){var p=0;while((p=r.n.indexOf(wd,p))>=0){hits.push([r.m[p],r.m[p+wd.length-1]+1]);p+=wd.length;}});
+      if(!hits.length)return;hits.sort(function(a,b){return a[0]-b[0];});
+      var f=document.createDocumentFragment(),pos=0,s=t.nodeValue;
+      hits.forEach(function(h){if(h[0]<pos)return;f.appendChild(document.createTextNode(s.slice(pos,h[0])));var mk=document.createElement('mark');mk.className='zk-m';mk.textContent=s.slice(h[0],h[1]);f.appendChild(mk);pos=h[1];});
+      f.appendChild(document.createTextNode(s.slice(pos)));t.parentNode.replaceChild(f,t);});
+  }
+  function show(){
+    if(!target) return;
+    for(var d=target.parentElement;d;d=d.parentElement){if(d.tagName==='DETAILS'&&!d.open)d.open=true;}
+    if(target.tagName==='DETAILS')target.open=true;
+    var v=target;while(v&&v!==document.body&&!v.getClientRects().length)v=v.parentElement;
+    var mk=target.querySelector('mark.zk-m');
+    if(mk&&mk.getClientRects().length&&v===target)mk.scrollIntoView({block:'center'});else (v||target).scrollIntoView({block:'center'});
+  }
+  function go(){
+    target=find(); if(!target) return;
+    mark(target); target.classList.add('zk-hit'); show();
+    [350,900,1700].forEach(function(t){setTimeout(function(){if(!user)show();},t);});
+  }
+  if(document.readyState==='complete')setTimeout(go,60);else addEventListener('load',function(){setTimeout(go,60);});
+})();
+(function(){
+  if(!window.ZK) return;
+  var KEY='zk:saved', FILE=decodeURIComponent(location.pathname.split('/').pop()||'index.html');
+  var USEL=(/irshad/.test(FILE)?'':'.pair,')+'.vs,.beyt,article.item,.unit';
+  function load(){try{return JSON.parse(localStorage.getItem(KEY))||[];}catch(e){return [];}}
+  function put(a){try{localStorage.setItem(KEY,JSON.stringify(a));return true;}catch(e){return false;}}
+  var STAR='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></svg>';
+  var st=document.createElement('style');
+  st.textContent='.zk-u{position:relative}.zk-pad{padding-left:38px!important}'+
+    '.zk-star{position:absolute;top:50%;left:2px;transform:translateY(-50%);width:34px;height:34px;padding:0;margin:0;border:0;border-radius:50%;background:none;display:grid;place-items:center;cursor:pointer;color:var(--muted,#888);opacity:.75;-webkit-tap-highlight-color:transparent;z-index:2}'+
+    '.zk-star.zk-top{top:6px;transform:none}.zk-star svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linejoin:round}'+
+    '@media (hover:hover){.zk-star:hover{opacity:1}}.zk-star.on{color:var(--gold,#c90);opacity:1}.zk-star.on svg{fill:var(--gold,#c90)}'+
+    '.zk-star:focus-visible{outline:2px solid var(--gold,#c90);outline-offset:1px;opacity:1}'+
+    '.zk-fstar{position:relative;transform:none;flex:none;width:38px;height:38px;border:1px solid var(--rule,#ccc);border-radius:8px;background:var(--sheet,#fff);opacity:1}'+
+    '#focus .zk-u{padding-left:38px!important}#focus .zk-star:not(.zk-fstar){left:2px!important}'+
+    '.zk-toast{position:fixed;z-index:70;left:50%;bottom:calc(90px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);padding:9px 16px;border-radius:999px;background:var(--ink,#222);color:var(--paper,#fff);font:500 14px "Golos Text",system-ui,sans-serif;pointer-events:none;opacity:0;transition:opacity .2s;white-space:nowrap}.zk-toast.show{opacity:1}';
+  document.head.appendChild(st);
+  var toast=document.createElement('div');toast.className='zk-toast';document.body.appendChild(toast);var tt=0;
+  function say(t){toast.textContent=t;toast.classList.add('show');clearTimeout(tt);tt=setTimeout(function(){toast.classList.remove('show');},1500);}
+  var bs=[],idx=new Map(),units=[];
+  function key(e){return ZK.norm(ZK.text(e)).slice(0,60);}
+  function lt(x){return ZK.norm(x).replace(/[^a-zа-я\u0621-\u064a]/g,'');}
+  function cyr(e){return (ZK.text(e).match(/[А-Яа-я]/g)||[]).length;}
+  function ctx(i){for(var j=i-1;j>=0&&j>i-500;j--){var e=bs[j];if(/^H[1-4]$/.test(e.tagName)||e.classList.contains('ititle')){var t=ZK.text(e);if(t)return t.slice(0,110);}}return '';}
+  function setup(){
+    bs=ZK.blocks();idx=new Map();bs.forEach(function(e,i){idx.set(e,i);});
+    var all=[].slice.call(document.querySelectorAll(USEL)).filter(function(u){return !u.closest(ZK.EX)&&!u.querySelector(USEL);});
+    units=[];
+    all.forEach(function(u){
+      var inner=[].slice.call(u.querySelectorAll(ZK.SEL)).filter(function(e){return idx.has(e);});
+      if(idx.has(u))inner.unshift(u);
+      if(!inner.length)return;
+      var first=inner[0],main=inner.filter(function(e){return cyr(e)>=8;})[0]||first;
+      var cy=inner.filter(function(e){return cyr(e)>=8;}),tr=inner.filter(function(e){return e.classList.contains('bg')||e.classList.contains('tr')&&!/[̣̱̄]/.test(e.textContent);})[0]||cy[cy.length-1]||first;
+      var o={u:u,inner:inner,b:idx.get(first),k:key(first),main:main,snip:tr,fk:lt(ZK.text(main)).slice(0,32)};
+      u.classList.add('zk-u');
+      var s=document.createElement('button');s.type='button';s.className='zk-star';s.innerHTML=STAR;s.setAttribute('aria-label','Запази');s.dataset.zb=o.b;
+      u.appendChild(s);o.s=s;units.push(o);
+    });
+    place();paint();
+  }
+  function lefts(o){var m=Infinity;o.inner.forEach(function(e){if(e.closest('.num'))return;var r=e.getBoundingClientRect();if(r.width&&r.height&&r.left<m)m=r.left;});return m;}
+  function place(){
+    units.forEach(function(o){var u=o.u;u.classList.remove('zk-pad');if(o.pl0!==undefined){u.style.paddingLeft='';}
+      o.s.style.top='';o.s.classList.remove('zk-top');
+      var ur=u.getBoundingClientRect();if(!ur.width){if(!place.retry&&(place.n=(place.n||0)+1)<20){place.retry=setTimeout(function(){place.retry=0;place();},500);}return;}
+      var L=lefts(o);if(L===Infinity){u.classList.add('zk-pad');o.s.style.left='2px';return;}
+      var g=L-ur.left;
+      if(g<32){u.classList.add('zk-pad');g=lefts(o)-ur.left;}
+      if(g<44){var pl=parseFloat(getComputedStyle(u).paddingLeft)||0;if(o.pl0===undefined)o.pl0=pl;u.style.paddingLeft=(pl+44-g)+'px';g=lefts(o)-ur.left;}
+      o.s.style.left=Math.max(0,(g-34)/2)+'px';
+      var tall=ur.height>Math.min(innerHeight*0.7,520);
+      o.s.classList.toggle('zk-top',tall);
+      var num=u.querySelector('.num');
+      if(num&&ZK.text(num).trim()){var rg=document.createRange();rg.selectNodeContents(num);var nr=rg.getBoundingClientRect(),sr=o.s.getBoundingClientRect();
+        if(nr.height&&nr.height<120&&sr.top<nr.bottom+4&&sr.bottom>nr.top-4&&sr.left<nr.right+4&&sr.right>nr.left-4){o.s.classList.remove('zk-top');o.s.style.top=(nr.bottom-ur.top+6+17)+'px';}}
+    });
+  }
+  function savedKeys(){var m={};load().forEach(function(it){if(it.f===FILE)m[it.k]=1;});return m;}
+  function paint(){var m=savedKeys(),byb={};units.forEach(function(o){var on=!!m[o.k];byb[o.b]=on;o.s.classList.toggle('on',on);o.s.setAttribute('aria-label',on?'Махни от запазените':'Запази');o.s.title=on?'Запазено':'Запази';});
+    if(fbody)fbody.querySelectorAll('.zk-star[data-zb]').forEach(function(c){c.classList.toggle('on',!!byb[c.dataset.zb]);});paintF();}
+  function toggle(o){
+    var a=load(),j=-1;a.forEach(function(it,n){if(it.f===FILE&&it.k===o.k)j=n;});
+    if(j>=0){a.splice(j,1);put(a);say('Премахнато от запазените');}
+    else{var name=(document.querySelector('.bar-title')||{}).textContent||document.title;
+      var t=ZK.text(o.snip);if(t.length<20)t=ZK.text(o.u);
+      a.unshift({f:FILE,b:o.b,k:o.k,t:t.slice(0,260),c:ctx(o.b),n:name.trim(),d:Date.now()});say(put(a)?'Запазено ★':'Не може да се запази');}
+    paint();
+  }
+  document.addEventListener('click',function(ev){var s=ev.target.closest&&ev.target.closest('.zk-star');if(!s||s===fstar)return;ev.preventDefault();ev.stopPropagation();
+    var o=units.filter(function(x){return x.s===s;})[0]||units.filter(function(x){return String(x.b)===s.dataset.zb;})[0];if(o)toggle(o);},true);
+  /* one-by-one reading mode: star in the top bar of the focus view */
+  var fbody=document.getElementById('fBody'),fclose=document.getElementById('fClose'),fstar=null,fcur=null;
+  function paintF(){if(!fstar)return;fstar.hidden=!fcur;if(!fcur)return;var on=!!savedKeys()[fcur.k];fstar.classList.toggle('on',on);fstar.setAttribute('aria-label',on?'Махни от запазените':'Запази');}
+  function syncF(){
+    if(!fbody)return;fcur=null;
+    if(fbody.querySelector('.zk-star[data-zb]')){paint();return;}
+    var t=lt(ZK.text(fbody));
+    if(t){var best=null;units.forEach(function(o){if(o.fk.length>=8&&t.indexOf(o.fk)>=0&&(!best||o.fk.length>best.fk.length))best=o;});fcur=best;}
+    paintF();
+  }
+  if(fbody&&fclose){
+    fstar=document.createElement('button');fstar.type='button';fstar.className='zk-star zk-fstar';fstar.innerHTML=STAR;fstar.hidden=true;
+    fclose.parentNode.insertBefore(fstar,fclose);
+    fstar.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();if(fcur)toggle(fcur);});
+    var mo=new MutationObserver(function(){clearTimeout(mo.t);mo.t=setTimeout(syncF,30);});mo.observe(fbody,{childList:true,subtree:true,characterData:true});
+  }
+  var rt=0;addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(place,150);});
+  addEventListener('orientationchange',function(){setTimeout(place,300);});addEventListener('pageshow',function(){setTimeout(place,100);});document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')setTimeout(place,100);});
+  if(window.ResizeObserver){var ro=new ResizeObserver(function(){clearTimeout(rt);rt=setTimeout(place,150);});ro.observe(document.body);}
+  addEventListener('storage',function(e){if(e.key===KEY)paint();});
+  function start(){setup();if(document.fonts&&document.fonts.ready)document.fonts.ready.then(place);setTimeout(place,800);}
+  if(document.readyState==='complete')setTimeout(start,30);else addEventListener('load',function(){setTimeout(start,30);});
+  /* settings like "hide Arabic" change layout -> re-place */
+  new MutationObserver(function(){clearTimeout(rt);rt=setTimeout(place,120);}).observe(document.body,{attributes:true,attributeFilter:['class','style']});
+  new MutationObserver(function(){clearTimeout(rt);rt=setTimeout(place,120);}).observe(document.documentElement,{attributes:true,attributeFilter:['style','data-theme']});
+})();
+(function(){
+  var K='zk:theme',W='zk:wake';
+  function g(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+  function s(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+  /* one theme for all books */
+  var seg=document.getElementById('themeSeg');
+  if(seg){
+    var t=g(K);
+    if(t){var b=seg.querySelector('[data-t="'+t+'"]');if(b&&b.getAttribute('aria-pressed')!=='true')b.click();}
+    seg.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-t]');if(b)s(K,b.dataset.t);});
+  }
+  /* keep the screen on */
+  var sup=('wakeLock' in navigator),lock=null,on=g(W)==='1',pend=false;
+  function req(){if(!sup||!on||lock||pend||document.visibilityState!=='visible')return;pend=true;
+    navigator.wakeLock.request('screen').then(function(l){pend=false;lock=l;l.addEventListener('release',function(){lock=null;});}).catch(function(){pend=false;});}
+  function rel(){if(lock){try{lock.release();}catch(e){}lock=null;}}
+  document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')req();});
+  document.addEventListener('click',req,{passive:true});
+  window.zkWake={sup:sup,get:function(){return on;},set:function(v){on=!!v;s(W,on?'1':'0');if(on)req();else rel();}};
+  var panel=document.getElementById('panel');
+  if(panel&&sup&&!document.getElementById('zkWake')){
+    var grp=document.createElement('div');grp.className='grp';
+    grp.innerHTML='<h3>Екран</h3><label class="tog"><span>Екранът да не изгасва<small style="display:block;font-size:13px;color:var(--muted);font-weight:400">Докато приложението е отворено</small></span> <input type="checkbox" id="zkWake"></label>';
+    panel.appendChild(grp);
+    var cb=grp.querySelector('input');cb.checked=on;cb.addEventListener('change',function(){window.zkWake.set(cb.checked);});
+  }
+  req();
+})();
+/* Back button: closes settings / one-by-one mode first, then returns to the book's title page,
+   and only then leaves the book. Settings get a close (×) button. */
+(function(){
+  var H=history;if(!H||!H.pushState)return;
+  var P=H.pushState.bind(H),R=H.replaceState.bind(H);
+  var hero=document.getElementById('top');
+  var panel=document.getElementById('panel')||document.getElementById('zkPanel');
+  var setBtn=document.getElementById('setBtn')||document.getElementById('zkSet');
+  var focus=document.getElementById('focus'),fClose=document.getElementById('fClose');
+  function st(){return (H.state&&H.state.zk)||null;}
+  function atStart(){if(!hero)return true;var r=hero.getBoundingClientRect();return r.bottom>80;}
+  if(hero){try{H.scrollRestoration='manual';}catch(e){}}
+  var cur=st();
+  if(!cur||cur==='panel'||cur==='focus'||cur==='_c'){cur='root';try{R({zk:'root'},'');}catch(e){}}
+  /* app code that used pushState for in-book jumps -> keep a single "inside the book" entry */
+  H.pushState=function(s,t,u){try{if(cur==='root'&&hero){P({zk:'book'},t||'',u);cur='book';}else R(H.state,t||'',u);}catch(e){}};
+  H.replaceState=function(s,t,u){try{R(s&&s.zk?s:H.state,t||'',u);}catch(e){}};
+  function active(){var u=navigator.userActivation;return !u||u.hasBeenActive;}
+  function enter(){if(hero&&cur==='root'&&!atStart()&&active()){try{P({zk:'book'},'');cur='book';}catch(e){}}}
+  addEventListener('scroll',enter,{passive:true});
+  ['click','touchend','keydown'].forEach(function(t){addEventListener(t,function(){setTimeout(enter,60);},{passive:true,capture:true});});
+  function toTop(){try{scrollTo({top:0,left:0,behavior:'instant'});}catch(e){scrollTo(0,0);}}
+  /* in-page links: no extra history entries; "#top" = back to the title page */
+  document.addEventListener('click',function(e){
+    if(e.defaultPrevented||e.button)return;
+    var a=e.target.closest&&e.target.closest('a[href^="#"]');if(!a)return;
+    var h=a.getAttribute('href');
+    if(h==='#top'||h==='#'){if(!hero)return;e.preventDefault();if(cur==='book')H.back();else toTop();return;}
+    var el=document.getElementById(decodeURIComponent(h.slice(1)));if(!el||a.closest('#focus'))return;
+    e.preventDefault();H.pushState(null,'',h);el.scrollIntoView();
+  });
+  /* layers */
+  function pOpen(){return !!panel&&(panel.id==='zkPanel'?!panel.hidden:panel.classList.contains('open'));}
+  function pClose(){if(!panel)return;if(panel.id==='zkPanel')panel.hidden=true;else panel.classList.remove('open');if(setBtn)setBtn.setAttribute('aria-expanded','false');}
+  function fOpen(){return !!focus&&focus.classList.contains('open');}
+  function fShut(){if(fClose)fClose.click();else if(focus)focus.classList.remove('open');}
+  function watch(el,name,isOpen){if(!el)return;var was=isOpen();
+    new MutationObserver(function(){var o=isOpen();if(o===was)return;was=o;
+      if(o){if(cur!==name){try{P({zk:name},'');cur=name;}catch(e){}}}
+      else if(cur===name){cur='_c';H.back();}
+    }).observe(el,{attributes:true,attributeFilter:['class','hidden']});}
+  watch(panel,'panel',pOpen);watch(focus,'focus',fOpen);
+  addEventListener('popstate',function(){
+    var prev=cur;cur=st()||'root';
+    var closed=false;
+    if(cur!=='panel'&&pOpen()){pClose();closed=true;}
+    if(cur!=='focus'&&fOpen()){fShut();closed=true;}
+    if(closed||prev==='_c'||prev==='panel'||prev==='focus')return;
+    if(cur==='root'&&hero)toTop();
+  });
+  /* × button in the settings panel */
+  if(panel){
+    var x=document.createElement('button');x.type='button';x.className='zk-px';x.setAttribute('aria-label','Затвори');x.title='Затвори';
+    x.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>';
+    x.addEventListener('click',function(e){e.stopPropagation();pClose();});
+    panel.insertBefore(x,panel.firstChild);
+    var cs=document.createElement('style');
+    cs.textContent='#'+panel.id+'{padding-top:'+(panel.id==='zkPanel'?'34px':'18px')+'}'+'.zk-px{position:absolute;top:8px;right:8px;z-index:3;width:38px;height:38px;padding:0;border:1px solid var(--rule,#ccc);border-radius:50%;background:var(--sheet,#fff);color:var(--ink,#222);display:grid;place-items:center;cursor:pointer;touch-action:manipulation}'+
+      '.zk-px svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}.zk-px::before{content:"";position:absolute;inset:-6px}';
+    document.head.appendChild(cs);
+  }
+})();
+</script>
+<script>(function(){if(!('serviceWorker' in navigator)||location.protocol==='file:')return;var app=['standalone','fullscreen','minimal-ui'].some(function(m){return matchMedia('(display-mode: '+m+')').matches;})||navigator.standalone===true;addEventListener('load',function(){navigator.serviceWorker.register('sw.js').then(function(){if(app)navigator.serviceWorker.ready.then(function(r){r.active&&r.active.postMessage({type:'download'});});}).catch(function(){});});})();</script>
+</body>
+</html>
