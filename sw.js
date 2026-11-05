@@ -1,14 +1,15 @@
 /* Зикирь – service worker.
    В браузъра нищо не се тегли предварително. Пълното изтегляне за офлайн
    става само в инсталираното приложение (страницата праща съобщение 'download').
-   Този файл се генерира автоматично. Версия: af34de001e */
-const VERSION = 'zikir-af34de001e';
+   Този файл се генерира автоматично. Версия: 448bd781da */
+const VERSION = 'zikir-448bd781da';
 const FILES = [
  "./",
  "index.html",
  "abdest.html",
  "djevshen.html",
  "dua_kumail.html",
+ "dalailalkhayrat.html",
  "duaibadet.html",
  "duazikr.html",
  "gradinite.html",
