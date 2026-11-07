@@ -386,7 +386,8 @@ a,button,label,select,summary,input,output,[role=button],.chip{touch-action:mani
       ch.port1.onmessage=function(e){
         var d=e.data;
         if(d.full){show('ok','Готово – работи и без интернет');return;}
-        show('busy','Изтегляне за офлайн… '+Math.round(d.done*100/d.total)+'%');
+        if(d.older) show('ok','Работи и без интернет · обновяване '+Math.round(d.done*100/d.total)+'%');
+        else show('busy','Изтегляне за офлайн… '+Math.round(d.done*100/d.total)+'%');
         if(!d.busy) asked=false;   // restart if the download stopped
         setTimeout(poll,1500);
       };
@@ -396,7 +397,7 @@ a,button,label,select,summary,input,output,[role=button],.chip{touch-action:mani
   addEventListener('load',function(){
     navigator.serviceWorker.register('sw.js').then(function(){
       // offline download only in the installed app
-      if(isApp()){show('busy','Подготовка за офлайн…');poll();}
+      if(isApp()){try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist();}catch(_){}show('busy','Подготовка за офлайн…');poll();}
     }).catch(function(){});
   });
   var mq=matchMedia('(display-mode: standalone)');
