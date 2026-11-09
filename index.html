@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Зикирь</title>
+<meta name="description" content="Мевлид-и Шериф, молитви и дуи – с арабски текст, транскрипция и превод. Работи и без интернет.">
+<link rel="stylesheet" href="fonts/fonts.css">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#F5F4F0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111318" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Зикирь">
+
+<script>try{var zt=localStorage.getItem('zk:theme');if(zt==='light'||zt==='dark')document.documentElement.setAttribute('data-theme',zt);}catch(e){}</script>
+<style>
+/* Layout: one centered column; calligraphic masthead, then a stacked list of collections, each tinted with its own app's accent */
+:root{
+  --paper:#F5F4F0; --sheet:#FFFFFF; --ink:#1C1F24; --muted:#60656E; --gold:#9A7A2C; --rule:#E0DDD5;
+  --c-mevlid:#21406A; --c-ramazan:#6A3F86; --c-istigfar:#2D4A7A; --c-salat:#7A3B2E; --c-gradinite:#3E6B35; --c-kumayl:#4B3B78; --c-hizb:#2F5D62; --c-abdest:#1F6480; --c-irshad:#7A4A2A; --c-tainite:#5A4632; --c-salevati:#2E6B3F; --c-djevshen:#9C1A5E; --c-lek:#2F6B52; --c-mech:#3B4A6B; --c-sah:#556226; --c-dz:#8A3A5C; --c-di:#1F6B5C; --c-dl:#2E5E3A;
+  --serif:"Literata","PT Serif",Georgia,serif;
+  --sans:"Golos Text","PT Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --arf:"Amiri","Noto Naskh Arabic","Traditional Arabic",serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#111318; --sheet:#181B22; --ink:#E7E5DF; --muted:#A0A5AF; --gold:#D8B867; --rule:#2A2E37;
+    --c-mevlid:#9DB9E0; --c-ramazan:#C9A6E6; --c-istigfar:#9DB8E8; --c-salat:#E3A08F; --c-gradinite:#A9D29B; --c-kumayl:#B9A6EA; --c-hizb:#93C6CB; --c-abdest:#8CC7DD; --c-irshad:#E0B08C; --c-tainite:#D9BE9C; --c-salevati:#9DD0AA; --c-djevshen:#F08BBE; --c-lek:#93CDB2; --c-mech:#A9B8DA; --c-sah:#C3CF8E; --c-dz:#E7A4C2; --c-di:#8FD3C1; --c-dl:#9CD3A8;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#111318; --sheet:#181B22; --ink:#E7E5DF; --muted:#A0A5AF; --gold:#D8B867; --rule:#2A2E37;
+  --c-mevlid:#9DB9E0; --c-ramazan:#C9A6E6; --c-istigfar:#9DB8E8; --c-salat:#E3A08F; --c-gradinite:#A9D29B; --c-kumayl:#B9A6EA; --c-hizb:#93C6CB; --c-abdest:#8CC7DD; --c-irshad:#E0B08C; --c-tainite:#D9BE9C; --c-salevati:#9DD0AA; --c-djevshen:#F08BBE; --c-lek:#93CDB2; --c-mech:#A9B8DA; --c-sah:#C3CF8E; --c-dz:#E7A4C2; --c-di:#8FD3C1; --c-dl:#9CD3A8;
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.55;
+  padding:env(safe-area-inset-top,0px) 16px env(safe-area-inset-bottom,0px)}
+.wrap{max-width:700px;margin:0 auto;padding-block:56px 56px}
+header{text-align:center;margin-bottom:44px}
+.ar{font-family:var(--arf);font-size:clamp(64px,16vw,96px);line-height:1.1;color:var(--gold);margin:0}
+h1{font-family:var(--serif);font-weight:600;font-size:clamp(34px,8vw,46px);line-height:1.1;margin:6px 0 12px;letter-spacing:.01em}
+.lead{margin:0 auto;color:var(--muted);max-width:46ch;text-wrap:balance}
+.verse{margin:22px auto 0;max-width:44ch;color:var(--muted);font-family:var(--serif);font-style:italic;font-size:16px}
+.verse b{display:block;font-family:var(--arf);font-style:normal;font-weight:400;font-size:24px;color:var(--ink);margin-bottom:4px}
+.list{list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.app{--c:var(--gold);display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center;padding:18px 18px;
+  background:var(--sheet);border:1px solid var(--rule);border-radius:12px;color:var(--ink);text-decoration:none;transition:border-color .15s}@media (hover:hover){.app:hover{border-color:var(--c)}}
+.app:focus-visible{outline:2px solid var(--c);outline-offset:2px}
+.glyph{width:64px;height:56px;border-radius:12px;display:grid;place-items:center;font-family:var(--arf);font-size:18px;white-space:nowrap;line-height:1;
+  color:var(--c);background:color-mix(in srgb,var(--c) 12%,transparent)}
+.txt{min-width:0}
+.name{display:block;font-family:var(--serif);font-weight:600;font-size:20px;line-height:1.25}
+.desc{display:block;color:var(--muted);font-size:15px;margin-top:3px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.tag{font-size:12px;font-weight:500;letter-spacing:.03em;padding:2px 8px;border-radius:999px;border:1px solid var(--rule);color:var(--c)}
+.go{color:var(--muted)}
+.go svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}@media (hover:hover){.app:hover .go{color:var(--c)}}
+.m{--c:var(--c-mevlid)} .r{--c:var(--c-ramazan)} .i{--c:var(--c-istigfar)} .s{--c:var(--c-salat)} .g{--c:var(--c-gradinite)} .k{--c:var(--c-kumayl)} .h{--c:var(--c-hizb)} .a{--c:var(--c-abdest)} .ir{--c:var(--c-irshad)} .tn{--c:var(--c-tainite)} .sv{--c:var(--c-salevati)} .dj{--c:var(--c-djevshen)} .lk{--c:var(--c-lek)} .mc{--c:var(--c-mech)} .sh{--c:var(--c-sah)} .dz{--c:var(--c-dz)} .di{--c:var(--c-di)} .dl{--c:var(--c-dl)}
+div.app{grid-template-columns:auto 1fr}@media (hover:hover){div.app:hover{border-color:var(--rule)}}
+.vers{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.vers a{display:inline-flex;flex-direction:column;padding:8px 14px;border-radius:10px;border:1px solid var(--rule);text-decoration:none;color:var(--ink);font-weight:500;font-size:15px;line-height:1.3;transition:border-color .15s}
+.vers a small{font-weight:400;font-size:12.5px;color:var(--muted)}@media (hover:hover){.vers a:hover{border-color:var(--c)}}.vers a:focus-visible{outline:2px solid var(--c);outline-offset:2px}
+footer{margin-top:48px;text-align:center;color:var(--muted);font-size:14px}
+@media (max-width:440px){.go{display:none}.app{grid-template-columns:auto 1fr;gap:14px;padding:16px}.glyph{width:58px;height:50px;font-size:16px}}
+
+/* install + offline */
+[hidden]{display:none!important}
+.inst{display:grid;gap:10px;justify-items:center;margin:-16px 0 36px;text-align:center}
+.inst-btn{display:inline-flex;align-items:center;gap:10px;padding:12px 20px;border-radius:999px;border:0;background:var(--ink);color:var(--paper);font:600 16px var(--sans);cursor:pointer}
+.inst-btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.inst-btn:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.off{display:inline-flex;align-items:center;gap:8px;font-size:14px;color:var(--muted)}
+.off i{width:8px;height:8px;border-radius:50%;background:var(--rule);flex:none}
+.off.ok i{background:var(--c-gradinite)}
+.off.busy i{background:var(--gold);animation:pulse 1.2s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.3}}
+.how{max-width:420px;background:var(--sheet);border:1px solid var(--rule);border-radius:12px;padding:14px 16px;text-align:left;font-size:15px}
+.how p{margin:0 0 6px;font-weight:600}
+.how ol{margin:0;padding-left:20px;display:grid;gap:4px;color:var(--ink)}
+.how b{font-weight:600}
+@media (prefers-reduced-motion:reduce){.off.busy i{animation:none}*{transition:none!important}}
+
+/* search */
+.srch{margin:0 0 22px}
+.sbox{position:relative;display:flex;align-items:center}
+.sbox>svg{position:absolute;left:14px;width:20px;height:20px;stroke:var(--muted);fill:none;stroke-width:1.9;stroke-linecap:round;pointer-events:none}
+.sbox input{width:100%;height:50px;padding:0 46px 0 44px;border-radius:12px;border:1px solid var(--rule);background:var(--sheet);color:var(--ink);font:400 17px var(--sans);-webkit-appearance:none;appearance:none}
+.sbox input::-webkit-search-cancel-button{display:none}
+.sbox input::placeholder{color:var(--muted)}
+.sbox input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px color-mix(in srgb,var(--gold) 22%,transparent)}
+.qx{position:absolute;right:6px;width:38px;height:38px;border:0;border-radius:8px;background:none;color:var(--muted);cursor:pointer;display:grid;place-items:center}
+.qx svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
+.sin{display:inline-flex;align-items:center;gap:6px;margin:10px 0 0;padding:6px 2px;border:0;background:none;color:var(--muted);font:400 15px var(--sans);cursor:pointer}
+.sin b{color:var(--ink);font-weight:600}
+.sin svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .15s}
+.sin[aria-expanded="true"] svg{transform:rotate(180deg)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 4px}
+.chips{--c:var(--ink)}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:7px 12px;border-radius:999px;border:1px solid var(--rule);background:var(--sheet);color:var(--ink);font:500 14px/1.2 var(--sans);cursor:pointer;text-align:left}
+.chip i{width:9px;height:9px;border-radius:50%;flex:none;border:1.5px solid var(--c)}
+.chip[aria-pressed="true"]{border-color:var(--c);background:color-mix(in srgb,var(--c) 11%,var(--sheet))}
+.chip[aria-pressed="true"] i{background:var(--c)}
+.chip.all{--c:var(--gold);font-weight:600}
+.chip:focus-visible,.hit:focus-visible,.more:focus-visible,.sin:focus-visible,.qx:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.sstat{margin:12px 0 0;color:var(--muted);font-size:15px}
+.sstat:empty{display:none}
+.srch{--c:var(--gold)}
+.rg{margin:18px 0 0}
+.rg h2{display:flex;align-items:baseline;gap:8px;margin:0 0 8px;font:600 18px/1.3 var(--serif);color:var(--c)}
+.rg h2 small{font:500 13px var(--sans);color:var(--muted)}
+.hits{display:grid;gap:8px}
+.hit{display:block;padding:12px 14px;border-radius:10px;background:var(--sheet);border:1px solid var(--rule);color:var(--ink);text-decoration:none;font:400 16px/1.5 var(--serif)}@media (hover:hover){.hit:hover{border-color:var(--c)}}
+.hit small{display:block;font:500 12.5px/1.35 var(--sans);color:var(--muted);margin-bottom:4px;letter-spacing:.01em}
+.hit mark{background:color-mix(in srgb,var(--gold) 30%,transparent);color:inherit;border-radius:2px;padding:0 1px}
+.more{margin:8px 0 0;padding:8px 14px;border-radius:999px;border:1px solid var(--rule);background:none;color:var(--c);font:500 14px var(--sans);cursor:pointer}
+body.searching .list,body.searching .inst{display:none}
+/* saved */
+.srow{display:flex;align-items:center;gap:8px;margin-top:10px}
+.srow .sin{margin:0}
+.savb{margin-left:auto;display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;border:1px solid var(--rule);background:var(--sheet);color:var(--ink);font:600 15px var(--sans);cursor:pointer}
+.savb svg{width:17px;height:17px;stroke:var(--gold);fill:none;stroke-width:1.8;stroke-linejoin:round}
+.savb.has svg{fill:var(--gold)}
+.savb b{font-weight:600;color:var(--muted)}
+.savb b:not(:empty)::before{content:"· "}
+.savb[aria-expanded="true"]{border-color:var(--gold);background:color-mix(in srgb,var(--gold) 12%,var(--sheet))}
+.savb:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+body.saving .list,body.saving .inst,body.saving #res,body.saving #sstat,body.saving #chips{display:none!important}
+#saved .empty{color:var(--muted);font-size:15px;margin:16px 0 0;line-height:1.5}
+.sv{position:relative}
+.sv .hit{padding-right:46px}
+.sv .rm{position:absolute;top:8px;right:6px;width:36px;height:36px;border:0;border-radius:8px;background:none;color:var(--muted);cursor:pointer;display:grid;place-items:center}
+.sv .rm svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}@media (hover:hover){.sv .rm:hover{color:var(--ink)}}
+
+
+/* settings (theme + keep screen on) */
+.wrap{position:relative}
+.setb{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:0;width:42px;height:42px;border-radius:10px;border:1px solid var(--rule);background:var(--sheet);color:var(--ink);display:grid;place-items:center;cursor:pointer}
+.setb svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.setb:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.spanel{position:absolute;z-index:20;top:calc(64px + env(safe-area-inset-top,0px));right:0;width:min(320px,calc(100vw - 32px));background:var(--sheet);border:1px solid var(--rule);border-radius:14px;padding:16px;box-shadow:0 14px 40px rgba(0,0,0,.18);text-align:left}
+.spanel h3{margin:0 0 8px;font:500 13px var(--sans);color:var(--muted);letter-spacing:.02em}
+.spanel .g+.g{margin-top:16px;padding-top:14px;border-top:1px solid var(--rule)}
+.tseg{display:flex;border:1px solid var(--rule);border-radius:9px;overflow:hidden}
+.tseg button{flex:1;padding:9px 6px;border:0;background:transparent;color:var(--ink);font:500 15px var(--sans);cursor:pointer}
+.tseg button+button{border-left:1px solid var(--rule)}
+.tseg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.wtog{display:flex;align-items:center;justify-content:space-between;gap:12px;font-size:16px;cursor:pointer}
+.wtog small{display:block;font-size:13px;color:var(--muted)}
+.wtog input{flex:none;appearance:none;-webkit-appearance:none;width:42px;height:24px;border-radius:12px;background:var(--rule);position:relative;cursor:pointer}
+.wtog input::after{content:"";position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .15s;box-shadow:0 1px 2px rgba(0,0,0,.25)}
+.wtog input:checked{background:var(--gold)}
+.wtog input:checked::after{transform:translateX(18px)}
+
+/* tiles view */
+.list.tiles{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.list.tiles>li{display:flex}
+.list.tiles .app{width:100%;grid-template-columns:1fr;justify-items:center;align-content:start;text-align:center;gap:10px;padding:18px 12px 16px}
+.list.tiles .glyph{width:76px;height:66px;font-size:20px}
+.list.tiles .name{font-size:17px;line-height:1.3}
+.list.tiles .desc,.list.tiles .tags,.list.tiles .go{display:none}
+.list.tiles .vers{justify-content:center;gap:6px;margin-top:8px}
+.list.tiles .vers a{padding:6px 10px;font-size:13.5px;align-items:center}
+.list.tiles .vers small{display:none}
+@media (min-width:600px){.list.tiles{grid-template-columns:repeat(auto-fill,minmax(180px,1fr))}}
+</style>
+<style id="zk-touch">
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+a,button,label,select,summary,input,output,[role=button],.chip{touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,.06)}
+.panel,#panel,#zkPanel{max-height:calc(100vh - 80px - env(safe-area-inset-top,0px));-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+@supports (height:100dvh){.panel,#panel,#zkPanel{max-height:calc(100dvh - 80px - env(safe-area-inset-top,0px))}}
+@media (pointer:coarse){
+ .ib,.zk-home,.zk-flag,.ctl button,.setb,.savb,.sin{position:relative}
+ .ib::before,.zk-home::before,.zk-flag::before,.ctl button::before,.zk-star::before,.setb::before,.savb::before,.sin::before{content:"";position:absolute;inset:-6px}
+ .ctl button{width:44px;height:40px}
+ .seg button{min-height:44px}
+ .tog{min-height:44px}
+ select.sel,.sel{min-height:40px}
+ .chip{min-height:38px}
+ sup a{display:inline-block;padding:10px 8px;margin:-10px -8px}
+ summary{padding-top:8px;padding-bottom:8px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <button class="setb" id="zkSet" type="button" aria-label="Настройки" aria-expanded="false" aria-controls="zkPanel"><svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg></button>
+  <div class="spanel" id="zkPanel" role="dialog" aria-label="Настройки" hidden>
+    <div class="g"><h3>Тема – за всички книги</h3><div class="tseg" id="zkTheme"><button type="button" data-t="auto">Авто</button><button type="button" data-t="light">Светла</button><button type="button" data-t="dark">Тъмна</button></div></div>
+    <div class="g"><h3>Изглед на книгите</h3><div class="tseg" id="zkView"><button type="button" data-v="list">Списък</button><button type="button" data-v="tiles">Плочки</button></div></div>
+    <div class="g" id="zkWakeG"><label class="wtog"><span>Екранът да не изгасва<small>Във всички книги, докато са отворени</small></span><input type="checkbox" id="zkWakeI"></label></div>
+  </div>
+  <header>
+    <p class="ar" lang="ar" dir="rtl">ذِكْر</p>
+    <h1>Зикирь</h1>
+    <p class="verse"><b lang="ar" dir="rtl">أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ</b>О, да, при споменаването на Аллах сърцата се успокояват. (Ер-Ра‘д, 28)</p>
+  </header>
+
+  <div class="inst" id="inst">
+    <button class="inst-btn" id="instBtn" type="button" hidden>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M12 7v7M9 11.5l3 3 3-3M10.5 18.5h3"/></svg>
+      Инсталирай на телефона
+    </button>
+    <div class="how" id="how" hidden></div>
+    <span class="off" id="off" hidden><i></i><span id="offTxt"></span></span>
+  </div>
+
+  <section class="srch" id="srch" role="search">
+    <div class="sbox">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>
+      <input id="q" type="search" placeholder="Търси в книгите…" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search" aria-label="Търси в книгите">
+      <button class="qx" id="qx" type="button" aria-label="Изчисти" hidden><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    </div>
+    <div class="srow">
+    <button class="sin" id="sinBtn" type="button" aria-expanded="false" aria-controls="chips">Търси в: <b id="sinLbl">всички книги</b><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+    <button class="savb" id="savBtn" type="button" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></svg>Запазени<b id="savN"></b></button>
+    </div>
+    <div class="chips" id="chips" hidden></div>
+    <p class="sstat" id="sstat" aria-live="polite"></p>
+    <div id="res"></div>
+    <div id="saved" hidden></div>
+  </section>
+
+  <ul class="list">
+    <li><a class="app m" href="mevlid.html">
+      <span class="glyph" lang="ar">مولد</span>
+      <span class="txt"><span class="name">Мевлид-и Шериф</span>
+        <span class="desc">Поемата на Сюлейман Челеби – оригинален текст, транскрипция и превод</span>
+        <span class="tags"><span class="tag">Български</span><span class="tag">Türkçe</span></span></span>
+      <span class="go"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
+    </a></li>
+    <li><a class="app r" href="ramazanskadua.html">
+      <span class="glyph" lang="ar">دعاء</span>
+      <span class="txt"><span class="name">Рамазанска дюа</span>
+        <span class="desc">78-те имена на Аллах с айетите към тях</span></span>
+      <span class="go"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
+    </a></li>
+    <li><div class="app i">
+      <span class="glyph" lang="ar">استغفار</span>
+      <span class="txt"><span class="name">Молитви за опрощение</span>
+        <span class="desc">Седемдесетте молитви на имам Хасен ел-Басри</span>
+        <span class="vers"><a href="istigfar.html">За самостоятелно четене<small>„…и опрости греха ми“</small></a><a href="istigfar_group.html">За групово четене<small>„…и опрости греха ни“</small></a></span></span>
+    </div></li>
+    <li><a class="app s" href="salatsalam.html">
+      <span class="glyph" lang="ar">صلاة</span>
+      <span class="txt"><span class="name">Саляту селям</span>
+        <span class="desc">Благослов и приветствие към Пратеника Мухаммед ﷺ</span></span>
+      <span class="go"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
+    </a></li>
+    <li><a class="app g" href="gradinite.html">
+      <span class="glyph" lang="ar">رياض</span>
+      <span class="txt"><span class="name">Градините на Рая</span>
+        <span class="desc">Четиридесетте градини на имам Юсуф ен-Небхани</span></span>
+      <span class="go"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
+    </a></li>
+    <li><a class="app k" href="dua_kumail.html">
+      <span class="glyph" lang="ar">كميل</span>
+      <span class="txt"><span class="name">Молитвата на Кумайл</span>
+        <span class="desc">Приписвана на имам Али ибн Аби Талиб, в превод на Александър Веселинов – Шамсуддин</span></span>
+      <span class="go"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
+    </a></li>
+    <li><div class="app h">
+      <span class="glyph" lang="ar">حزب</span>
+      <span class="txt"><span class="name">ел-Хизбу-л-Еа‘зам</span>
+        <span class="desc">Молитвите на Мулла Али ел-Кари от Курана и Сунната, разпределени в седем дни</span>
+        <span class="vers"><a href="hizb.html">Първи превод<small>пълна версия – транскрипция, тълкуване, източници</small></a><a href="hizb_new.html">Втори превод<small>кратка версия – арабски текст и превод</small></a></span></span>
+    </div></li>
+    <li><a class="app a" href="abdest.html">
+      <span class="glyph" lang="ar">وضوء</span>
+      <span class="txt"><span class="name">Дюите за абдест</span>
+        <span class="desc">Препоръчителните дюи при всяко действие от абдеста</span></span>
+      <span class="go"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
+    </a></li>
+    <li><a class="app ir" href="irshad.html">
+      <span class="glyph" lang="ar">إرشاد</span>
+      <span class="txt"><span class="name">Иршад ес-Сяликин</span>
+        <span class="desc">Касиде – наставление за устремените към доволството на Господаря на световете</span></span>
+      <span class="go"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
+    </a></li>
+    <li><a class="app tn" href="tainite.html">
+      <span class="glyph" lang="ar">مكنون</span>
+      <span class="txt"><span class="name">Книгата на тайните</span>
+        <span class="desc">Наставленията на имам ал-Касим ибн Ибрахим ар-Расси към сина му</span></span>
+      <span class="go"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
+    </a></li>
+    <li><a class="app sv" href="salevati.html">
+      <span class="glyph" lang="ar">صلوات</span>
+      <span class="txt"><span class="name">Салевати от огромна полза</span>
+        <span class="desc">25 салевата от сборника на сеййид Мухаммед Хишам Каббани</span></span>
+      <span class="go"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
+    </a></li>
+    <li><a class="app dj" href="djevshen.html">
+      <span class="glyph" lang="ar">جوشن</span>
+      <span class="txt"><span class="name">Джевшен-и Кебир</span>
+        <span class="desc">Сура Йа Син и Джевшен-и Кебир в превод на Айхан Селиман</span></span>
+      <span class="go"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
+    </a></li>
+    <li><a class="app lk" href="lekarstva.html">
+      <span class="glyph" lang="ar">شفاء</span>
+      <span class="txt"><span class="name">Лекарства от Свещения Коран</span>
+        <span class="desc">160 предписания с айети и дуи от Корана – от Мевляна Ашраф Али Тханви</span></span>
+      <span class="go"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
+    </a></li>
+    <li><a class="app mc" href="mechsreshtumagiite.html">
+      <span class="glyph" lang="ar">رقية</span>
+      <span class="txt"><span class="name">Меч срещу магиите</span>
+        <span class="desc">Магията и уроките и лечението им с рукя – от Уахид Абдусселям Бали</span></span>
+      <span class="go"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
+    </a></li>
+    <li><a class="app sh" href="sahifa.html">
+      <span class="glyph" lang="ar">صحيفة</span>
+      <span class="txt"><span class="name">Съвършената Сахифа</span>
+        <span class="desc">54-те молитви на имам Зайн ал-Абидин – арабски текст с хараке и превод на Александър Веселинов – Шамсуддин</span></span>
+      <span class="go"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
+    </a></li>
+    <li><a class="app dz" href="duazikr.html">
+      <span class="glyph" lang="ar">أذكار</span>
+      <span class="txt"><span class="name">Дуи и зикр</span>
+        <span class="desc">Ежедневни дуи и споменавания от Корана и Сунната – при събуждане, абдест, намаз, сутрин и вечер, заспиване</span></span>
+      <span class="go"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
+    </a></li>
+    <li><a class="app di" href="duaibadet.html">
+      <span class="glyph" lang="ar">عبادات</span>
+      <span class="txt"><span class="name">Дуа и ибадети</span>
+        <span class="desc">Ибадетите и дуите през свещените дни, нощи и месеци на годината – от д-р хаджи Недим Генджев</span></span>
+      <span class="go"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
+    </a></li>
+    <li><a class="app dl" href="dalailalkhayrat.html">
+      <span class="glyph" lang="ar">دلائل</span>
+      <span class="txt"><span class="name">Тридесет и едно предания за ползите от салеватите и двеста и едно от имената на Пратеника на Аллах, мир нему и неговото семейство</span>
+        <span class="desc">Из „Деляилю-л-хайрат“ на имам ел-Джезули – арабски текст и превод</span></span>
+      <span class="go"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span>
+    </a></li>
+  </ul>
+
+</div>
+<script>
+(function(){
+  var btn=document.getElementById('instBtn'), how=document.getElementById('how'),
+      off=document.getElementById('off'), offTxt=document.getElementById('offTxt');
+  function isApp(){
+    return ['standalone','fullscreen','minimal-ui','window-controls-overlay'].some(function(m){return matchMedia('(display-mode: '+m+')').matches;})
+      ||navigator.standalone===true||document.referrer.indexOf('android-app://')===0;
+  }
+  var standalone=isApp();
+  var KEY='zikir:installed';
+  function wasInstalled(){try{return localStorage.getItem(KEY)==='1';}catch(e){return false;}}
+  function markInstalled(){try{localStorage.setItem(KEY,'1');}catch(e){}}
+  var ua=navigator.userAgent, ios=/iphone|ipad|ipod/i.test(ua)||(/macintosh/i.test(ua)&&'ontouchend' in document);
+  var deferred=null;
+
+  if(standalone) markInstalled();
+  if(!standalone&&!wasInstalled()) btn.hidden=false;
+  addEventListener('beforeinstallprompt',function(e){
+    e.preventDefault(); deferred=e;
+    // the browser offers install only when the app is not installed
+    try{localStorage.removeItem(KEY);}catch(_){}
+    if(!isApp()) btn.hidden=false;
+  });
+  addEventListener('appinstalled',function(){markInstalled();btn.hidden=true;how.hidden=true;deferred=null;});
+  matchMedia('(display-mode: standalone)').addEventListener&&matchMedia('(display-mode: standalone)').addEventListener('change',function(e){if(e.matches){btn.hidden=true;how.hidden=true;}});
+
+  btn.addEventListener('click',function(){
+    if(deferred){deferred.prompt();deferred.userChoice.finally(function(){deferred=null;});return;}
+    if(ios){
+      how.innerHTML='<p>Инсталиране на iPhone / iPad</p><ol><li>Отвори тази страница в <b>Safari</b>.</li><li>Натисни бутона <b>Сподели</b> (квадратче със стрелка нагоре).</li><li>Избери <b>„Добави към началния екран“</b> и потвърди с <b>„Добави“</b>.</li></ol>';
+    }else{
+      how.innerHTML='<p>Инсталиране</p><ol><li>Отвори менюто на браузъра (<b>⋮</b> горе вдясно).</li><li>Избери <b>„Инсталиране на приложението“</b> или <b>„Добавяне към началния екран“</b>.</li></ol>';
+    }
+    how.hidden=!how.hidden;
+  });
+
+  if(!('serviceWorker' in navigator)||location.protocol==='file:') return;
+  function show(cls,txt){off.hidden=false;off.className='off '+cls;offTxt.textContent=txt;}
+  var asked=false;
+  function poll(){
+    navigator.serviceWorker.ready.then(function(reg){
+      var w=reg.active; if(!w) return setTimeout(poll,1000);
+      if(!asked){w.postMessage({type:'download'});asked=true;}
+      var ch=new MessageChannel();
+      ch.port1.onmessage=function(e){
+        var d=e.data;
+        if(d.full){show('ok','Готово – работи и без интернет');return;}
+        if(d.older) show('ok','Работи и без интернет · обновяване '+Math.round(d.done*100/d.total)+'%');
+        else show('busy','Изтегляне за офлайн… '+Math.round(d.done*100/d.total)+'%');
+        if(!d.busy) asked=false;   // restart if the download stopped
+        setTimeout(poll,1500);
+      };
+      w.postMessage({type:'status'},[ch.port2]);
+    });
+  }
+  addEventListener('load',function(){
+    navigator.serviceWorker.register('sw.js').then(function(){
+      // offline download only in the installed app
+      if(isApp()){try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist();}catch(_){}show('busy','Подготовка за офлайн…');poll();}
+    }).catch(function(){});
+  });
+  var mq=matchMedia('(display-mode: standalone)');
+  mq.addEventListener&&mq.addEventListener('change',function(e){if(e.matches)poll();});
+})();
+</script>
+<script>var ZK={
+ SEL:'p,li,h2,h3,h4,.bg,.tr,span.ay,details.src,dd,dt,blockquote,td',
+ EX:'.bar,.panel,.focus,.toc,.grid,nav,header,#top,footer,select,button,label,[role=dialog],.zk-ver,.inst,script,style,svg',
+ blocks:function(){var S=ZK.SEL,E=ZK.EX;return Array.prototype.filter.call(document.querySelectorAll(S),function(e){return !e.closest(E)&&!(e.parentElement&&e.parentElement.closest(S));});},
+ text:function(e){var w=document.createTreeWalker(e,NodeFilter.SHOW_TEXT,{acceptNode:function(n){return n.parentElement.closest('svg,script,style')?2:1;}}),n,o='';while(n=w.nextNode())o+=n.nodeValue;return o.replace(/[-]/g,'').replace(/\s+/g,' ').trim();},
+ DROP:/[’‘'`ʼʻʿʾ´­\-‐‑–]/,
+ norm:function(s,wantMap){var o='',m=wantMap?[]:null,sp=true;for(var i=0;i<s.length;i++){var c=s[i];if(ZK.DROP.test(c))continue;
+   if(/\s/.test(c)){if(!sp){o+=' ';m&&m.push(i);sp=true;}continue;}
+   var l=c.toLowerCase();if(l!=='й'&&l!=='ё'){l=l.normalize('NFD').replace(/[̀-ͯ]/g,'');}if(l==='ı')l='i';else if(/[\u064B-\u065F\u0670\u06D6-\u06ED\u0640]/.test(l))continue;else if(/[أإآٱ]/.test(l))l='ا';else if(l==='ى')l='ي';else if(l==='ة')l='ه';
+   for(var k=0;k<l.length;k++){o+=l[k];m&&m.push(i);}sp=false;}
+  return wantMap?{n:o,m:m}:o;}
+};
+</script>
+<script>
+(function(){
+  var CLS={mevlid:'m',ramazanskadua:'r',istigfar:'i',istigfar_group:'i',salatsalam:'s',gradinite:'g',dua_kumail:'k',hizb:'h',hizb_new:'h',abdest:'a',irshad:'ir',tainite:'tn',salevati:'sv',djevshen:'dj',lekarstva:'lk',mechsreshtumagiite:'mc',sahifa:'sh',duazikr:'dz',duaibadet:'di',dalailalkhayrat:'dl'};
+  var q=document.getElementById('q'),qx=document.getElementById('qx'),sin=document.getElementById('sinBtn'),lbl=document.getElementById('sinLbl'),
+      chips=document.getElementById('chips'),stat=document.getElementById('sstat'),res=document.getElementById('res');
+  var DB=null,loading=null,sel=null,shown={},timer=0;
+  function store(k,v){try{if(v===undefined)return JSON.parse(localStorage.getItem(k));localStorage.setItem(k,JSON.stringify(v));}catch(e){return null;}}
+  function ss(k,v){try{if(v===undefined)return sessionStorage.getItem(k);sessionStorage.setItem(k,v);}catch(e){return null;}}
+  function esc(s){return s.replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function load(){
+    if(DB) return Promise.resolve(DB);
+    if(!loading){
+      stat.textContent='Зареждане…';
+      loading=fetch('search.json').then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(d){
+        d.books.forEach(function(b){b.n2=b.s.map(function(x){return ZK.norm(x[2]);});});
+        DB=d;buildChips();return d;
+      }).catch(function(){loading=null;stat.textContent='Търсенето не може да се зареди. Провери връзката с интернет.';throw 0;});
+    }
+    return loading;
+  }
+  function buildChips(){
+    var saved=store('zk:books');sel={};
+    DB.books.forEach(function(b){sel[b.f]=!saved||saved.indexOf(b.f)>=0;});
+    if(saved&&!DB.books.some(function(b){return sel[b.f];}))DB.books.forEach(function(b){sel[b.f]=true;});
+    var h='<button type="button" class="chip all" data-f="*"><i></i>Всички</button>';
+    DB.books.forEach(function(b){h+='<button type="button" class="chip '+CLS[b.f]+'" data-f="'+b.f+'"><i></i>'+esc(b.n)+'</button>';});
+    chips.innerHTML=h;paintChips();
+  }
+  function paintChips(){
+    var n=0,all=true,one='';
+    DB.books.forEach(function(b){if(sel[b.f]){n++;one=b.n;}else all=false;});
+    chips.querySelectorAll('.chip').forEach(function(c){var f=c.dataset.f;c.setAttribute('aria-pressed',f==='*'?String(all):String(!!sel[f]));});
+    lbl.textContent=all?'всички книги':n===0?'нито една книга':n===1?one:n+' книги';
+  }
+  chips.addEventListener('click',function(e){
+    var c=e.target.closest('.chip');if(!c)return;var f=c.dataset.f;
+    if(f==='*'){var all=DB.books.every(function(b){return sel[b.f];});DB.books.forEach(function(b){sel[b.f]=!all;});}
+    else sel[f]=!sel[f];
+    store('zk:books',DB.books.filter(function(b){return sel[b.f];}).map(function(b){return b.f;}));
+    paintChips();run();
+  });
+  sin.addEventListener('click',function(){
+    load().then(function(){var o=chips.hidden;chips.hidden=!o;sin.setAttribute('aria-expanded',String(o));});
+  });
+  function snippet(t,words){
+    var r=ZK.norm(t,true),hits=[];
+    words.forEach(function(w){var p=0;while((p=r.n.indexOf(w,p))>=0){hits.push([r.m[p],r.m[p+w.length-1]+1]);p+=w.length;}});
+    hits.sort(function(a,b){return a[0]-b[0];});
+    var first=hits.length?hits[0][0]:0,a=0,b=t.length;
+    if(t.length>220){a=Math.max(0,first-70);if(a>0){var sp=t.indexOf(' ',a);if(sp>=0&&sp<first)a=sp+1;}b=Math.min(t.length,a+220);if(b<t.length){var sp2=t.lastIndexOf(' ',b);if(sp2>first)b=sp2;}}
+    var h=a>0?'… ':'',pos=a;
+    hits.forEach(function(x){if(x[0]<pos||x[1]>b)return;h+=esc(t.slice(pos,x[0]))+'<mark>'+esc(t.slice(x[0],x[1]))+'</mark>';pos=x[1];});
+    return h+esc(t.slice(pos,b))+(b<t.length?' …':'');
+  }
+  function run(){
+    var raw=q.value.trim();qx.hidden=!raw;ss('zk:q',raw);
+    document.body.classList.toggle('searching',!!raw);
+    if(!raw){res.innerHTML='';stat.textContent='';return;}
+    load().then(function(){
+      var words=ZK.norm(raw).split(' ').filter(Boolean);
+      if(words.join('').length<2){res.innerHTML='';stat.textContent='Напиши поне 2 букви.';return;}
+      var books=DB.books.filter(function(b){return sel[b.f];});
+      if(!books.length){res.innerHTML='';stat.textContent='Избери поне една книга от „Търси в“.';return;}
+      var total=0,nb=0,html='',per=books.length===1?40:5;
+      books.forEach(function(b){
+        var m=[];for(var i=0;i<b.n2.length;i++){var n=b.n2[i],ok=true;for(var k=0;k<words.length;k++){if(n.indexOf(words[k])<0){ok=false;break;}}if(ok)m.push(i);}
+        if(!m.length)return;total+=m.length;nb++;
+        var lim=shown[b.f]||per;
+        html+='<div class="rg '+CLS[b.f]+'"><h2>'+esc(b.n)+'<small>'+m.length+'</small></h2><div class="hits">';
+        m.slice(0,lim).forEach(function(i){var s=b.s[i],c=b.c[s[1]];
+          html+='<a class="hit" href="'+b.f+'.html?zkq='+encodeURIComponent(raw)+'&zkb='+s[0]+'">'+(c?'<small>'+esc(c)+'</small>':'')+snippet(s[2],words)+'</a>';});
+        html+='</div>'+(m.length>lim?'<button type="button" class="more" data-f="'+b.f+'" data-n="'+lim+'">Покажи още ('+(m.length-lim)+')</button>':'')+'</div>';
+      });
+      res.innerHTML=html;
+      stat.textContent=total?('Намерени '+total+' '+(total===1?'резултат':'резултата')+(nb>1?' в '+nb+' книги':'')+'.'):'Няма резултати за „'+raw+'“.';
+    }).catch(function(){});
+  }
+  res.addEventListener('click',function(e){var b=e.target.closest('.more');if(!b)return;shown[b.dataset.f]=+b.dataset.n+30;run();});
+  q.addEventListener('input',function(){shown={};clearTimeout(timer);timer=setTimeout(run,180);});
+  q.addEventListener('focus',function(){load().catch(function(){});},{once:true});
+  q.addEventListener('keydown',function(e){if(e.key==='Enter'){clearTimeout(timer);run();q.blur();}if(e.key==='Escape'){q.value='';run();}});
+  qx.addEventListener('click',function(){q.value='';shown={};run();q.focus();});
+  var last=ss('zk:q');if(last){q.value=last;run();}
+})();
+</script>
+<script>
+(function(){
+  var btn=document.getElementById('savBtn'),box=document.getElementById('saved'),nEl=document.getElementById('savN'),q=document.getElementById('q');
+  var CLS={mevlid:'m',mevlid_tr:'m',ramazanskadua:'r',istigfar:'i',istigfar_group:'i',salatsalam:'s',gradinite:'g',dua_kumail:'k',hizb:'h',hizb_new:'h',abdest:'a',irshad:'ir',tainite:'tn',salevati:'sv',djevshen:'dj',lekarstva:'lk',mechsreshtumagiite:'mc',sahifa:'sh',duazikr:'dz',duaibadet:'di',dalailalkhayrat:'dl'};
+  var NAMES={};document.querySelectorAll('.list a[href$=".html"]').forEach(function(a){var f=a.getAttribute('href'),n=a.closest('.app');var nm=n&&n.querySelector('.name');NAMES[f]=(nm?nm.textContent.trim():'')+(a.closest('.vers')?' – '+a.childNodes[0].textContent.trim().toLowerCase():'');});
+  NAMES['mevlid_tr.html']=(NAMES['mevlid.html']||'Мевлид')+' – Türkçe';
+  function load(){try{return JSON.parse(localStorage.getItem('zk:saved'))||[];}catch(e){return [];}}
+  function put(a){try{localStorage.setItem('zk:saved',JSON.stringify(a));}catch(e){}}
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+  function count(){var n=load().length;nEl.textContent=n?n:'';btn.classList.toggle('has',n>0);}
+  function render(){
+    var a=load();count();
+    if(!a.length){box.innerHTML='<p class="empty">Нямаш запазени места. В някоя книга докосни абзац – дуа, айет или текст – и натисни „Запази“. После ще го намираш тук.</p>';return;}
+    var groups=[],by={};
+    a.forEach(function(it,i){if(!by[it.f]){by[it.f]=[];groups.push(it.f);}by[it.f].push([it,i]);});
+    var h='';
+    groups.forEach(function(f){var nm=NAMES[f]||by[f][0][0].n||f;
+      h+='<div class="rg '+(CLS[f.replace('.html','')]||'')+'"><h2>'+esc(nm)+'<small>'+by[f].length+'</small></h2><div class="hits">';
+      by[f].forEach(function(p){var it=p[0];var t=it.t.length>230?it.t.slice(0,230)+' …':it.t;
+        h+='<div class="sv"><a class="hit" href="'+esc(f)+'?zkq=&zkb='+it.b+'&zkk='+encodeURIComponent(it.k)+'">'+(it.c?'<small>'+esc(it.c)+'</small>':'')+esc(t)+'</a>'+
+           '<button class="rm" type="button" data-i="'+p[1]+'" aria-label="Премахни от запазените" title="Премахни"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>';});
+      h+='</div></div>';});
+    box.innerHTML=h;
+  }
+  function open(o){btn.setAttribute('aria-expanded',String(o));box.hidden=!o;document.body.classList.toggle('saving',o);
+    try{sessionStorage.setItem('zk:sv',o?'1':'');}catch(e){} if(o)render();}
+  btn.addEventListener('click',function(){open(btn.getAttribute('aria-expanded')!=='true');});
+  box.addEventListener('click',function(e){var r=e.target.closest('.rm');if(!r)return;var a=load();a.splice(+r.dataset.i,1);put(a);render();});
+  q.addEventListener('input',function(){if(q.value.trim()&&btn.getAttribute('aria-expanded')==='true')open(false);});
+  addEventListener('storage',function(e){if(e.key==='zk:saved'){count();if(!box.hidden)render();}});
+  addEventListener('pageshow',function(){count();if(!box.hidden)render();});
+  count();
+  try{if(sessionStorage.getItem('zk:sv'))open(true);}catch(e){}
+})();
+</script>
+<script>
+(function(){
+  function g(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+  function st(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+  var btn=document.getElementById('zkSet'),pn=document.getElementById('zkPanel'),seg=document.getElementById('zkTheme'),wi=document.getElementById('zkWakeI');
+  function theme(){var t=g('zk:theme')||'auto';if(t==='auto')document.documentElement.removeAttribute('data-theme');else document.documentElement.setAttribute('data-theme',t);
+    seg.querySelectorAll('button').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.t===t));});}
+  seg.addEventListener('click',function(e){var b=e.target.closest('[data-t]');if(!b)return;st('zk:theme',b.dataset.t);theme();});
+  btn.addEventListener('click',function(e){e.stopPropagation();var o=pn.hidden;pn.hidden=!o;btn.setAttribute('aria-expanded',String(o));});
+  document.addEventListener('click',function(e){if(!pn.hidden&&!pn.contains(e.target)&&e.target!==btn){pn.hidden=true;btn.setAttribute('aria-expanded','false');}});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!pn.hidden){pn.hidden=true;btn.setAttribute('aria-expanded','false');btn.focus();}});
+  var sup=('wakeLock' in navigator),lock=null,pend=false;
+  function on(){return g('zk:wake')==='1';}
+  function req(){if(!sup||!on()||lock||pend||document.visibilityState!=='visible')return;pend=true;navigator.wakeLock.request('screen').then(function(l){pend=false;lock=l;l.addEventListener('release',function(){lock=null;});}).catch(function(){pend=false;});}
+  if(!sup)document.getElementById('zkWakeG').hidden=true;
+  wi.checked=on();wi.addEventListener('change',function(){st('zk:wake',wi.checked?'1':'0');if(wi.checked)req();else if(lock){lock.release();lock=null;}});
+  document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')req();});
+  document.addEventListener('click',req,{passive:true});
+  addEventListener('pageshow',function(){theme();wi.checked=on();req();});
+  theme();req();
+})();
+</script>
+<script>
+(function(){
+  var seg=document.getElementById('zkView'),list=document.querySelector('ul.list');
+  function g(){try{return localStorage.getItem('zk:view')||'list';}catch(e){return 'list';}}
+  function apply(v){list.classList.toggle('tiles',v==='tiles');seg.querySelectorAll('button').forEach(function(b){b.setAttribute('aria-pressed',String(b.dataset.v===v));});}
+  seg.addEventListener('click',function(e){var b=e.target.closest('[data-v]');if(!b)return;try{localStorage.setItem('zk:view',b.dataset.v);}catch(_){}apply(b.dataset.v);});
+  apply(g());
+})();
+</script>
+<script id="zk-hist">/* Back button: closes settings / one-by-one mode first, then returns to the book's title page,
+   and only then leaves the book. Settings get a close (×) button. */
+(function(){
+  var H=history;if(!H||!H.pushState)return;
+  var P=H.pushState.bind(H),R=H.replaceState.bind(H);
+  var hero=document.getElementById('top');
+  var panel=document.getElementById('panel')||document.getElementById('zkPanel');
+  var setBtn=document.getElementById('setBtn')||document.getElementById('zkSet');
+  var focus=document.getElementById('focus'),fClose=document.getElementById('fClose');
+  function st(){return (H.state&&H.state.zk)||null;}
+  function atStart(){if(!hero)return true;var r=hero.getBoundingClientRect();return r.bottom>80;}
+  if(hero){try{H.scrollRestoration='manual';}catch(e){}}
+  var cur=st();
+  if(!cur||cur==='panel'||cur==='focus'||cur==='_c'){cur='root';try{R({zk:'root'},'');}catch(e){}}
+  /* app code that used pushState for in-book jumps -> keep a single "inside the book" entry */
+  H.pushState=function(s,t,u){try{if(cur==='root'&&hero){P({zk:'book'},t||'',u);cur='book';}else R(H.state,t||'',u);}catch(e){}};
+  H.replaceState=function(s,t,u){try{R(s&&s.zk?s:H.state,t||'',u);}catch(e){}};
+  function active(){var u=navigator.userActivation;return !u||u.hasBeenActive;}
+  function enter(){if(hero&&cur==='root'&&!atStart()&&active()){try{P({zk:'book'},'');cur='book';}catch(e){}}}
+  addEventListener('scroll',enter,{passive:true});
+  ['click','touchend','keydown'].forEach(function(t){addEventListener(t,function(){setTimeout(enter,60);},{passive:true,capture:true});});
+  function toTop(){try{scrollTo({top:0,left:0,behavior:'instant'});}catch(e){scrollTo(0,0);}}
+  /* in-page links: no extra history entries; "#top" = back to the title page */
+  document.addEventListener('click',function(e){
+    if(e.defaultPrevented||e.button)return;
+    var a=e.target.closest&&e.target.closest('a[href^="#"]');if(!a)return;
+    var h=a.getAttribute('href');
+    if(h==='#top'||h==='#'){if(!hero)return;e.preventDefault();if(cur==='book')H.back();else toTop();return;}
+    var el=document.getElementById(decodeURIComponent(h.slice(1)));if(!el||a.closest('#focus'))return;
+    e.preventDefault();H.pushState(null,'',h);el.scrollIntoView();
+  });
+  /* layers */
+  function pOpen(){return !!panel&&(panel.id==='zkPanel'?!panel.hidden:panel.classList.contains('open'));}
+  function pClose(){if(!panel)return;if(panel.id==='zkPanel')panel.hidden=true;else panel.classList.remove('open');if(setBtn)setBtn.setAttribute('aria-expanded','false');}
+  function fOpen(){return !!focus&&focus.classList.contains('open');}
+  function fShut(){if(fClose)fClose.click();else if(focus)focus.classList.remove('open');}
+  function watch(el,name,isOpen){if(!el)return;var was=isOpen();
+    new MutationObserver(function(){var o=isOpen();if(o===was)return;was=o;
+      if(o){if(cur!==name){try{P({zk:name},'');cur=name;}catch(e){}}}
+      else if(cur===name){cur='_c';H.back();}
+    }).observe(el,{attributes:true,attributeFilter:['class','hidden']});}
+  watch(panel,'panel',pOpen);watch(focus,'focus',fOpen);
+  addEventListener('popstate',function(){
+    var prev=cur;cur=st()||'root';
+    var closed=false;
+    if(cur!=='panel'&&pOpen()){pClose();closed=true;}
+    if(cur!=='focus'&&fOpen()){fShut();closed=true;}
+    if(closed||prev==='_c'||prev==='panel'||prev==='focus')return;
+    if(cur==='root'&&hero)toTop();
+  });
+  /* × button in the settings panel */
+  if(panel){
+    var x=document.createElement('button');x.type='button';x.className='zk-px';x.setAttribute('aria-label','Затвори');x.title='Затвори';
+    x.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>';
+    x.addEventListener('click',function(e){e.stopPropagation();pClose();});
+    panel.insertBefore(x,panel.firstChild);
+    var cs=document.createElement('style');
+    cs.textContent='#'+panel.id+'{padding-top:'+(panel.id==='zkPanel'?'34px':'18px')+'}'+'.zk-px{position:absolute;top:8px;right:8px;z-index:3;width:38px;height:38px;padding:0;border:1px solid var(--rule,#ccc);border-radius:50%;background:var(--sheet,#fff);color:var(--ink,#222);display:grid;place-items:center;cursor:pointer;touch-action:manipulation}'+
+      '.zk-px svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}.zk-px::before{content:"";position:absolute;inset:-6px}';
+    document.head.appendChild(cs);
+  }
+})();
+</script>
+</body>
+</html>
