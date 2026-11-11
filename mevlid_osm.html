@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Мевлид-и Шериф – османски текст и транскрипция</title>
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+:root{
+  --paper:#F8F8F5; --sheet:#FFFFFF; --ink:#1B2030; --muted:#5E6474; --lapis:#21406A; --gold:#9C7A33; --rule:#E2E0D8; --refrain:#F3EFE3;
+  --ar-filter:none;
+  --s-ar:1; --s-tr:1; --s-bg:1;
+  --serif:"Alegreya", "PT Serif", Georgia, "Times New Roman", serif;
+  --sans:"Alegreya Sans", "PT Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#11151E; --sheet:#171C27; --ink:#E9E6DD; --muted:#A3A7B3; --lapis:#9DB9E0; --gold:#D3B46B; --rule:#2A3040; --refrain:#1D2230;
+    --ar-filter:invert(1);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#11151E; --sheet:#171C27; --ink:#E9E6DD; --muted:#A3A7B3; --lapis:#9DB9E0; --gold:#D3B46B; --rule:#2A3040; --refrain:#1D2230;
+  --ar-filter:invert(1);
+}
+*,*::before,*::after{box-sizing:inherit}
+[hidden]{display:none!important}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px); -webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);font-size:18px;line-height:1.55}
+img{max-width:100%}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px;border-radius:4px}
+
+/* top bar */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:color-mix(in srgb,var(--paper) 92%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--rule)}
+.bar-in{max-width:880px;margin:0 auto;display:flex;align-items:center;gap:8px;padding:8px 16px;font-family:var(--sans)}
+.bar-title{font-family:var(--serif);font-weight:500;font-size:17px;white-space:nowrap;margin-right:auto;color:var(--ink);text-decoration:none}
+.sel{appearance:none;-webkit-appearance:none;background:var(--sheet);border:1px solid var(--rule);border-radius:8px;padding:7px 30px 7px 10px;font:500 15px var(--sans);color:var(--ink);max-width:46vw;background-image:linear-gradient(45deg,transparent 50%,var(--muted) 50%),linear-gradient(135deg,var(--muted) 50%,transparent 50%);background-position:calc(100% - 15px) 52%,calc(100% - 10px) 52%;background-size:5px 5px;background-repeat:no-repeat}
+.ib{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:8px;border:1px solid var(--rule);background:var(--sheet);cursor:pointer}
+.ib svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+
+/* settings panel */
+.panel{max-height:calc(100vh - 80px);overflow:auto;position:fixed;z-index:20;right:max(12px,calc((100vw - 880px)/2 + 12px));top:calc(env(safe-area-inset-top,0px) + 60px);width:min(320px,calc(100vw - 24px));background:var(--sheet);border:1px solid var(--rule);border-radius:12px;padding:16px;font-family:var(--sans);box-shadow:0 12px 40px rgba(10,15,30,.18);display:none}
+.panel.open{display:block}
+.panel h3{margin:0 0 8px;font:500 14px var(--sans);color:var(--muted)}
+.panel .grp+ .grp{margin-top:16px}
+.tog{display:flex;align-items:center;justify-content:space-between;padding:7px 0;font-size:16px;cursor:pointer}
+.tog input{appearance:none;-webkit-appearance:none;width:40px;height:23px;border-radius:12px;background:var(--rule);position:relative;cursor:pointer;transition:background .15s}
+.tog input::after{content:"";position:absolute;top:3px;left:3px;width:17px;height:17px;border-radius:50%;background:var(--sheet);transition:transform .15s}
+.tog input:checked{background:var(--lapis)}
+.tog input:checked::after{transform:translateX(17px)}
+.step{display:flex;align-items:center;justify-content:space-between;padding:5px 0;font-size:16px}
+.step .ctl{display:flex;align-items:center;gap:6px}
+.step .ctl button{width:34px;height:32px;border-radius:8px;border:1px solid var(--rule);background:transparent;cursor:pointer;font-size:18px;line-height:1}
+.step .ctl button:disabled{opacity:.35;cursor:default}
+.step .ctl output{min-width:44px;text-align:center;font-size:14px;color:var(--muted)}
+.seg{display:flex;border:1px solid var(--rule);border-radius:8px;overflow:hidden}
+.seg button{flex:1;padding:7px 0;border:0;background:transparent;cursor:pointer;font-size:15px}
+.seg button+button{border-left:1px solid var(--rule)}
+.seg button[aria-pressed="true"]{background:var(--lapis);color:var(--sheet)}
+
+/* hero */
+.hero{max-width:880px;margin:0 auto;padding:56px 20px 32px;text-align:center}
+.arch{width:120px;height:auto;color:var(--gold)}
+.hero h1{font-weight:400;font-size:clamp(44px,10vw,76px);line-height:1;margin:18px 0 10px;letter-spacing:.01em}
+.hero p{margin:0 auto;color:var(--muted);font-size:18px;max-width:34ch}
+.cta{margin-top:26px;display:flex;flex-wrap:wrap;gap:10px;justify-content:center;font-family:var(--sans)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:999px;border:1px solid var(--lapis);background:var(--lapis);color:var(--sheet);font:500 16px var(--sans);cursor:pointer;text-decoration:none}
+.btn.ghost{background:transparent;color:var(--lapis)}
+.toc{max-width:520px;margin:36px auto 0;padding:0;list-style:none;text-align:left;font-family:var(--sans)}
+.toc a{display:flex;justify-content:space-between;gap:12px;padding:11px 4px;border-bottom:1px solid var(--rule);color:var(--ink);text-decoration:none;font-size:17px}
+.toc a span{color:var(--muted);font-size:15px}@media (hover:hover){.toc a:hover span{color:var(--gold)}}
+
+/* reading */
+main{max-width:880px;margin:0 auto;padding:0 16px 80px}
+.sec-h{text-align:center;padding:64px 0 28px}
+.sec-h .orn{display:flex;align-items:center;gap:14px;justify-content:center;color:var(--gold)}
+.sec-h .orn::before,.sec-h .orn::after{content:"";height:1px;flex:0 1 120px;background:currentColor;opacity:.6}
+.sec-h h2{font-weight:400;font-size:clamp(30px,6vw,42px);margin:14px 0 0;line-height:1.1}
+.sec-h .n{display:block;font:500 15px var(--sans);color:var(--muted);margin-top:8px}
+
+.beyt{position:relative;background:var(--sheet);border:1px solid var(--rule);border-radius:4px 4px 4px 4px;padding:16px 16px 14px 40px;margin:0 0 10px;scroll-margin-top:72px}
+.beyt .num{position:absolute;left:8px;top:20px;font:500 13px var(--sans);color:var(--muted);width:26px;text-align:center}
+.beyt.refrain{background:var(--refrain);border-color:color-mix(in srgb,var(--gold) 45%,var(--rule))}
+.beyt.refrain .num{color:var(--gold)}
+.beyt.cur{border-color:var(--lapis)}
+.hems{display:grid;gap:14px}
+.hem{min-width:0}
+.ar{display:flex;justify-content:flex-end;margin:0 0 6px}
+.ar img{display:block;filter:var(--ar-filter);height:auto}
+.tr{font-size:calc(21px * var(--s-tr));font-weight:500;line-height:1.35}
+.bg{font-size:calc(17px * var(--s-bg));font-style:italic;color:var(--muted);line-height:1.45;margin-top:2px}
+.center{text-align:center;padding:22px 16px;margin:6px 0 12px}
+.center .ar{justify-content:center}
+.center .tr{font-size:calc(20px * var(--s-tr))}
+.hide-ar .ar,.hide-tr .tr,.hide-bg .bg{display:none}
+
+@media (min-width:760px){
+  .hems{grid-template-columns:1fr 1fr;gap:28px}
+  .beyt{padding:20px 26px 18px 58px}
+  .ar{justify-content:center}
+  .hem .tr,.hem .bg{text-align:center}
+  .rtl .beyt .hem:first-child{order:2}
+}
+.beyt .num{} @media (max-width:479px){.bar-title{display:none}.sel{max-width:none;flex:1}}
+@media (min-width:760px){.beyt .num{left:16px}}
+.endnote{text-align:center;color:var(--muted);font-family:var(--sans);font-size:15px;padding:40px 0 0}
+
+/* focus mode */
+.focus{position:fixed;inset:0;z-index:30;background:var(--paper);display:none;flex-direction:column;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}
+.focus.open{display:flex}
+.f-top{display:flex;align-items:center;gap:10px;padding:10px 16px;font-family:var(--sans);border-bottom:1px solid var(--rule)}
+.f-top .where{margin-right:auto;font-size:15px;color:var(--muted)}
+.f-body{flex:1;overflow:auto;display:flex;align-items:center;justify-content:center;padding:24px 20px}
+.f-card{width:100%;max-width:640px;text-align:center}
+.f-card .hem+.hem{margin-top:34px}
+.f-card .ar{justify-content:center}
+.f-card .tr{font-size:calc(28px * var(--s-tr))}
+.f-card .bg{font-size:calc(19px * var(--s-bg))}
+.f-card.refrain .tr{color:var(--gold)}
+.f-nav{display:flex;gap:10px;padding:12px 16px;border-top:1px solid var(--rule);font-family:var(--sans)}
+.f-nav button{flex:1;padding:14px;border-radius:10px;border:1px solid var(--rule);background:var(--sheet);font-size:17px;font-weight:500;cursor:pointer}
+.f-nav button.next{background:var(--lapis);border-color:var(--lapis);color:var(--sheet)}
+.f-nav button:disabled{opacity:.4;cursor:default}
+.prog{height:3px;background:var(--rule)}
+.prog i{display:block;height:100%;background:var(--gold);width:0;transition:width .2s}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+.ar .art{margin:0;width:100%;font-family:"Amiri","Noto Naskh Arabic",serif;font-weight:400;font-style:normal;font-size:calc(28px * var(--s-ar));line-height:1.85;text-align:right;direction:rtl;color:var(--ink);overflow-wrap:break-word}.f-card .ar .art{font-size:calc(32px * var(--s-ar))}
+.full{display:grid;gap:6px}
+.art.ol{margin:0;font-family:"Amiri","Noto Naskh Arabic",serif;font-weight:400;font-style:normal;color:var(--ink);text-align:right;direction:rtl;font-size:calc(26px * var(--s-ar));line-height:2;word-spacing:.08em}
+.tl{text-align:left;direction:ltr;margin:0;font-size:calc(19px * var(--s-tr));line-height:1.4;font-weight:500}
+.tl b{color:var(--gold);font-weight:700}
+.center{display:grid;gap:6px}
+.center .art.ol{text-align:center}
+.center .tl{text-align:center;font-style:italic;font-weight:400}
+.center.prose .art.ol{text-align:justify;text-align-last:center;font-size:calc(23px * var(--s-ar))}
+.center.prose .tl{text-align:justify;font-style:normal;font-size:calc(17px * var(--s-tr))}
+.note{font-family:var(--sans);font-size:14px;color:var(--muted);text-align:center;font-style:italic;margin:4px 0 10px}
+.f-card .art.ol{text-align:center;font-size:calc(30px * var(--s-ar))}
+.f-card .tl{text-align:center;font-size:calc(22px * var(--s-tr))}
+.f-card.prose .art.ol{font-size:calc(24px * var(--s-ar))}
+.f-card .note{font-size:17px}
+.hide-ar .art.ol{display:none}.hide-tr .tl{display:none}
+</style>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#F5F4F0" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111318" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Зикирь">
+<script>try{var zt=localStorage.getItem('zk:theme');if(zt==='light'||zt==='dark')document.documentElement.setAttribute('data-theme',zt);}catch(e){}</script>
+<style id="zk-nav">.bar-in .bar-title{display:none}.zk-home{flex:0 1 auto;min-width:0;max-width:min(52vw,340px);display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 12px 0 10px;border-radius:8px;border:1px solid var(--rule);background:var(--sheet);color:var(--ink);text-decoration:none;font-weight:600;font-size:15px;white-space:nowrap}.zk-home span{overflow:hidden;text-overflow:ellipsis}.zk-home svg{flex:none;width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}@media (hover:hover){.zk-home:hover,.zk-flag:hover{border-color:var(--gold)}}.zk-flag{flex:none;display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:8px;border:1px solid var(--rule);background:var(--sheet)}.zk-flag svg{width:24px;height:16px;border-radius:2px;box-shadow:0 0 0 1px rgba(0,0,0,.15)}.bar-in .sel{flex:1 1 0;min-width:0}@media (max-width:479px){.bar-in .sel{max-width:none;min-width:84px}.zk-home{max-width:40vw}}.zk-alt{color:var(--ink)}.zk-alt svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;box-shadow:none;border-radius:0}.zk-ver{display:grid;justify-items:center;gap:8px;margin:22px auto 0;font-family:var(--sans)}.zk-ver small{font-size:13px;color:var(--muted);letter-spacing:.04em}.zk-seg{display:inline-flex;border:1px solid var(--lapis);border-radius:999px;overflow:hidden}.zk-seg a,.zk-seg span{padding:8px 16px;font-size:15px;font-weight:500;text-decoration:none;color:var(--lapis)}.zk-seg span{background:var(--lapis);color:var(--paper)}@media (hover:hover){.zk-seg a:hover{background:color-mix(in srgb,var(--lapis) 12%,transparent)}}.zk-ver p{margin:0;font-size:14px;color:var(--muted);max-width:40ch;text-align:center}main p,main li{overflow-wrap:break-word}</style>
+<style id="zk-touch">
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+a,button,label,select,summary,input,output,[role=button],.chip{touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,.06)}
+.panel,#panel,#zkPanel{max-height:calc(100vh - 80px - env(safe-area-inset-top,0px));-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+@supports (height:100dvh){.panel,#panel,#zkPanel{max-height:calc(100dvh - 80px - env(safe-area-inset-top,0px))}}
+@media (pointer:coarse){
+ .ib,.zk-home,.zk-flag,.ctl button,.setb,.savb,.sin{position:relative}
+ .ib::before,.zk-home::before,.zk-flag::before,.ctl button::before,.zk-star::before,.setb::before,.savb::before,.sin::before{content:"";position:absolute;inset:-6px}
+ .ctl button{width:44px;height:40px}
+ .seg button{min-height:44px}
+ .tog{min-height:44px}
+ select.sel,.sel{min-height:40px}
+ .chip{min-height:38px}
+ sup a{display:inline-block;padding:10px 8px;margin:-10px -8px}
+ summary{padding-top:8px;padding-bottom:8px}
+}
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="bar-in">
+    <a class="zk-home" id="zkHome" href="index.html" title="Зикирь – начална страница"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11 12 4l8 7"/><path d="M6 9.5V20h4.5v-5h3v5H18V9.5"/></svg><span>Зикирь</span></a>
+    <a class="bar-title" href="#top">Мевлид-и Шериф</a>
+    <select class="sel" id="jump" aria-label="Към бахир"></select>
+    <button class="ib" id="focusBtn" aria-label="Четене бейт по бейт" title="Бейт по бейт">
+      <svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="14" rx="2"/><path d="M9 12h6M13 9.5 15.5 12 13 14.5"/></svg>
+    </button>
+    <a class="zk-flag zk-alt" href="mevlid.html" aria-label="Вариант с превод" title="Вариант с превод"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h13M15 5l3 3-3 3"/><path d="M19 16H6M9 13l-3 3 3 3"/></svg></a>
+    <button class="ib" id="setBtn" aria-label="Настройки" aria-expanded="false" title="Настройки">
+      <svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>
+    </button>
+  </div>
+</header>
+
+<div class="panel" id="panel" role="dialog" aria-label="Настройки">
+  <div class="grp">
+    <h3>Показвай</h3>
+    <label class="tog">Османски текст <input type="checkbox" id="optAr" checked></label>
+    <label class="tog">Транскрипция <input type="checkbox" id="optTr" checked></label>
+    <label class="tog" hidden>Превод <input type="checkbox" id="optBg" checked></label>
+  </div>
+  <div class="grp">
+    <h3>Размер на шрифта</h3>
+    <div class="step" data-k="sar">Османски текст <span class="ctl"><button data-d="-1" aria-label="По-малък арабски текст">−</button><output></output><button data-d="1" aria-label="По-голям арабски текст">+</button></span></div>
+    <div class="step" data-k="str">Транскрипция <span class="ctl"><button data-d="-1" aria-label="По-малка транскрипция">−</button><output></output><button data-d="1" aria-label="По-голяма транскрипция">+</button></span></div>
+    <div class="step" data-k="sbg" hidden>Превод <span class="ctl"><button data-d="-1" aria-label="По-малък превод">−</button><output></output><button data-d="1" aria-label="По-голям превод">+</button></span></div>
+  </div>
+  <div class="grp">
+    <h3 hidden>Първи полустих</h3>
+    <div class="seg" id="orderSeg" hidden>
+      <button data-o="ltr" aria-pressed="true">Отляво</button>
+      <button data-o="rtl" aria-pressed="false">Отдясно</button>
+    </div>
+  </div>
+  <div class="grp">
+    <h3>Тема</h3>
+    <div class="seg" id="themeSeg">
+      <button data-t="auto" aria-pressed="true">Авто</button>
+      <button data-t="light" aria-pressed="false">Светла</button>
+      <button data-t="dark" aria-pressed="false">Тъмна</button>
+    </div>
+  </div>
+</div>
+
+<section class="hero" id="top">
+  <svg class="arch" viewBox="0 0 120 90" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M10 84h100"/><path d="M22 84v-8c0-4 4-4 4-8 0-3 4-3 6-4M98 84v-8c0-4-4-4-4-8 0-3-4-3-6-4"/><path d="M32 64c0-18 12-26 28-38 16 12 28 20 28 38"/><path d="M60 26v-8"/><circle cx="60" cy="16" r="2"/></g><path d="M64 2a7 7 0 1 0 6 10 6 6 0 1 1-6-10z" fill="currentColor"/></svg>
+  <h1>Мевлид-и Шериф</h1>
+  <p>Османският текст и транскрипция</p>
+  <div class="zk-ver"><small>ВАРИАНТ</small><div class="zk-seg"><a href="mevlid.html">С превод</a><span aria-current="page">Османски и транскрипция</span></div><p>Османският текст и транскрипцията на цели редове, без превод – с истигфара, салаватите, Фатихата и дуата за Мевлида.</p></div>
+  <div class="cta">
+    <a class="btn" href="#" id="startBtn">Започни четене</a>
+    <button class="btn ghost" id="resumeBtn" hidden></button>
+  </div>
+  <ul class="toc" id="toc"></ul>
+</section>
+
+<main id="reader"></main>
+
+<div class="focus" id="focus" role="dialog" aria-label="Бейт по бейт">
+  <div class="f-top">
+    <span class="where" id="fWhere"></span>
+    <button class="ib" id="fClose" aria-label="Затвори">
+      <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>
+    </button>
+  </div>
+  <div class="prog"><i id="fProg"></i></div>
+  <div class="f-body" id="fBody"></div>
+  <div class="f-nav">
+    <button id="fPrev">Назад</button>
+    <button id="fNext" class="next">Напред</button>
+  </div>
+</div>
+
+<script id="data" type="application/json">[{"title":"Начало","items":[{"type":"note","t":"Започва се с тевбе истигфар Желателно е преди началото на всеки раздел-баб да се изпява ашера (айети от Куран-и Керим). А при пеенето на самия Мевлид-и Шериф, всеки път когато се спомене някое от имената на Нашия Пейгамбер J – „Мухаммед“, „Ахмед“ или „Мустафа“, всеки от слушащите тихичко трябва да си прошепне салеват. Затова са отпечатани удебелено и са подчертани, за да не бъдат пропуснат салевата при изричането им."},{"type":"center","ar":["أَسْتَغْفِرُ اللّٰهَ أَسْتَغْفِرُ اللّٰهَ أَسْتَغْفِرُ اللّٰهَ الْعَظِمَ الـْكَرِيمَ الَّذِي لَا إِلٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ","وَأَتُوبُ إِلَيْهِ وَنَسْأَلُهُ التَّوْبَةَ وَالْمَغْفِرَةَ وَالْهِدَايَةَ لَنَا إِنّهُ هُوَ التَّوَّابُ الرَّحِيمُ إِنّهُ هُوَ التَّوَّابُ","الرَّحِيمُ إِنّهُ هُوَ التَّوَّابُ الرَّحِيمُ تَوْبَةَ عَبْدٍ ظَالِمٍ لِنَفْسِهِ لَا يَمْلِكُ لِنَفْسِهِ مَوْتًا وَلَا حَيَاةً وَلَا","نُشُورًا"],"tr":"Естегфируллох, естегфируллох, естегфируллох, ел-азим ел-керим елллези ля иляхе илля хюўел хаййул каййум уе етюбу илейх. Уе неселюху-т-теўбете ўел мегфирате ўел хидяйете леня, иннеху хюўе-т-теўўабу-р-рахим, иннеху хюўе-т-теўўабу-р-рахим, иннеху хюўе-т-теўўабу-р-рахим, теўбете абдин золимин ли нефсихи ля йемликю ли нефсихи меўтех ўеля хайатен ўеля нушуро."},{"type":"center","ar":["اَللّٰهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ"],"tr":"Еллохюмме салли аля мухаммедин ўе аля али мухаммед (3)","f":true}]},{"title":"Тевхид Бахри","items":[{"type":"beyt","ar":"اَللهْ اٰدٖينْ ذِكْر اٖيدَهِ لِمْ اَوَّلاَ  وَاجِبْ اُولْدُرْ جُمْلَه اٖشْدَه هَرْ قُولَه","tr":"Аллах адън зикри делим еввеля  Ваджиб олдур джумле иште хер кула"},{"type":"beyt","ar":"اَللهْ اٰدٖينْ هَرْكٖيمْ اُولْ اَوَّلْ اَڬاٰ  هَرْاٖيشٖى اٰسَانْ اٖيدَرْ اَللهْ اَكٰا","tr":"Аллах адън хер ким ол еввел ана  Хер иши асян идер Аллах ана"},{"type":"beyt","ar":"اَللهْ آدٖى اُولْسَه هَرْ اٖيشِكْ اُوكٖى  هَرْكِزْ اَبْتَرْ اُولْمَيَه اٰنِكْ صُوكٖي","tr":"Аллах адъ олса хер ишин öню  Херкиз ебтер олмая анън сону"},{"type":"beyt","ar":"هَرْ نَفَسْدَه اَلله اٰدِينْ دٖى مُدَامْ  اَللهْ اٰدِيلَه اُولُورْ هَرْ اَيشْ تَمَامْ","tr":"Хер нефесте Аллах адън димюдям  Аллах адъй ле олур хер иш темам"},{"type":"beyt","ar":"بِرْكَزْ اَللهْ دٖيسَه شَوْقِلَه لِسَانْ  دُوكٖيلُورْ جُمْلَه كُنٰاهْ مِثْلُ و خَزَانْ","tr":"Биркез Аллах дисе шеуки ле лисян  Дюкюлюр джумле гюнях мислю хазян"},{"type":"beyt","ar":"اِسْمِ پٰاكِنْ پَاكْ اُولُورْ ذِكْر اَيْلَيَنْ  هَرْ مُرٰادَه اٖيرٖيشُورْ اَللهْ دَيَنْ","tr":"Исми пакин пак олур зикрай лейен  Хер муродя иришур Аллах дийен"},{"type":"beyt","ar":"عَشْقِلَه كَلْ اِمْدٖى اَللهْ اٖيدَه لِمْ  دَرْدٖيلَه كُوزْ يٰاشِلَهْ آهْ اٖيدَه لِمْ","tr":"Ашкиле гел имди Аллах иделим  Дердиле гöз яшиле ах иделим"},{"type":"beyt","ar":"اُولَهْ كٖيمْ رَحْمَتْ قٖيلَه اُولْ پٰادِشَاهْ  اُولْ كَرٖيمُ و اُولْ رَحٖيمُ و اُولْ اِلٰهْ","tr":"Олаким рахмет къла ол падишах  Ол кериму ол рахиму ол илях"},{"type":"beyt","ar":"بِرْدِرْ اُولْ بِرْلِكِنَه شَكْ يُوقْ دُرُرْ  كَرْچِه يَاكْلِشْ سُوْيَلَيَنْلَرْ چُوقْ دُرُرْ","tr":"Бирдир ол бирлигине шек йок дурур  Герчи янлъш сöйлейенлер чок дурур"},{"type":"beyt","ar":"جُمْلَه عَالَمْ يُوغٖيكَنْ اُولْ وٰارْ اٖيدٖى  يَرٰادِ لْمِشْدَنْ غَنٖي جَبَّارْ اٖيدٖى","tr":"Джумле алем югикен ол вар иди  Ярадълмъш дан гани джеббар иди"},{"type":"beyt","ar":"وٰارْ اٖيكَنْ اُولْ يُوقْ اٖيدٖى اِنْسُ و مَلَكْ  عَرْشُ و فَرْشُ و اٰيُو كُونْ هَمْ نُهْ فَلَكْ","tr":"Вар икен ол йок иди инсю мелек  Аршу фершу аю гюн хем нух фелек"},{"type":"beyt","ar":"صُنْعِلَه بُونْلَرٖى اُولْ وٰارْ اَيْلَدٖى  بِرْ لِكٖينَه جُمْلَه اِقْرٰارْ اَيْلَدٖى","tr":"Сун иле бунларъ ол вар ейледи  Бирлиг̱ине джумле икрар ейледи"},{"type":"beyt","ar":"بٰارٖى نَه حَاجَتْ قٖيلٰاوُزْ سُوزٖى چُوقْ  بِرْدِرْ اُولْ كٖيمْ اَنْدَنْ اَرْتَقْ تَكْرٖى يُوقْ","tr":"Барине хаджет кълавуз сöзю чок  Бирдир ол ким андан артък танръ йок"},{"type":"beyt","ar":"كَرْدٖيلَرْ سِزْ بُولَه سِزْ اُودْدَنْ نَجٰاتْ  عَشْقِلَه دَرْدٖيلَه اٖيدِكْ اَلصَّلٰاتْ","tr":"Гердилер сиз буласъз оддан неджат  Ашк иле дерд иле идин ессалят"},{"type":"center","ar":["اَلصَّلَاةُ وَالسَّلَامُ عَلَيْكَ يَارَسُولَ اللّٰهِ"],"tr":"Ессалятю ўесселяму алейке йа расюлеллох","f":true},{"type":"center","ar":["اَلصَّلَاةُ وَالسَّلَامُ عَلَيْكَ يَاحَبِيبَ اللّٰهِ"],"tr":"Ессалятю ўесселяму алейке йа хабибеллох","f":true},{"type":"center","ar":["اَلصَّلَاةُ وَالسَّلَامُ عَلَيْكَ يَاسَيِّدَ الْأَوَّلِينَ وَالْآخِرِينَ"],"tr":"Ессалятю ўесселяму алейке йа сеййидел еўўелине ўел ахирин","f":true},{"type":"beyt","ar":"اَىْ عَزٖيزْلَرْ اِشْتَه بَاشْلٰارِزْ سُوزَه  بِرْ وَصِيَّتْ قيٖلٰاوُزْ اِلَّا سِزَه","tr":"Ей азизлер иште башларъз сюзе  Бир васиййет кълавуз илля сизе"},{"type":"beyt","ar":"اُولْ وَصِيَّتْ كٖيمْ دٖيرَمْ هَرْ كٖيمْ طُوتَه  مِسْك كِبٖي قُوقُوسٖي جَانْلَرْدَه تُوتَه","tr":"Ол васиййет ким дирем хер ким туте  Миск гиби кокусу джанларде тюте"},{"type":"beyt","ar":"حَقْ تَعَالٰى رَحْمَتْ اَيْلَيَه اَڬاٰ  كٖيمْ بَنٖى اُولْ بِرْ دُعَا اٖيلَه اَكٰا","tr":"Хак Теаля рахмет ейлейе ана  Ким бени ол бир дуа иле ана"},{"type":"beyt","ar":"هَرْكِه دٖيلَرْ بُو دُعَادَه بُولُنَه  فَاتِحَه اِحْسَانْ اٖيدَه سُلَيْمٰانْ قُولُنَه","tr":"Херки дилер бу дуада булуна  Фатиха ихсян иде Сюлейман кулуна"},{"type":"center","ar":["لِلهِ الْفَاتِحَه مَعَ الصَّلَوَاتْ","اَللّٰهُمَّ صَلِّ عَلَى سَيِّدِنَا وَنَبِيِّنَا مُحَمَّدٍ النَّبِيِّ الْأُمِّيِّ وَعَلَى آلِهِ وَصَحْبِهِ وَأَهْلِ بَيْتِهِ وَسَلِّمْ","أَعُوذُ بِاللّٰهِ مِنَ الشَّيْطَانِ الرَّجِيمِ، بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيمِ","اَلْحَمْدُ لِلّٰهِ رَبِّ الْعَالَمِينَ، الرَّحْمٰنِ الرَّحِيمِ، مَالِكِ يَوْمِ الدِّينِ، إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ، اِهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ، صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ"],"tr":"Лилляхил Фатиха Меассалеват Еллохюмме салли аля сеййидиня ўе небиййиня мухаммедини-н-небиййил уммиййи ўе аля алихи ўе сахбихи ўе ехли бейтихи ўе селлим. Еузю билляхи мине-ш-шейтони-р-раджим. Бисмилляхи-р-рахмани-р-рахим. Елхамдю лилляхи раббил алемин. Еррахмани-р-рахим. Малики йеўми-д-дин. Иййаке неабудю ўе иййаке нестеин. Ихдине-с-сирота-л-мустеким. Сирота-л-лезине енамте алейхим гайри-л-мегдуби алейхим ўеле-д-доллин."},{"type":"center","ar":["اَللّٰهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ"],"tr":"Еллохюмме салли аля мухаммедин ўе аля али мухаммед","f":true},{"type":"beyt","ar":"حَقْ تَعَالٰى چُونْ يَرَاتْدٖي آدَمٖى  قٖيلدٖى آدَمْلَه مُزَيَّنْ عَالَمٖى","tr":"Хак Теаля чюн яраттъ Адеми  Кълдъ Адемле мюзеййен алеми"},{"type":"beyt","ar":"آدَمَه قٖيلدٖى فَرِشْتَهْلَرْ سُجُودْ  هَمْ اَكٰا چُوقْ قٖيلْدٖى اُولْ لُطْفٖى اِسِّىٖ جُودْ","tr":"Адеме кълдъ фериштехлер сюджюд  Хем ана чок кълдъ ол лютфи сиджюд"},{"type":"beyt","ar":"مُصْطَفٰى نُورٖينٖى اَلْنِنْدَه قودٖى  بٖيلْ حَبٖيبِمْ نُورٖيدِرْ بُو نُورْ دٖيدٖى","tr":"<b>Мустафа<\/b> нуруну алнънде куди  Бил хабибим нурудур бу нур диди"},{"type":"beyt","ar":"قٖيلْدٖى اُولْ نُورْ اَنِكْ اَلْنِنْدَه قَرٰارْ  قَالْدٖى آنِكْ اٖيلَه نٖيجَه رُوزِكَارْ","tr":"Кълдъ ол нур анън алнънда карар  Калдъ анън иле нидже рузигяр"},{"type":"beyt","ar":"صُكْرَ حَوّٰا اَلْنِنَه نَقْل اٖيتْدٖى بٖيلْ  طُورْدٖى اٰنْدَه دَخٖى نٖيجَه آىُ و يٖيلْ","tr":"Сонра хавва алнъна неклитти бил  Дурду анда дахи нидже аю йъл"},{"type":"beyt","ar":"شٖيتْ طُوغْدٖى اَكٰا نَقْل اٖيتْدٖى نُورْ  اٰنِكْ اَلْنِنْدَه تَجَلِّى قٖيلْدٖى نُورْ","tr":"Шит доуду ана некл итти нур  Анън алнънда теджелли кълдъ нур"},{"type":"beyt","ar":"اٖيرْدٖى اَبْرٰاهٖيمُ و اِسْمٰاعٖيلَه هَمْ  سُوزْ اُوزٰا نُورْ كَرْ قَلٰانِكْ دٖيرْ اٖيسَمْ","tr":"Ирди Ибрахиму Исмаиле хем  Сöз уза нур гер каланън дир исем"},{"type":"beyt","ar":"اِشْبُو رَسْمٖيلَه مُسَلْسَلْ مُتَّصِلْ  تٰا اُولُنْجَه مُصْطَفَا يَه مُنْتَقِلْ","tr":"Иш бу ресмиле муселсел муттасил  Та олунджа <b>Мустафая<\/b> мунтекил"},{"type":"beyt","ar":"كَلْدٖى چُونْ اُولْ رَحْمَةً لِلْعَالَمٖينْ  وٰارْدٖى نُورْ اَنْدَه قَرٰارْ اٖيتْدٖى هَمٖينْ","tr":"Гелди чюн ол рахметен лил алемин  Вардъ нур анда карар итти хемин"},{"type":"beyt","ar":"كَرْدٖيلَرْ سِزْ بُولَه سِزْ اُودْدَنْ نَجٰاتْ  عَشْقِلَه دَرْدٖيلَه اٖيدِكْ اَلصَّلٰاتْ","tr":"Гердилер сиз буласъз оддан неджат  Ашк иле дерд иле идин ессалят"},{"type":"center","ar":["اَلصَّلَاةُ وَالسَّلَامُ عَلَيْكَ يَارَسُولَ اللّٰهِ"],"tr":"Ессалятю ўесселяму алейке йа расюлеллох","f":true},{"type":"center","ar":["اَلصَّلَاةُ وَالسَّلَامُ عَلَيْكَ يَاحَبِيبَ اللّٰهِ"],"tr":"Ессалятю ўесселяму алейке йа хабибеллох","f":true},{"type":"center","ar":["اَلصَّلَاةُ وَالسَّلَامُ عَلَيْكَ يَاسَيِّدَ الْأَوَّلِينَ وَالْآخِرِينَ"],"tr":"Ессалятю ўесселяму алейке йа сеййидел еўўелине ўел ахирин","f":true},{"type":"center","ar":["اَللّٰهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ"],"tr":"Еллохюмме салли аля мухаммедин ўе аля али мухаммед","f":true}]},{"title":"Велядет Бахри","items":[{"type":"beyt","ar":"اَمٖينَه خَاتُونْ مُحَمَّدْ آنَه سٖي  اُولْ صَدَفْدَنْ طُوغْدُى اُولْ دُرْدٰانَه سٖى","tr":"Амине хатун <b>Мухаммед<\/b> анеси  Ол садефден доуду ол дурдянеси"},{"type":"beyt","ar":"چُونْكِه عَبْدُ اللَّهْدَنْ اُولْدٖى حَامِلَه  وَقْتِ اٖيرِشْدٖى هَفْتَهُ و اَيّٰامِلَه","tr":"Чюнки Абдуллах дан олду хамиле  Вакт иришти хефтевю еййамиле"},{"type":"beyt","ar":"هَمْ مُحَمَّدْ كَلْمَسٖى اُولْدٖى يَقٖينْ  چُوقْ عَلٰامَتْلَرْ بَلُورْدٖى كَلْمَدٖينْ","tr":"Хем <b>Мухаммед<\/b> гелмеси олду йекин  Чок аляметлер белюрди гелмедин"},{"type":"beyt","ar":"اُولْ رَبٖيعُ الْاَوَّلْ اٰيِكْ نٖيجَه سٖى  اُوكْ اٖيكِنْجٖى كٖيجَه اِثْنَيْنْ كٖيجَه سٖى","tr":"Ол рабиул еввел айън ниджеси  Он икинджи гидже иснейн гиджеси"},{"type":"beyt","ar":"دٖيدٖى كُورْدُمْ اُولْ حَبٖيبِكْ آنَسٖى  بِرْ عَجَبْ نُورْ كٖيمْ كُونَشْ پَرْوَانَه سٖي","tr":"Диди гöрдум ол хабибин анеси  Бир аджеб нур ким гюнеш перванеси"},{"type":"beyt","ar":"بَرْق اُورُوبْ چٖيقْدٖى اَوِمْدَنْ نَاكَهٰانْ  كُوكْلَرَه دَكْ نُورْ اٖيلَه طُولْدٖى جِهَانْ","tr":"Берк уруп чъктъ евимден нягехан  Гьоклере дек нур иле долду джихан"},{"type":"beyt","ar":"هَمْ هَوَا اُوزْرَه دُوشَنْدٖى بِرْ دُوشَكْ  اٰدٖى سُنْدُسْ دُوشَيَنْ آنٖى مَلَكْ","tr":"Хем Хева юзре дюшенди бир дюшек  Адъ сюндюс дюшейен ани мелек"},{"type":"beyt","ar":"اُوچْ عَلَمْ دَخٖى دٖيكِلْدٖى اُوچْ يَرَه  هَرْ بِرٖيسِنْ اٖيدَه يِمْ نَرْدَنْ نَرَه","tr":"Юч алем дахи дикилди юч йере  Хер бирисин идейим нерден нере"},{"type":"beyt","ar":"مَغْرِبُ و مَشْرِقْدَه اٖيكٖيسٖى اٰنِكْ  بِرٖى طَامِنْدَه دٖيكِلْدٖى كَعْبَه نِكْ","tr":"Мегрибу мешрикта икиси анън  Бири тамънда дикилди кябенин"},{"type":"beyt","ar":"بٖيلْدِمْ اَنْلَرْدَنْكِه اُولْ خَلْقِكْ بَكٖى  كٖيْم يَقِينْ اُولْدٖى جِهَانَه كَلْمَكٖى","tr":"Билдим анлардан ки ол халкън бег̱и  Ким якън олду джихана гелмег̱и"},{"type":"beyt","ar":"اٖينْدٖيلَرْ كُوكْدَنْ مَلَكْلَرْ صَافُ صَافْ  كَعْبَه كِبٖى قٖيلْدٖيلَرْ اَوِمْ طَوَافْ","tr":"Индилер гьоктен мелеклер сафу саф  Кябе гиби кълдълар евим таваф"},{"type":"beyt","ar":"يٰارٖيلُوبْ دٖيوَارِ چٖيقْدٖى نَاكَهٰانْ  كَلْدٖى اُوچْ حُورٖى بَكٰا اُولْدٖى عَيَانْ","tr":"Ярълюп дивара чъктъ нягехан  Гелди юч хури бана олду аян"},{"type":"beyt","ar":"چَوْرَه يَانِمَه كَلُوبْ اُوتُورْ دٖيلَرْ  مُصْطَفَايٖي بِرْ بِرٖينَه مُشْتُولَرْ","tr":"Чевре янъма гелюп утур дулар  Мсутафа йъ бир бирине муштулар"},{"type":"beyt","ar":"بُو سَنِكْ اُوغْلِكْ كِبٖى قَدْرٖى جَمٖيلْ  بِرْ اَنَايَه وٖيرْ مَمِشْدِرْ اُولْ جَلٖيلْ","tr":"Бу сенин олун гиби кадри джемил  Бир аная вирмемиштир ол джелил"},{"type":"beyt","ar":"اُولُو دَوْلَتْ بُولْدِكْ اَىْ دِلْدَارَه سَنْ  طُوغِسَرْدِرْ سَنْدَنْ اُولْ خُلْقِ حَسَنْ","tr":"Улу девлет булдун ей дилдяре сен  Дог̱у сердир сенден ол хулки хасен"},{"type":"beyt","ar":"بُو كَلَنْ عِلْمِ لَدُنْ سُلْطَانيٖدِرْ  بُو كَلَنْ تَوْحٖيدِ عِرْفَانْ كٰانيٖدِرْ","tr":"Бу гелен илми ледун султанъдър  Бу гелен теухиди ирфан кянъдър"},{"type":"beyt","ar":"وَصْفِنٖى بُو رَسْمَه تَرْتٖيبْ اٖيتْدٖيلَرْ  اُولْ مُبَارَكْ نُورٖى تَرْغٖيبْ اٖيتْدٖيلَرْ","tr":"Васфънъ бу расме тертип иттилер  Ол мубарак нуру тергиб иттилер"},{"type":"beyt","ar":"اَمٖينَه اٖيدَرْ چُو وَقْت اُولْدٖى تَمَامْ  كٖيمْ وُجُودَه كَلَه اُولْ خَيْرُ الْاَنَامْ","tr":"Амине идер чу вакт олду темам  Ким вуджуде геле ол хайрул енам"},{"type":"beyt","ar":"صُوصَادِمْ غَايَتْ حَرٰارَتْدَنْ قَتٖي  صُونْدٖيلَرْ بِرْ جَامْ طُلُوسٖي شَرْبَتٖى","tr":"Сусадъм гайет харареттен катъ  Сундулар бир джам дулусу шербети"},{"type":"note","t":"Тук се дава шербет."},{"type":"beyt","ar":"قَارْدَنْ اٰقْ اٖيدٖى وُهَمْ صُغُوقْ اٖيدٖى  لَذَّتٖي دَخٖى شَكَرْدَه يُوقْ اٖيدٖى","tr":"Кардан ак иди вухем сог̱ук иди  Леззети дахи шекерде йок иди"},{"type":"beyt","ar":"اٖيچْدِمْ آنٖي اُولْدٖى وُجُودُمْ نُورَه غَرْق  اٖيدَه مَدِمْ كَنْدِمٖى نُورْدَنْ فَرْق","tr":"Ичтим анъ олду вуджудум нура гарк  Идемедим кендими нурдан фарк"},{"type":"note","t":"На това място се става."},{"type":"beyt","ar":"كَلْدٖى بِرْ آقْ قُوشْ قَنٰادٖيلَه رَوَانْ  اَرْقَه مٖى صٖيغَادٖى قُوَّتْلَه هَمٰانْ","tr":"Гелди бир ак куш канадъле реван  Аркамъ съг̱адъ кувветле хеман"},{"type":"beyt","ar":"طُوغْدٖى اُولْ سَاعَتْدَه اُولْ سُلْطَانِ دٖينْ  نُورَه غَرْق اُولْدٖى سَمٰوَاتُ زَمٖينْ","tr":"Дог̱ду ол саатте ол султанъ дин  Нура гарк олду семавату земин"},{"type":"beyt","ar":"صَلُّوا عَلَيْهِ وَسَلِّمُوا تَسْلِيمًا  حَتَّى تَنَالُوا جَنَّةً وَنَعِيمًا","tr":"Саллю алейхи ве селлиму теслима  Хаття тенялю дженнетен ве неима"},{"type":"beyt","ar":"كَرْدٖيلَرْ سِزْ بُولَه سِزْ اُودْدَنْ نَجٰاتْ  عَشْقِلَه دَرْدٖيلَه اٖيدِكْ اَلصَّلٰاتْ","tr":"Гердилер сиз буласъз оддан неджат  Ашк иле дерд иле един есселят"},{"type":"center","ar":["اَلصَّلَاةُ وَالسَّلَامُ عَلَيْكَ يَارَسُولَ اللّٰهِ"],"tr":"Ессалятю ўесселяму алейке йа расюлеллох","f":true},{"type":"center","ar":["اَلصَّلَاةُ وَالسَّلَامُ عَلَيْكَ يَاحَبِيبَ اللّٰهِ"],"tr":"Ессалятю ўесселяму алейке йа хабибеллох","f":true},{"type":"center","ar":["اَلصَّلَاةُ وَالسَّلَامُ عَلَيْكَ يَاسَيِّدَ الْأَوَّلِينَ وَالْآخِرِينَ"],"tr":"Ессалятю ўесселяму алейке йа сеййидел еўўелине ўел ахирин","f":true},{"type":"center","ar":["اَللّٰهُمَّ يَا رَبِّ بِجَاهِ نَبِيِّكَ الْمُصْطَفَى وَرَسُولِكَ الْمُرْتَضَى، طَهِّرْ قُلُوبَنَا مِنْ كُلِّ وَصْفٍ يُبَاعِدُنَا عَنْ مُشَاهَدَتِكَ وَمَحَبَّتِكَ، وَأَمِتْنَا عَلَى السُّنَّةِ وَالْجَمَاعَةِ وَالشَّوْقِ إِلَى لِقَائِكَ، يَا ذَا الْجَلَالِ وَالْإِكْرَامِ، بِرَحْمَتِكَ يَا أَرْحَمَ الرَّاحِمِينَ، وَسَلَامٌ عَلَى الْمُرْسَلِينَ، وَالْحَمْدُ لِلّٰهِ رَبِّ الْعَالَمِينَ"],"tr":"Еллохюмме йа рабби би джахи небиййике-л-мустафа ўе расюлике-л-муртедо, таххир кулюбеня мин кюлли ўесфин йубаидюня ан мушахедетике ўе мехаббетике ўе емитня алессюннети ўе-л-джемаати йа зе-л-джеляли ўе-л-икром, би рахметике йа ерхаме-р-рохимин, ўе селямун але-л-мурселин, ўе-л-хамдю лилляхи рабби-л-алемин."},{"type":"center","ar":["اَللّٰهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ"],"tr":"Еллохюмме салли аля мухаммедин ўе аля али мухаммед","f":true}]},{"title":"Мерхаба Бахри","items":[{"type":"beyt","ar":"يٰارَادِلْمِشْ جُمْلَه اُولْدٖى شَادُمَانْ  غَمْ كٖيدُوبْ عَالَمْ يَكٖيدَنْ بُولْدٖى جَانْ","tr":"Ярадълмъш джумле олду шадуман  Гам гидуп алем йениден булду джан"},{"type":"beyt","ar":"جُمْلَه ذَرَّاتٖى جِهَانْ اٖيدُوبْ صَدَا  چَاغْرٖيشُوبَنْ دٖيدٖيلَرْكٖيمْ مَرْحَبٰا","tr":"Джумле зеррати джихан идюп сада  Чаръ шубен дидилер ким мерхаба"},{"type":"beyt","ar":"مَرْحَبَا اَىْ عَالٖى سُلْطَانْ مَرْحَبَا  مَرْحَبَااَىْ كَانِ عِرْفَانْ مَرْحَبَا","tr":"Мерхаба ей али султан мерхаба  Мерхаба ей кяни ирфан мерхаба"},{"type":"beyt","ar":"مَرْحَبَا اَىْ قُرَّةِ الْعَيْنِ خَلٖيلْ  مَرْحَبَا اَىْ خَاصِ مَحْبُوبِ جَلٖيلْ","tr":"Мерхаба ей курратил айни халил  Мерхаба ей хасъ мехбуби джелил"},{"type":"beyt","ar":"مَرْحَبٰا اَىْ جُمْلَه نِكْ مَطْلُوبٖى سَنْ  مَرْحَبَا اَىْ خَالِقِكْ مَحْبُوبِي سَنْ","tr":"Мерхаба ей джумленин матлюби сен  Мерхаба ей холикин мехбуби сен"},{"type":"beyt","ar":"مَرْحَبَا اَىْ جَانِ جَانَانْ مَرْحَبَا  مَرْحَبَا اَىْ دَرْدَه دَرْمَانْ مَرْحَبَا","tr":"Мерхаба ей джанъ джанън мерхаба  Мерхаба ей дерде дерман мерхаба"},{"type":"beyt","ar":"مَرْحَبٰا اَىْ عَاصٖي اُمَّتْ مَلْجَئِ  مَرْحَبَا اَىْ چَارَه سِزْلَرْ اَشْفَعٖى","tr":"Мерхаба ей асъ уммет мелджеи  Мерхаба ей чаре сизлер ешфеи"},{"type":"beyt","ar":"مَرْحَبَا اَىْ رَحْمَةً لِلْعَالَمٖينْ  مَرْحَبَا سَنْسِكْ شَفٖيعَ الْمُذْنِبٖينْ","tr":"Мерхаба ей рахметен лил алемин  Мерхаба сенсин шефиал музнибин"},{"type":"beyt","ar":"اَىْ جَمَالٖى كُونْ يُوزٖى بَدْرِ مُنٖيرْ  اَىْ قَمُودُوشْمُشْلَرَه سَنْ دَسْت كٖيرْ","tr":"Ей джемали гюн юзи бедри мунир  Ей каму дюшмешлере сен дест гир"},{"type":"beyt","ar":"دَسْت كٖيرٖيسِنْ قَمُو اُفْتَادَه نِكْ  هَمْ پَنَاهٖى بَنْدَهِ اٰزٰادَه نِكْ","tr":"Дест гирисин каму уфтяденин  Хем пеняхи бендеи азяденин"},{"type":"beyt","ar":"اَىْ كُوكُلْلَرْدَرْدٖينِكْ دَرْمَانٖى سَنْ  اَىْ يَرٰادِلْمِشْلَرِكْ سُلْطَانٖى سَنْ","tr":"Ей гюнюллер дердинин дерманъ сен  Ей ярадълмъшларън султанъ сен"},{"type":"beyt","ar":"كَرْدٖيلَرْ سِزْ بُولَه سِزْ اُودْدَنْ نَجٰاتْ  عَشْقِلَه دَرْدٖيلَه اٖيدِكْ اَلصَّلٰاتْ","tr":"Гердилер сиз буласъз оддан неджат  Ашк иле дердиле идин ессалят"},{"type":"center","ar":["اَلصَّلَاةُ وَالسَّلَامُ عَلَيْكَ يَارَسُولَ اللّٰهِ"],"tr":"Ессалятю ўесселяму алейке йа расюлеллох","f":true},{"type":"center","ar":["اَلصَّلَاةُ وَالسَّلَامُ عَلَيْكَ يَاحَبِيبَ اللّٰهِ"],"tr":"Ессалятю ўесселяму алейке йа хабибеллох","f":true},{"type":"center","ar":["اَلصَّلَاةُ وَالسَّلَامُ عَلَيْكَ يَاسَيِّدَ الْأَوَّلِينَ وَالْآخِرِينَ"],"tr":"Ессалятю ўесселяму алейке йа сеййидел еўўелине ўел ахирин","f":true},{"type":"center","ar":["اَللّٰهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ"],"tr":"Еллохюмме салли аля мухаммедин ўе аля али мухаммед","f":true}]},{"title":"Чюнкю Ол Бахри","items":[{"type":"beyt","ar":"چُونْكِه اُولْ مَحْبُوبِ رَحْمٰنِ رَحٖيمْ  قٖيلْدٖى دُنْيٰايٖي جَمَالِنْدَنْ نَعٖيمْ","tr":"Чунки ол мехбуби рахмани рахим  Кълдъ дюняйъ джемалинден неим"},{"type":"beyt","ar":"بِرْبِرٖينَه مُشْ دَه لَايُو هَرْ مَلَكْ  رَقْصَه كٖيرْدٖى شَوْقِ شَادِنْدَنْ فَلَكْ","tr":"Бирбирине мушделяю хер мелек  Ракса гирди шеуку шадъндан фелек"},{"type":"beyt","ar":"اشْبُو هَيْبَتْدَنْ اَمٖينَه خُوبْرُو  بِرْ زَمَانْ عَقْلٖى كٖيدُوبْ كَلْدٖى كٖيرُو","tr":"Ишбу хейбеттен Емине хубру  Бир земан аклъ гидюп гелди гиру"},{"type":"beyt","ar":"كُورْدٖى كِتْمِشْ حُورٖيلَرْ هٖيچْ كِمْسَه يُوقْ  كُورْمَدِى اُوغْلِنْ تَضَرُّعْ قٖيلْدٖى چُوقْ","tr":"Гöрдю гитмиш хурилер хич кимсе йок  Гьормеди олун тадарру кълдъ чок"},{"type":"beyt","ar":"حُورٖيلَرْ اَلْدٖى تَصَوُّرْ قٖيلْدٖى اُولْ  حَيْرَتْ اٖيچْرَه چُوقْ تَفَكُّرْ قٖيلْدٖى اُولْ","tr":"Хурилер алдъ тесаввур кълдъ ол  Хайрат ичре чок тефеккюр кълдъ ол"},{"type":"beyt","ar":"چَوْرَه يَانِنْ اِسْتَيُو قٖيلْدٖى نَظَرْ  كُورْدٖى كٖيمْ بِرْ كُوشَه دَه خَيْرُ الْبَشَرْ","tr":"Чевре янън истею кълдъ незар  Гöрдю ким бир кöшеде хайрул бешер"},{"type":"beyt","ar":"شُويْلَه بَيْتُ اللّٰهَه قَرْشُو اُولْ رَسُولْ  يُوزْ يَرَه اُورْمِشْ وَ قٖيلْمِشْ سَجْدَه اُولْ","tr":"Шöйле бейтуллаха каршъ ол расюл  Юз йере урмуш ве кълмъш сежде ол"},{"type":"beyt","ar":"سَجْدَه دَه بٰاشٖى دِلٖى تَحْمٖيدْ اٖيدَرْ  هَمْ كَتُورْمِشْ پَرْمَغٖينْ تَوْحٖيدْ اٖيدَرْ","tr":"Сеждеде башъ дили тахмид идер  Хем гетюрмиш пармаг̱ън теухид идер"},{"type":"beyt","ar":"دَپْرَ نُورْدُودَاقْلَرٖى سُويْلَرْ كَلٰامْ  اَكْلَيَه مَزْدِمْ نَه دٖيرْدٖى اُولْ هُمَامْ","tr":"Депре нурду дакларъ сöйлер келям  Анлая маздъм не дерди ол хумам"},{"type":"beyt","ar":"قُولٰاغِمْ اَغْزٖينَه اُورْدُمْ دِكْلَدِمْ  سُويْلَدٖيكٖى سُوزٖى اُولْدَمْ اَكْلَدِمْ","tr":"Кулаг̱ъм аг̱зъна вурдум динледим  Сöйледиг̱и сöзю ол дем анладъм"},{"type":"beyt","ar":"دٖيرْكِه اَىْ مَوْلٰا يُوزُمْ طُوتْدُمْ سَكَا  يَا اِلٰهٖى اُمَّتِمْ وٖيرْكِلْ بَكٰا","tr":"Дирки ей мевля юзюм туттум сана  Я иляхи умметим виргил бана"},{"type":"beyt","ar":"حَقَّه بَاغْلٰايُوبْ كُوكُلْدَنْ هِمَّتٖى  دٖيرْ اٖيدٖى وٰا اُمَّتٖى وٰا اُمَّتٖى","tr":"Хакка баг̱лаюп гöнюлден химмети  Дир иди ва уммети ва уммети"},{"type":"beyt","ar":"طِفْل اٖيكَنْ اُولْ دٖيلَرْدٖى اُمَّتِنْ  سَنْ قُوجَلْدِكْ تَرْك اٖيدَرْ سِنْ سُنَّتِنْ","tr":"Тифл икен ол дилерди умметин  Сен куджалдън терк идерсин сюннетин"},{"type":"beyt","ar":"اُمَّتِمْ دٖيدٖى سَكٰا چُونْ مُصْطَفَا  وٖيرْ صَلَوٰاتْ سَنْدَه اَكٰا بُولْ صَفَا","tr":"Умметим диди сана чун <b>Мустафа<\/b>  Вир салеват сенден ана бул сафа"},{"type":"beyt","ar":"كَرْدٖيلَرْ سِزْ بُولَه سِزْ اُودْدَنْ نَجٰاتْ  عَشْقِلَه دَرْدٖيلَه اٖيدِكْ اَلصَّلٰاتْ","tr":"Гердилер сиз буласъз оддан неджат  Ашкиле дердиле идин ессалят"},{"type":"center","ar":["اَلصَّلَاةُ وَالسَّلَامُ عَلَيْكَ يَارَسُولَ اللّٰهِ"],"tr":"Ессалятю ўесселяму алейке йа расюлеллох","f":true},{"type":"center","ar":["اَلصَّلَاةُ وَالسَّلَامُ عَلَيْكَ يَاحَبِيبَ اللّٰهِ"],"tr":"Ессалятю ўесселяму алейке йа хабибеллох","f":true},{"type":"center","ar":["اَلصَّلَاةُ وَالسَّلَامُ عَلَيْكَ يَاسَيِّدَ الْأَوَّلِينَ وَالْآخِرِينَ"],"tr":"Ессалятю ўесселяму алейке йа сеййидел еўўелине ўел ахирин","f":true},{"type":"center","ar":["اَللّٰهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ"],"tr":"Еллохюмме салли аля мухаммедин ўе аля али мухаммед","f":true}]},{"title":"Мекке Кавми Бахри","items":[{"type":"beyt","ar":"مَكَّه قَوْمٖى اُولُولَرٖى بٖى خِلٰافْ  اُولْكٖيجَه كَعْبَه يٖي قٖيلُورْكَنْ طَوَافْ","tr":"Мекке кауми улуларъ бихиляф  Ол гидже кябейи кълъркен таваф"},{"type":"beyt","ar":"سَجْدَه قٖيلْدٖى كَعْبَه كُورْدٖى خٖاصُ وعَامْ  دُوشْمَدٖى بِرْ طَاشٖى خُوشْ قٖيلْدٖى قِيَامْ","tr":"Сежде кълдъ кябе гöрдю хасуам  Дюшмеди бир ташъ хош кълдъ киям"},{"type":"beyt","ar":"رُكْنٖى رُكْنَه كَعْبَه نِكْ وٖيرْدٖى سَلٰامْ  دٖيدٖيلَرْكٖيمْ طُوغْدٖى اُولْ خَيْرُ الْاَنَامْ","tr":"Рюкни рюкне кябенин вирди селям  Дидилер ким доуду ол хайрул еням"},{"type":"beyt","ar":"كَعْبَه بِرْ صَوْت اِتْدٖى اُولْدَمْ نَاكَهَانْ  دٖيدٖى طُوغْدٖى بُوكٖيجَه شَمْسِ جِهَانْ","tr":"Кябе бир саут итти олдем нягехан  Диди дог̱ду бу гидже шемси джихан"},{"type":"beyt","ar":"يٰالٖينْ آيٰاقْ بٰاشْ آچُوبَنْ صَافُ صٰافْ  اَيْلَيٖيسَرْ اُمَّتٖى بَنٖى طَوَافْ","tr":"Ялън аяк баш ачубен сафу саф  Ейлейисер уммети бени таваф"},{"type":"beyt","ar":"پٰاكْ اٖيدُوبْ پُتْدَنْ كُفُرْدَنْ اُولْ رَسُولْ  قُورْتَرٖيسَرْ بَنٖى مُشْرِكْلَرْدَنْ اُولْ","tr":"Пак идюп путтан кюфюрден ол расюл  Куртарисер бени мюшриклерден ол"},{"type":"beyt","ar":"فَخْرِ عَالَمْ اٖيرْدٖى چُونْ قِرْق يَاشِنَه  قُونْدٖى پَسْ تَاجِ نُبُوَّتْ بَاشِنَه","tr":"Фахри алем ирди чун кърк яшъна  Конду пес тяджи нубуввет башъна"},{"type":"beyt","ar":"اٖينْدٖى قُرْاٰنْ اٰيَتْ اٰيَتْ بَيِّنَاتْ  ظَاهِرْ اُولْدٖى نِيدَه دُرْلُو مُعْجِزٰاتْ","tr":"Инди Куран айет айет беййинят  Захир олду нидже тюрлю муджизат"},{"type":"beyt","ar":"اَوَّلٰا اُولْ كٖيمْ مُبَارَكْ جِسْمِنِكْ  كُولْكَه سٖي دُوشْمَزْدٖى يَرَه رَسْمِنِكْ","tr":"Еввеля ол ким мубарек джисминин  Гьолгеси дюшмезди йере ресминин"},{"type":"beyt","ar":"نُورْ اٖيدٖى بَاشْدَنْ اَيٰاغَه كُوْدَه سٖي  نُورْ عَيَانْدِرْ نُورِكْ اُولْمَزْ كُولْكَه سٖي","tr":"Нур иди баштан аяга гьовдеси  Нур аяндър нурун олмаз гьолгеси"},{"type":"beyt","ar":"اُولْ مُبَارَكْ بٰاشٖي اُوزْرَه هَرْ زَمٰانْ  بِرْ بُلُوكْ بُلُوطْ اُولُورْدٖى سَايَبَانْ","tr":"Ол мубарек башъ öзре хер земан  Бир бюлюк булут олурду сайебан"},{"type":"beyt","ar":"هَرْنَرَه وَارْسَه بٖيلَه وٰارِرْدٖى اُولْ  بٰاشٖى اُوزْرَه هَرْ زَمَانْ طُورُرْدٖى اُولْ","tr":"Хер нере варса биле варърдъ ол  Башъ юзре хер земан дурурду ол"},{"type":"beyt","ar":"دَپْرَه دٖيجَكْ دُودَغِكْ اُولْ مَاهِ وَشْ  دَپْرَ نُورْدٖى كَوكْدَه هَمْ اٰىُو كُونَشْ","tr":"Депре диджек дудаг̱ън ол махи веш  Депре нурди гьокте хем айу гюнеш"},{"type":"beyt","ar":"اِنْجُو دِيشْلَرْ شُعَاعِنْدَنْ كِيجَه  اٖيكْنَه دُوشْسَه بُولُنُورْدٖى اَىْ خوٰاجَه","tr":"Инджу дишлери шуаинден гидже  Ине дюшсе булунурду ей ходжа"},{"type":"beyt","ar":"دُو قُنُيجَقْ صَاچِنَه بٰادِ صَبَا  مِسْكِ عَنْبَرْلَه طُولَرْ اٖيدٖى هَوَا","tr":"До кунуджак сачъна бади сабах  Миски анберле долар иди хева"},{"type":"note","t":"Тук се накажда с аромат."},{"type":"beyt","ar":"دَرْلَسَه كُولْلَرْ اُولُورْدَى دَرْلَرٖى  خُوشْ دَرَرْلَرْدٖى دَرِنْدَنْ كُولْلَرٖى","tr":"Терлесе гюллер олурду терлери  Хош терерлерди деринден гюллери"},{"type":"beyt","ar":"صَدْرٖى نُورِنْدَنْ قَرٰانْلِقْ كٖيجَه لَرْ  يُولْدَه يُورُرْدٖى يِكِتْلَرْ قُوجَه لَرْ","tr":"Садри нурундан каранлък гиджелер  Йолда юрюрдю иг̱итлер коджалар"},{"type":"beyt","ar":"دِكْدٖى خُرْمَايٖي هَمْ اُولْ شَاهِ جِهَانْ  دِكْدٖيكٖى سَاعَتْ يَمِشْ وٖيرْدٖى هَمَانْ","tr":"Дикти хурмайъ хем ол шахи джихан  Диктиг̱и саат йемиш вирди хеман"},{"type":"beyt","ar":"كَرْدٖيلَرْ سِزْ بُولَه سِزْ اُودْدَنْ نَجٰاتْ  عَشْقِلَه دَرْدٖيلَه اٖيدِكْ اَلصَّلٰاتْ","tr":"Гердилер сиз буласъз оддан неджат  Ашкиле дердиле идин ессалят"},{"type":"center","ar":["اَلصَّلَاةُ وَالسَّلَامُ عَلَيْكَ يَارَسُولَ اللّٰهِ"],"tr":"Ессалятю ўесселяму алейке йа расюлеллох","f":true},{"type":"center","ar":["اَلصَّلَاةُ وَالسَّلَامُ عَلَيْكَ يَاحَبِيبَ اللّٰهِ"],"tr":"Ессалятю ўесселяму алейке йа хабибеллох","f":true},{"type":"center","ar":["اَلصَّلَاةُ وَالسَّلَامُ عَلَيْكَ يَاسَيِّدَ الْأَوَّلِينَ وَالْآخِرِينَ"],"tr":"Ессалятю ўесселяму алейке йа сеййидел еўўелине ўел ахирин","f":true},{"type":"center","ar":["اَللّٰهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ"],"tr":"Еллохюмме салли аля мухаммедин ўе аля али мухаммед","f":true}]},{"title":"Мирач Бахри","items":[{"type":"beyt","ar":"كَلْبَرُو اَىْ عِشْق اُودٖينَه يَانٖيجٖي  كَنْدُويٖي مَعْشُوقَه عَاشِقْ صَانٖيجٖي","tr":"Гелберу ей ишк удине янъджъ  Кендуйи машука ашък санъджъ"},{"type":"beyt","ar":"دِكْلَه كَلْ مِعْرٰاجِنْ اُولْ شَاهِكْ عَيَانْ  عَاشِقْ اٖيسَكْ عَشْق اُودٖينَه طُورْمَه يٰانْ","tr":"Динле гел мираджън ол шахин аян  Ашък исен ашк удине дурмаян"},{"type":"beyt","ar":"بِرْ دُوشَنْبِه كٰيجَه سٖي تَحْقٖيقْ خَبَرْ  لَيْلَهِ قَدْر اٖيدٖى اُولْ كٖيجَه مَكَرْ","tr":"Бир дюшенби гиджеси тахкик хабер  Лейлеи кадриди ол гидже мег̱ер"},{"type":"beyt","ar":"اُولْ هَمَايُونْ بَخْتِ اُولْقَدْرِ يُوجَه  اُمَّهَانٖى اَوٖينَه وَارْدٖى كٖيجَه","tr":"Ол хюмаюн бахти ол кадри юдже  Уммехани евине вардъ гидже"},{"type":"beyt","ar":"اَنْدَه اٖيكَنْ نَاكَهَانْ اُولْ يُوزٖى آقْ  جَنَّتَه وَارْ دٖيدٖى جَبْرَائٖيلَه حَقْ","tr":"Анда икен нягехан ол юзу ак  Дженнете вар диди джебраиле хак"},{"type":"beyt","ar":"بِرْ مُرَصَّعْ تَاجْ بِرْ حُلَّه كَمَرْ  هَمْ دَخٖى اَلْ بِرْ بُرَاقَى مُعْتَبَرْ","tr":"Бир мурасса тадж бир хулле кемер  Хем дахи ал бир буракъ муатебер"},{"type":"beyt","ar":"اُولْ حَبٖيبِمَه اٖيلَتْ بِنْسُونْ آنٖى  عَرْشِمٖى سَيْر اَيْلَسُونْ كُورْسُونْ بَنٖى","tr":"Ол хабибиме илет бинсюн анъ  Аршъмъ сейр ейлесюн гьорсюн бени"},{"type":"beyt","ar":"جَبْرٰائٖيلْ چُونْ جَنَّتَه وَارْدٖى رَوَانْ  كُورْدٖيكٖيمْ قِرْق بِيكْ بُرٰاقْ اُوتْلَرْ هَمَانْ","tr":"Джебраил чюн дженнете вардъ реван  Гьордю ким кърк бин бурак отлар хеман"},{"type":"beyt","ar":"اٖيچْلَرِنْدَنْ بِرْ بُرَاقْ اَغْلَرْ قَتٖى  يٖيمَزْ اٖيچْمَزْ قَالْمٰامِشْ هٖيچْ طَاقَتٖى","tr":"Ичлеринден бир бурак алар кати  Имез ичмез калмамъш хич такати"},{"type":"beyt","ar":"كُوزْلَرِنْدَنْ يٰاشٖى چَيْحُونْ اَيْلَمِشْ  جِكَرٖينٖي دَرْدٖيلَه خُونْ اَيْلَمِشْ","tr":"Гьозлеринден яшъ чейхун ейлемиш  Джиг̱ерини дердиле хун ейлемиш"},{"type":"beyt","ar":"دٖيدٖى جَبْرٰائيٖل نَدِرْ اَغْلٰادٖيغِكْ  حُزْنِلَه جَانُ و جِكَرْ دٰاغْلٰا دٖيغِكْ","tr":"Диди Джебраил недир агладъг̱ън  Хюзниле джану джигер даг̱ладъг̱ън"},{"type":"beyt","ar":"بٰاقٖى يُولْدٰا شِكْ يَيُوبْ اٖيچُوبْ كَزَرْ  سَنْ اٖيكٖيلَرْ سِنْ دٖى جَانِكْ نَه سَزَرْ","tr":"Баки йолдашън йейуп ичюп гезер  Сен инилерсин ди джанън не сезер"},{"type":"beyt","ar":"دٖيدٖى قِرْق بِيكْ يٖيلْ دُرُرْكٖيمْ يٰا اَمٖينْ  عَشْقدُرُرْ بَكٰا يِمَكْ اٖيچْمَكْ هَمَينْ","tr":"Диди кърк бин йъл дурур ким я емин  Ашк дурур бана йемек ичмек хемин"},{"type":"beyt","ar":"نٰاكَهٰانْ بِرْ اُونْ اِشِتْدٰى قُولٰاغِمْ  اُولْزَمَانْدَنْ بٖيلْمَزَمْ صَاغُ و صُولِمْ","tr":"Нягехан бир юн ишитти кулаг̱ъм  Ол земандан билмезем саг̱ъ солум"},{"type":"beyt","ar":"يٰا مُحَمَّدْ دَيُو بَنْ چٰاغِرْ دٖيلَرْ  بِرْ صَدَا بِرْلَه يُورَكْلَرْ دَلْدٖيلَرْ","tr":"Я <b>Мухаммед<\/b> дейубен чаг̱ър дълар  Бир сада бирле юреклер делдилер"},{"type":"beyt","ar":"اُولْزَمَانْدَنْ بِلْمَزَمْ كٖيمْ نُولْمِشَمْ  اُولْ اٰدِكْ اِسّٖينَه عَاشِقْ اُولْمِشَمْ","tr":"Ол земандан билмезем ким нолмушам  Ол адън иссине ашък олмушам"},{"type":"beyt","ar":"يُورَكِمْ اٖيچِنْدَه اَرٖيدٖى يَاغِمْ  عٰاشِقْ اُولْدٖى كُورْمَدَنْ بُوقُولٰاغِمْ","tr":"Юреим ичинде ериди яг̱ъм  Ашък олду гьормеден бу кулаг̱ъм"},{"type":"beyt","ar":"جَنَّتٖى بٰاشِمَه عَشْقٰى طٰارْ اٖيدَرْ  اَشَمٖى لَيْلُ و نَهَارْ اُوشْ زٰارْ اٖيدَرْ","tr":"Дженнети башъма ашкъ дар идер  Ишими лейлю нехар юш зяр идер"},{"type":"beyt","ar":"كَرْچِه ظَاهِرْ جَنَّتْ اٖيچْرَه طُورُرَمْ  مَعْنٖيدَه نَارِكْ عَذٰابِنْ كُورُرَمْ","tr":"Герчи зохир дженнет ичре дурурам  Маниде нарън азябън гьорюрем"},{"type":"beyt","ar":"كَرْاٖيرَه مَزْسَمْ وِصَالِنَه اٰنِكْ  اُورٖيَسَرَمْ تَرْكِنٖى جَانُ و تَنِكْ","tr":"Гер иремезсем висалине анън  Урисерем теркини джану тенин"},{"type":"beyt","ar":"جَبْرٰائٖيلْ اٖيدَرْ بُرٰاقَه اَىْ بُرَاقْ  وٖيرْدٖى حَقْ مَقْصُودٖينٖى قٖيلْمَه فِرَاقْ","tr":"Джебраил идер бурака ей бурак  Вирди хак максудуну кълма фирак"},{"type":"beyt","ar":"كٖيمْدَه كٖيمْ عَشْقِكْ نِشَانٖى وٰارْ دُرُرْ  عَاقِبَتْ مَعْشُوقَه آنٖى اٖيرْ كُورُرْ","tr":"Кимде ким ашкън нишанъ вар дурур  Акибет машука анъ ир гюрюр"},{"type":"beyt","ar":"كَلْبَرُو مَعْشُوقِنَه اٖيرْكُورَه يِمْ  يُورَه كِكْ زَحْمِنَه مَرْهَمْ اُورَه يِمْ","tr":"Гелберу машукуна ир гьорейим  Юреин захмине мерхем урайим"},{"type":"beyt","ar":"اَلْدٖى جَبْرٰائٖيلْ بُرٰاقَى اُولْزَمَانْ  تٰاجَنَابِ اَحْمَدَه كَلْدٖى هَمَانْ","tr":"Алдъ Джебраил буракъ ол земан  Та дженабъ <b>Ахмеде<\/b> гелди хеман"},{"type":"beyt","ar":"حَقْ سَلَامْ اٖيتْدٖى سَكٰايٰا مُصْطَفَا  كٖيمْ مُبَارَكْ خَاطِرِكْ بُولْسُونْ صَفَا","tr":"Хак селям итти саная <b>Мустафа<\/b>  Ким мубарек хатърън булсун сафа"},{"type":"beyt","ar":"دٖيدٖيكٖيمْ كَلْسُونْ قُونُقْلَرَمْ آنٖى  عَرْشِمٖى سَيْر اَيْلَسُونْ كُورْسُونْ بَنٖى","tr":"Диди ким гелсюн конукларъм анъ  Аршъмъ сейр ейлесюн гьорсюн бени"},{"type":"beyt","ar":"بُو كٖيجَه ظَاهِرْ اُولُورْ اَسْرَارِ حَقْ  كُوسْتَرٖيسَرْ دِرْ سَكَادٖ يدَارٖى حَقْ","tr":"Бу гидже захир олур есраръ хак  Гьостерисер дир сана дидяри хак"},{"type":"beyt","ar":"زَمْزَمٖيلَه طُولْدٖى كَوْنٖيلَه مَكَانْ  عَرْشَه وٰارِرْ دٖيدٖيلَرْ فَخْرِ جِهَانْ","tr":"Земземиле долду кеун иле мекян  Арша варър дидилер фахри джихан"},{"type":"beyt","ar":"هَمْ سَكِزْ جَنَّتْ قَپُوسِينْ آچْدٖيلَرْ  عَالَمِكْ اُوسْتُنَه رَحْمَتْ صَاچْدٖيلَرْ","tr":"Хем секиз дженнет капусун ачтълар  Алемин юстюне рахмет сачтълар"},{"type":"beyt","ar":"كَلْ كٖيدَه لِمْ حَضْرَتَه يٰا مُصْطَفَا  مُنْتَظِرْدِرْ اٰنْدَه اَصْحَابِ صَفَا","tr":"Гел гиделим хазрете я <b>Мустафа<\/b>  Мунтазирдир анда асхаби сафа"},{"type":"beyt","ar":"سَكَا جَنَّتْدَنْ كَتُورْدِمْ بِرْ بُرٰاقْ  دَعْوَتِ رَحْمٰنْ دُرُرْ اَيْلَه يَرَاقْ","tr":"Сана дженнеттен гетюрдюм бир бурак  Дявети рахман дурур ей нури хак"},{"type":"beyt","ar":"طُورْدٖى يَرِنْدَنْ هَمَانْدَمْ مُصْطَفَا  قُودٖى تَاجٖى بٰاشِنَه اُولْ پُرْ صَفَا","tr":"Дурду йеринден хемендем <b>Мустафа<\/b>  Коду таджъ башъна ол пюр сафа"},{"type":"beyt","ar":"چَكْدٖى اُولْ دَمْدَه بُرٰاقٖى جَبْرٰائٖيلْ  اُوكُنَه دُوشْدٖى اَكٰا اُولْدٖى دَلٖيلْ","tr":"Чекди ол демде буракъ Джебраил  Öнюне дюштю ана олду делил"},{"type":"beyt","ar":"طَرْفَةُ الْعَيْن اٖيچْرَه اُولْ شَاهِ حَرَمْ  كَلْدٖى قُدْسَه اٖيرْدٖى وُبَصْدٖى قَدَمْ","tr":"Тарфетюл айни ичре ол шахи харем  Гелди кудсе ирди ву бастъ кадем"},{"type":"beyt","ar":"اَنْبِيَا اَرْوٰاحٖى قَارْشُو كَلْدٖيلَرْ  مُصْطَفٰى يَه عِزَّتْ اِكْرٰامْ قٖيلْدٖيلَرْ","tr":"Енбия ервахъ каршу гелдилер  <b>Мустафая<\/b> иззет икрам кълдълар"},{"type":"beyt","ar":"پَسْ كَچُوبْ مِحْرَابَه اُولْ خَيْرُ الْاَنَامْ  اَنْبِيَا اَرْوَاحِنَه اُولْدٖى اِمَامْ","tr":"Пес гечюп михраба ол хайрул еням  Енбия ервахъна олду имам"},{"type":"beyt","ar":"اٖيكٖى رَكْعَتْ قٖيلْدٖى اَقْصٰادَه نَمَازْ  اُويْلَه اَمْر اٖيتْمِشْ اٖيدٖى اُولْ بٖى نِيَازْ","tr":"Ики ракят кълдъ аксада немаз  Öйле емретмиш иди ол би нияз"},{"type":"beyt","ar":"اُولْ كٖيجَه طُورْمَدٖى جَوْلٰانْ اَيْلَدٖى  شَوْيَلَه كٖيمْ اَفْلٰاكٖى سَيْرٰانْ اَيْلَدِى","tr":"Ол гидже дурмадъ джевлян ейледи  Шьойле ким ефлакъ сейран ейледи"},{"type":"beyt","ar":"هَرْ بِرِنْدَنْ دُورْلُو حِكْمِتْ كُورْدٖى اُولْ  تَاكِه وَارْدٖى سِدْرَه يَه اٖيرِشْدٖى اُولْ","tr":"Хер биринден тюрлю хикмет гьордю ол  Таки вардъ сидрейе иришти ол"},{"type":"beyt","ar":"جَبْرٰائٖيلِكْ طُورٰاغٖيدِرْ اُولْ مَقَامْ  نُهْ فَلَكْ تَاكٰيمْ طُوتَالٖيدَنْ نِظَامْ","tr":"Джебраилин дураг̱ъдър ол мекам  Нух фелек та ким туталъндан низам"},{"type":"beyt","ar":"قَالْدٖى جَبْرٰائٖيلْ مَقَامِنْدَه هَمٖينْ  دٖيدٖى اَكٰا رَحْمَةً لِلْعَالَمٖينْ","tr":"Калдъ Джебраил мекамънда хемин  Диди ана рахметен лил алемин"},{"type":"beyt","ar":"بٖيلْمَزَمْ بُويُولْلَرٖى بَنْ نٖيدَه يِمْ  كِمْ غَرٖيبَمْ بُونْدَه قَنْدَه كٖيدَه يِمْ","tr":"Билмезем бу йолларъ бен нидейим  Ким гарибем бунда канда гидейим"},{"type":"beyt","ar":"جَبْرٰائٖيلْ دٖيدٖى رَسُولَه اَىْ حَبٖيبْ  صَنْمَه غِلْ بُو يَرْدَه سَنْ سَنٖى غَرٖيبْ","tr":"Джебраил диди расюле ей хабиб  Санмаг̱ил бу йерде сен сени гарип"},{"type":"beyt","ar":"سَنِكْ اٖيچُونْ يَرٰادِلْدٖى نُهْ فَلَكْ  اِنْسُ وجِنُّ و حُورُ جَنَّتْ هَمْ مَلَكْ","tr":"Сенин ичюн яратълдъ нух фелек  Инсю джинню хуру дженнет хем мелек"},{"type":"beyt","ar":"بُونْدَه خَتْم اُولْدٖى بَنِمْ سَيْرَنْكَهِمْ  مٰاوَرٰا سِنْدَنْ دَخٖى يُوقْ اٰكَهِمْ","tr":"Бунда хатм олду беним сейран кехим  Мавера съндан дахи йок акехим"},{"type":"beyt","ar":"بَكٰا بُويْلَه اَمْر اٖيدُوبْدُرْ ذُو الْجَلٰالْ  اٰچْمَه يَمْ بَنْ بُونْدَنْ اُوتَه پَرُّوبَالْ","tr":"Бана бьойле емредюптюр зюл джелял  Ачмаям бен бундан öте перрубал"},{"type":"beyt","ar":"كَرْ كَچَمْ بِرْ ذَرَّه دَكْلُو اٖيلَرُو  يٰانَرَمْ بَاشْدَنْ اَيٰاغَه اَىْ اُولُو","tr":"Гер гечем бир зерре денлю илери  Янарам баштан аяг̱а ей улу"},{"type":"beyt","ar":"دٖيدٖى جَبْرٰائٖيلَه اُولْ شَاهِ جِهَانْ  پَسْ مَقَامِنْدَه طُورْاِمْدٖى سَنْ هَمَانْ","tr":"Диди Джебраиле ол шахи джихан  Пес мекамънда дур имди сен хеман"},{"type":"beyt","ar":"رٰاهِ عَشْقدَه كٖيمْ صَاقِنُورْ جَانِنٖى  اُولْ قَچَنْ كُورْسَه كَرَكْ جَانٰانِنٖى","tr":"Рахи ашкта ким сакинур джанънъ  Ол качан гьорсе герек джананънъ"},{"type":"beyt","ar":"چُونْ اَزَلْدَنْ بَكٰا عَشْق اُولْدٖى دَلٖيلْ  يٰا نَرْ اٖيسَمْ يٰانَه يِمْ بَنْ اَىْ خَلٖيلْ","tr":"Чюн езелден бана ашк олду делил  Янар исем янайим бен ей халил"},{"type":"beyt","ar":"رٰاهِ عَشْقٖى صَانْمَه غَافِلْ سَرْسَرٖى  بَلْكِه كَمْتَرْ نَسْنَه دِرْ وٖيرْمَكْ سَرٖى","tr":"Рахъ ашкъ санма гафил серсери  Белки кемтер неснедир вирмек сери"},{"type":"beyt","ar":"كَرْدٖيلَرْ سِزْ بُولَه سِزْ اُودْدَنْ نَجٰاتْ  عَشْقِلَه دَرْدٖيلَه اٖيدِكْ اَلصَّلٰاتْ","tr":"Гердилер сиз буласъз оддан неджат  Ашкиле дердиле идин ессалят"},{"type":"center","ar":["اَلصَّلَاةُ وَالسَّلَامُ عَلَيْكَ يَارَسُولَ اللّٰهِ"],"tr":"Ессалятю ўесселяму алейке йа расюлеллох","f":true},{"type":"center","ar":["اَلصَّلَاةُ وَالسَّلَامُ عَلَيْكَ يَاحَبِيبَ اللّٰهِ"],"tr":"Ессалятю ўесселяму алейке йа хабибеллох","f":true},{"type":"center","ar":["اَلصَّلَاةُ وَالسَّلَامُ عَلَيْكَ يَاسَيِّدَ الْأَوَّلِينَ وَالْآخِرِينَ"],"tr":"Ессалятю ўесселяму алейке йа сеййидел еўўелине ўел ахирин","f":true},{"type":"center","ar":["اَللّٰهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ"],"tr":"Еллохюмме салли аля мухаммедин ўе аля али мухаммед","f":true},{"type":"beyt","ar":"سُويْلَشُورْكَنْ جَبْرٰائٖيلْ اٖيلَه كَلَامْ  كَلْدٖى رَفْرَفْ اُوكُنَه وٖيرْدٖى سَلَامْ","tr":"Сьойлешюркен Джебраил иле келям  Гелди рефреф йонюне вирди селям"},{"type":"beyt","ar":"اَلْدَى اُولْ شَاهِ جِهَانٖى اُولْزَمَانْ  سِدْرَيَه كِتْدٖى وُكَتُورْدٖى هَمَانْ","tr":"Алдъ ол шахи джиханъ ол заман  Сидрейе гитти ве гьотюрдю хеман"},{"type":"beyt","ar":"كُورْدٖى كُوكْ اَهْلٖى عِبَادَتْدَه قَمُو  هَرْ بِرٖى بِرْ دُرْلُو طَاعَتْدَه قَمُو","tr":"Гьордю гьок ехли ибадетте каму  Хер бири бир тюрлю таатте каму"},{"type":"beyt","ar":"كِمٖى تَهْلٖيلُ و كِمٖى تَمْجٖيدْ اُوقُورْ  كِمٖي تَسْبٖيحُ و كِمٖى تَحْمٖيدْ اُوقُورْ","tr":"Кими техлилю кими темджид окур  Кими тесбиху кими техмид окур"},{"type":"beyt","ar":"كِمٖى قِيَامْدَه كِمٖى قٖيلْمِشْ رُكُوعْ  كِمٖى حَقَّه سَجْدَه قٖيلْمِشْ بٰا خُشُوعْ","tr":"Кими киямда кими кълмъш рукю  Кими хакка сежде кълмъш ба хушу"},{"type":"beyt","ar":"كِمِسِنٖى عَشْقِ حَقْ اَلْمِشْدُرُرْ  وٰالَهُ و حَيْرَانُ ومَسْت قَالْمِشْدُرُرْ","tr":"Кимисини ашкъ хак алмъш дурур  Валеху хайрану мест калмъш дурур"},{"type":"beyt","ar":"هَبْ كُوكْ اَهْلٖى جُمْلَه قَرْشُو كَلْدٖيلَرْ  مُصْطَفٰى يَه عِزَّتْ اِكْرٰامْ قٖيلْدٖيلَرْ","tr":"Хеп гьок ехли джюмле каршу гелдилер  <b>Мустафая<\/b> иззет икрам кълдълар"},{"type":"beyt","ar":"مَرْحَبًا بِكْ يٰا مُحَمَّدْ دٖيدٖيلَرْ  اَىْ شَفَاعَتْ كٰانِ اَحْمَدْ دٖيدٖيلَرْ","tr":"Мерхабен бик я <b>Мухаммед<\/b> дидилер  Ей шефаат кянъ <b>Ахмед<\/b> дидилер"},{"type":"beyt","ar":"هَرْ بِرٖى قُوتْلُو لَدٖى مِعْرَاجَنٖى  دٖيدٖيلَرْ كَيْدِكْ سَعَادَتْ تَاجِنٖى","tr":"Хер бири кутлуладъ мираджънъ  Дидилер гейдин сеадет тяджънъ"},{"type":"beyt","ar":"يُورٖيكٖيمْ مَيدَانْ سَنِكْدِرْ بُو كٖيجَه  صَحْبَتِ سُلْطَانْ سَنِكْدِرْ بُو كٖيجَه","tr":"Юрю ким мейдан сениндир бу гидже  Сухбети султан сениндир бу гидже"},{"type":"beyt","ar":"اٖيرْمَدٖى اَوَّلْ كَلَانْ بُو دَوْلَتَه  كِمْسَه لَايِقْ اُولْمَدٖى بُو رِفْعَتَه","tr":"Ирмеди еввел гелен бу девлете  Кимсе лайък олмадъ бу рифате"},{"type":"beyt","ar":"چُونْكِه قَمُوسِنْ كُورُوبْ كَچْدٖى اُوتَه  وَارْدٖى اٖيرِشْدٖى اُولْ اُولُو حَضْرَتَه","tr":"Чюнки камусун гюрюп гечти öте  Вардъ иришти ол олу хазрете"},{"type":"center","ar":["اَللّٰهُ أَكْبَرْ اَللّٰهُ أَكْبَرْ ، لَا إِلٰهَ إِلَّا اللّٰهُ وَاللّٰهُ أَكْبَرْ، اَللّٰهُ أَكْبَرْ وَلِلّٰهِ الْحَمْد ،"],"tr":"Еллохю екбер, еллохю екбер, ля иляхе илле-л-лохю ўе-л-лохю екебр, еллохю екбер ўе лилляхи-л-хамд."},{"type":"beyt","ar":"بٖى حُرُوفُ ولَفْظِ صَوْت اُولْ پٰادِشَاهْ  مُصْطَفٰى يَه سُويْلَدٖى بٖى اِشْتِبَاهْ","tr":"Би хуруфу ляфзи саут ол падишах  <b>Мустафая<\/b> сöйледи би иштибах"},{"type":"beyt","ar":"دٖيدٖى كٖيمْ مَحْبُوبُ ومَطْلُوبِكْ بَنَمْ  سَوْدٖيكٖيكْ جَانِلَه مَعْبُودِكْ بَنَمْ","tr":"Диди ким мехбубу метлюбин бенем  Севдиг̱ин джан иле мабудум бенем"},{"type":"beyt","ar":"كٖيجَه كُونْدُزْ طُورْمَيُوبْ اِسْتَدٖيكِكْ  نَولَه كٖيْم كُورْسَمْ جَمَالِكْ دٖيدٖيكِكْ","tr":"Гидже гюндюз дурмайуп истедиг̱ин  Нола ким гьорсем джемалин дидиг̱ин"},{"type":"beyt","ar":"كَلْ حَبٖيبِمْ سَكَا عَاشِقْ اُولْمِشَمْ  جُمْلَه خَلْقٖى سَكٰا بَنْدَه قٖيلْمِشَمْ","tr":"Гел хабибим санъ ашък олмъшам  Джумле халки сана бенде кълмъшам"},{"type":"beyt","ar":"نَه مُرَادِكْ وٰارْ اٖيسَه قِيلَمْ رَوَا  اَيْلَيَمْ بِرْ دَرْدَه بٖيكْ دُرْلُو دَوٰا","tr":"Не мурадан вар исе кълам рева  Ейлейем бир дерде бин тюрлю дева"},{"type":"beyt","ar":"مُصْطَفىٰ دٖيدٖى اَىْ يَارَبَّ الَّرحٖيمْ  اَىْ خَطَا بُو شُ عَطَاسٖى چُوقْ كَرٖيمْ","tr":"<b>Мустафа<\/b> диди ейя Рабберрахим  Ей хатабу шу атасъ чок Керим"},{"type":"beyt","ar":"اُولْ ضَعٖيفْ اُمَّتْلَرِكْ حَالٖى نُولَه  حَضْرَتِنَه نٖيجَه اَنْلَرْ يُولْ بُولَه","tr":"Ол зайъф умметлерин хали нола  Хазретине нидже анлар йол була"},{"type":"beyt","ar":"كٖيجَه كُونْدُزْ اٖيشْلَرٖى عِصْيَانْ قَمُو  قُورْ قَرَمْكِه يَرْلَرٖى اُولَه طَمُو","tr":"Гидже гюндюз ишлери исйан каму  Кор карамки йерлери ола таму"},{"type":"center","ar":["فَاعْلَمْ أَنَّهُ لَا إِلٰهَ إِلَّا اللّٰه، فَاعْلَمْ أَنَّهُ لَا إِلٰهَ إِلَّا اللّٰه، فَاعْلَمْ أَنَّهُ لَا إِلٰهَ إِلَّا اللّٰه،","مُحَمَّدٌ رَسُولُ اللّٰهِ حَقًّا"],"tr":"Феалем еннехю ля иляхе иллеллох, феалем еннехю ля иляхе иллеллох, феалем еннехю ля иляхе иллеллох, мухаммедю-р-расюлю-л-лохи хакко."},{"type":"beyt","ar":"يٰا اِلٰهٖى حَضْرَتِنْدَنْ حَاجَتِمْ  بُو دُرُرْكٖيمْ اُولَه مَقْبُولْ اُمَّتِمْ","tr":"Я иляхи хазретинден хаджетим  Бу дурур ким ола макбул умметим"},{"type":"beyt","ar":"حَقْ تَعٰالٰيدَنْ اٖيرِشْدٖى بِرْ نِدَا  يٰا مُحَمَّدْ بَنْ سَكٰا قٖيلْدِمْ عَطَا","tr":"Хак Теалядан иришди бир нидя  Я <b>Мухаммед<\/b> бен сана кълдъм ата"},{"type":"beyt","ar":"اُمَّتِنٖى سَكٰا وٖيرْدِمْ اَىْ حَبٖيبْ  جَنَّتِمٖى اَنْلَرَه قٖيلْدِمْ نَصٖيبْ","tr":"Умметтини сана вердим ей хабиб  Дженнетими онлара кълдъм насиб"},{"type":"beyt","ar":"اَىْ حَبٖيبِمْ نَدِرْ اُولْ كٖيمْ دٖيلَدِكْ  بِرْ اٰوُچْ طُپْرٰاغَه مِنَّتْ اَيْلَدِكْ","tr":"Ей хабибим недир ол ким диледин  Бир авуч топраг̱а миннет ейледин"},{"type":"beyt","ar":"بَنْ سَكٰا عَاشِقْ اُولٖيجَقْ اَىْ لَطٖيفْ  سَنِكْ اُولْمَزْمٖى دُو عَالَمْ اَىْ شَرٖيفْ","tr":"Бен сана ашък олуджак ей летиф  Сенин олмаз мъ дуалем ей шериф"},{"type":"beyt","ar":"ذٰاتِمَه مِرٰاتْ اٖيدِنْدِمْ ذٰاتِنٖى  بٖيلَه يٰازْدِمْ اٰدِمْ اٖيلَه اٰدٖينٖى","tr":"Зятъма мират идиндим зятънъ  Биле яздъм адам иле адънъ"},{"type":"beyt","ar":"هَمْ دٖيدٖيكٖيمْ يٰا مُحَمَّدْ بَنْ سَنٖى  بٖيلُورَمْ كُورْ مَكَه طُويْمَزْسِنْ بَنٖى","tr":"Хем диди ким я <b>Мухаммед<\/b> бен сени  Билюрем гьормег̱е доймазсън бени"},{"type":"beyt","ar":"لٖيكْ وٰارُوبْ دَعْوَتْ اٖيتْ قُولْلَرٖيمٖي  تَا كَلُوبَنْ كُورَه لَرْدٖيدٰارٖيمٖى","tr":"Лик варуп давет ит кулларъмъ  Та гелюбен гьоре лердидяръмъ"},{"type":"beyt","ar":"حَقِّكْ اَمْرٖيلَه اُولْ شَاهِ جِهَانْ  اُمَّهَانٖى اَوٖينَه كَلْدٖى هَمَانْ","tr":"Хаккън емри иле ол шахи джихан  Уммухани евине гелди хеман"},{"type":"beyt","ar":"هَرْنَه وٰاقِعْ اُولْدٖى اٖيسَه سَرْتَسَرْ  جُمْلَه سِنْ اَصْحٰابِنَه وٖيرْدٖى خَبَرْ","tr":"Хер не ваки олду исе сертесер  Джумлесин асхабъна вирди хабер"},{"type":"beyt","ar":"دٖيدٖيلَرْ اَىْ قِبْلَهِ اِسْلٰامِ دٖينْ  قُوتْلُو اُولْسُونْ سَكٰا مِعْرَاجٍ كُزٖينْ","tr":"Дидилер ей киблейи ислями дин  Кутлу олсун сана мираджъ гюзин"},{"type":"beyt","ar":"بِزْ قَمُومِزْ قُولْلَرِزْ سَنْ شَاهْسِكْ  كُوكْلُمِزْ اٖيچِنْدَه رُوشَنْ مَاهْ سِكْ","tr":"Биз камумуз кулларъз сен шахсън  Гьонлюмюз ичинде рушен махсън"},{"type":"beyt","ar":"اُمَّتِكْ اُولْدٖيغِمِزْ دَوْلَتْ يَتَرْ  خِدْمَتِكْ قٖيلْدٖيغِمِزْ عِزَّتْ يَتَرْ","tr":"Умметин олдугумуз девлет йетер  Хизметин кълдъг̱ъмъз иззет йетер"},{"type":"note","t":"Тук се вдигат ръцете за дюа."},{"type":"beyt","ar":"يٰا اِلٰهٖى اُولْ مُحَمَّدْ حِقّٖيچُونْ  اُولْ شَفَاعَتْ كٰانِ اَحْمَدْ حَقّٖيچُونْ","tr":"Я иляхи ол <b>Мухаммед<\/b> хаккичун  Ол шефаат кянъ <b>Ахмед<\/b> хаккичун"},{"type":"beyt","ar":"كُوزٖى يَاشٖى حَقّٖيچُونْ عَاشِقْلَرِنْ  بَغْرٖى بَاشٖى حَقّٖيچُونْ صَادِقْلَرِكْ","tr":"Гьозю яшъ хаккичюн ашъкларън  Баг̱ръ башъ хаккичюн садъкларън"},{"type":"beyt","ar":"بِزْ كُنَاهْكَارْ عَاصٖى مُجْرِمْ قُولْلَرٖى  يٰارْ لِغَاغِلْ كٖيمْ كُنَاهْلَرْدَنْ بَرٖى","tr":"Биз гюняхкяр аси муджрим кулларъ  Яр лигагил ким гюняхлардан бери"},{"type":"beyt","ar":"سَكَا لٰائِقْ قُولْلَرٖيلَه هَمْدَمْ اٖيتْ  اَهْلِ دَرْدِكْ صُحْبَتِنَه مَحْرَمْ اٖيتْ","tr":"Сана ляик куллариле хемдем ит  Ехли дердин сухбетине мехрам ит"},{"type":"beyt","ar":"عَفْو اٖيدُوبْ عِصْيَانِمِزْ قٖيلْ رَحْمَتٖى  اُولْ حَبٖيبِكْ يُوزٖى صُويٖي حُرْمَتٖى","tr":"Аффедюп исянъмъз къл рахмети  Ол хабибин юзю сую хурмети"},{"type":"beyt","ar":"يٰا اِلٰهٖى قٖيلْمَه بَزٖى ضَآلّٖينْ  بُو دُعَايَه جُمْلَه كِزْ دَيِكْ آمٖينْ","tr":"Я иляхи кълма бизи доллин  Бу дуая джумлениз дейин амин"},{"type":"beyt","ar":"اُمَّتِنْدَنْ رٰاضٖى اُولْسُونْ اُولْ مُعٖينْ  رَحْمَةُ اللهِ عَلَيْهِمْ اَجْمَعٖينْ","tr":"Умметинден разъ олсун ол муин  Рахметуллохи алейхим еджмеин"},{"type":"note","t":"След това се пеят сурите за хатим. А след това, ако мевлидът е за Еллиики се пеят следните две дюи."},{"type":"center","ar":["اَللّٰهُمَّ صَلِّ عَلَى سَيِّدِنَا مُحَمَّدٍ النَّبِيِّ الْأُمِّيِّ وَعَلَى آلِهِ وَصَحْبِهِ وَأَهْلِ بَيْتِهِ وَسَلِّمْ"],"tr":"Еллохюмме салли аля сеййидиня мухаммедини-н-небиййил уммиййи ўе аля алихи ўе сахбихи ўе ехли бейтихи ўе селлим. (3)"}]},{"title":"Дуа","items":[{"type":"center","ar":["بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيمِ، اَللّٰهُمَّ صَلِّ عَلَى مُحَمَّدٍ مَا دَامَتِ السَّمٰوٰتُ، اَللّٰهُمَّ صَلِّ عَلَى مُحَمَّدٍ مَا دَامَتِ الْبَرَكَاتُ، اَللّٰهُمَّ صَلِّ عَلَى مُحَمَّدٍ مَا دَامَتِ الرَّحْمَةُ، وَصَلِّ عَلَى مُحَمَّدٍ فِي الْأَجْسَادِ، وَصَلِّ عَلَى رُوحِ مُحَمَّدٍ فِي الْأَرْوَاحِ، وَصَلِّ عَلَى سَيِّدِنَا مُحَمَّدٍ، وَبَارِكْ عَلَى مُحَمَّدٍ، وَصَلِّ عَلَى جَمِيعِ الْأَنْبِيَاءِ وَالْمُرْسَلِينَ، وَالْحَمْدُ لِلّٰهِ رَبِّ الْعَالَمِينَ"],"tr":"Бисмилляхи-р-рахмани-р-рахим. Еллохюмме салли аля мухаммедин ма дямети-с-семаўат. Еллохюмме салли аля мухаммедин ма дямети-л-беракят. Еллохюмме салли аля мухаммедин ма дямети-р-рахмех. Ўе салли аля мухаммедин фи-л-еджсяд. Ўе салли аля рухи мухаммедин фи-л-ерўах. Ўе салли аля сеййидиня мухаммед. Ўе барик аля мухаммед. Ўе салли аля джемии-л-енбияи ўе-л-мурселин. Ўе-л-хамдю лилляхи рабби-л-алемин. (Пее се три пъти.)"},{"type":"center","ar":["بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيمِ، اَللّٰهُمَّ إِنِّي أَسْأَلُكَ بِحَقِّ حَقِّكَ، وَبِحَقِّ كِبْرِيَائِكَ، وَبِحَقِّ جَمَالِكَ، وَبِحَقِّ وُجُودِكَ وَفَضْلِكَ وَكَرَمِكَ، يَا قَدِيمَ الْإِحْسَانِ، يَا صَادِقَ الْوَعْدِ الْأَمِينُ، لَا إِلٰهَ إِلَّا أَنْتَ سُبْحَانَكَ إِنِّي كُنْتُ مِنَ الظَّالِمِينَ، اَللّٰهُمَّ أَجِبْ دَعْوَتِي بِحُرْمَةِ اسْمِكَ الْعَظِيمِ، وَبِحُرْمَةِ مُحَمَّدٍ صَلَّى اللّٰهُ تَعَالَى عَلَيْهِ وَسَلَّمَ وَعَلَى آلِهِ وَصَحْبِهِ أَجْمَعِينَ، وَالْحَمْدُ لِلّٰهِ رَبِّ الْعَالَمِينَ، وَلَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللّٰهِ الْعَلِيِّ الْعَظِيمِ"],"tr":"Бисмилляхи-р-рахмани-р-рахим. Еллохюмме инни еселюке бихакки хаккике, ўе бихакки кибрияике, ўе бихакки джемалике, ўе бихакки ўуджудике ўе федлике ўе керамике, йа кадиме-л-ихсяни, йа содика-л-ўеади-л-емину, ля иляхе илля енте субханеке инни кюнтю мине-з-золимин. Еллохюмме еджиб деаўети би хурмети-смике-л-азими, ўе бихурмети мухаммедин салле-л-лоху теаля алейхи ўе селлеме ўе аля алихи ўе сахбихи еджмеине, ўе-л-хамдю лилляхи рабби-л-алемине, ўе ля хаўле ўе ля куўўете илля билляхи-л-алиййи-л-азим. (Пее се седем пъти.)"},{"type":"note","t":"Накрая се изпява дюата за Мевлид-и Шериф."},{"type":"center","ar":["اَلْحَمْدُ لِوَلِيِّهِ وَالصَّلٰوةُ وَالسَّلٰامُ عَلَى نَبِيِّهِ وَعَلَى اٰلِهِ وَعِتْرَتِهِ اَجْمَعٖينَ، جَنَابُ اَرْحَمَ الرَّاحِمِينَ، حَبِيبِ اَكْرَمْ وَنَبِيِّ مُحْتَرَمْ صَلَّى اللّٰهُ عَلَيْهِ وَاٰلِهِ وَسَلَّمَ حُرْمَتِنَه قِرَآئَتْ اُولُنٰانْ مَوْلِدِ شَرِيفِي وَقُرْاٰنِ حَكِيمِى دَرْكٰاهِ عِزَّتِنْدَه قَبُولَه قَرِينْ اَيْلَيَه، حَاصِلْ اُولٰانْ اَجْرُ وَمَثُوبٰاتٖى اُولْ سَيِّدُ الْكَوْنَينْ رَسُولُ الثَّقَلَينْ اِمٰامُ الْحَرَمَينْ صَلَّى اللّٰهُ عَلَيْهِ وَاٰلِهِ وَسَلَّمَ حَضْرَتْلَرٖينِكْ رَوْضَئِ مُبٰارَكَه لَرٖينَه طَرَفِمِزْدَنْ فَقٖيرٰانَه وُعٰاجِزٰانَه اِهْدَا اَيْلَدِكْ رَبِّمِزْ وٰاصِلْ اَيْلَيَه، رُوحِ سَيِّدِ الْاَنٰامٖى جُمْلَمِزْدَنْ خُشْنُودْ وَسَائِيَه شَفٰاعَتِنْ اُوزَرٖيمِزَه سَايَبَانْ اَيْلَيَه، عِنْدِ رَسُولِ اللّٰهْدَه مَقْبُولِيَّتْ وَمَحْبُوبِيَّتْ مُيَسَّرْ اَيْلَيَه، وَسَآئِرْ اَنْبِيَآءِ عِظَامْ وَرُسُلِ كِرٰامْ عَلَيْهِمُ الصَّلٰاةُ وَالسَّلٰامْ حَضَرٰاتِنِكْ اَرْوٰاحِ شَرِيفْلَرِينَه اِكْرٰامْ اَيْلَيَه، اٰلِ اَزْوٰاجِ طَاهِرٰاتْ وَاَصْحٰابِ كُزِينْ وَاَنْصٰارِ مُهَاجِرٖين تَابِعٖينْ وَاَئِمَّئِ مُجْتَهِدٖينْ رِضْوٰانُ اللّٰهِ تَعٰالٰى عَلَيْهِمْ اَجْمَعٖينْ حَضَرٰاتِنِكْ رُوحْلَرٖينَه اِكْرٰامْ اَيْلَيَه، وَاَوْلِيٰاءِ عَارِفٖينْ مُرٖيدٖينْ مَنْسُوبٖينْ قَدَّسَ اللّٰهُ اَرْوٰاحَهُمْ حَضَرَاتْلَرٖينِكْ اَرْوٰاحِنَه اٖيصَالْ اَيْلَيَه، وَعَلَى الْخُصُوصْ بُو جَمْعِيَّتِمِزَه بَاعِثْ وَبَادٖى ذٰاتِ شَرٖيفِكْ سَعْيِنٖى مَشْكُورْ ذَنْبِنَى مَغْفُورْ عَمَلِنٖى مَقْبُولْ اَيْلَيَه، صُورٖى وَمَعْنَوٖى مُشْكِلَاتْلَرٖيمِزٖى حَلْ وُاٰسَانْ اَيْلَيَه، اَوْلَادِ مُكَرَّمْلَرٖينٖى عُلَمٰآءِ عَامِلٖينْ وَصُلَحٰآءِ صَالِحٖينْ وَاَغْنِيٰآءِ شَاكِرٖينْدَنْ اَيْلَيَه، اُصُولْ وفُرُوعْلَرِنْدَنْ آخِرَتَه اِرْتِحَالْ اٖيدَنْلَرِكْ تَقْصٖيرَاتْلَرٖينْ مَغْفُورْ وَرُوحْلَرٖينْ مَسْرُورْ اَيْلَيَه، بٰاقٖيدَه قَلَانْلَرٖى طُولِ عُمْرٖيلَه مُعَمَّرْ اَيْلَيَه، نٖيجَه نَيجَه مَجْلِسْلَرٖينْ اَمْثَالِ كَثٖيرَه سٖيلَه كَنْدٖيلَرٖينْ مَسْرُورْ اَيْلَيَه، بَرْدَه وَبَحِرْدَه بُولُنَانْ مُسَافِرٖينْ وَعَسَاكِرٖينَه سَلٰامَتْلَرْ اِحْسَانْ اَيْلَيَه، حُجَّاجِ مُسْلِمٖينَه بَرًّا وَبَحْرًا سَلٰامَتْلَرْ وٖيرُبْ كٖيدَنْلَرَه تَكْرٰارْ كِتْمَيَنْلَرَه عَنْ قَرٖيبِ الزَّمٰانْ حَلَالْ مَالْ اٖيلَه زِيَارَتْلَرْ اِحْسَانْ اَيْلَيَه، وَقْتِمِزْ خِتَامِنْدَه كَلِمَهِ شَهٰادَتْ (اَشْهَدُ اَنْ لَا اِلٰهَ اِلَّا اللّٰهُ وَاَشْهَدُ اَنَّ مُحَمَّدً عَبْدُهُ وَرَسُولُهُ) نَصٖيبْ اَيْلَيُوبْ سَكَرٰاتِ مُوْتِمِزٖى اٰسَانْ اَيْلَيَه، وَقَبِرْدَه شَيْطَانِ عَلَيْهِ اللَّعْنَه نِكْ مَكْرِنْدَنْ اَمٖينْ اَيْلَيَه، سُؤٰالِ مُنْكَرَيْنِكْ سُؤٰاللَّرٖينٖى آسَانْ وَجَوٰابْلَرٖينَه مُقَتَدِرْ اَيْلَيَه، وَجَنَّتُ وَجَمٰالٖيلَه جُمْلَه مِزَه اِكْرٰامْ اَيْلَيَه، دُعٰالَرٖيمِزٖى دَرَكٰاهِ عِزَّتِنْدَه مَقْبُولْ اَيْلَيَه، سُبْحٰانَ رَبِّكَ رَبِّ الْعِزَّتِ عَمَّا يَصِفُونَ، وَسَلٰامٌ عَلَى الْمُرْسَلِينَ، وَالْحَمْدُ لِلّٰهِ رَبِّ الْعَالَمٖينَ"],"tr":"Елхамдю ли велиййихи, вессалятю весселямю аля небиййихи ве аля итретихи еджмеин. Дженябю ерхаме-р-рохимин, хабиби екрем ве небиййи мухтерем саллеллохю алейхи ве алихи ве селлем хурметине кироет олунан мевлиди шерифи ве курани хакими дергях иззетинде кабуле карин ейлейе. Хасил олан еджру ве месюбати ол сеййидюл кевнейн, расюлю-с-секалейн, имамюл харамейн, саллеллохю алейхи ве алихи веселлем, хазратлеринън равзаи мубареклерине тарафъмъздан фекироне вю аджизяне ихдя ейледик раббимиз васил ейлейе. Рухи сеййидил енями джумлемизден хушнуд ве сяийе шефаатин юзеримизе сяйебан ейлейе. Инде расюлилляхта мекбулиййет ве мехбубиййет мюйессер ейлейе. Ве сяир енбияи изом ве русюли киром алехимю-с-салятю весселям хазаротинън ервахи шерифлерине икрам ейлейе. Али езваджи тохироти ве есхаби гюзин ве енсори мюхаджирин тябиин ве еиммеи мюджтехидин ридвануллохи теаля алейхим еджмеин хазаротинън рухлерине икрам ейлейе. Ве евлияи арифин муридин менсюбин каддселлоху ервахахюм хазаротлеринън ервахине исал ейлейе. Ве алел хусус бу джемиййетимизе баис ве бади зяти шерифин сеайини мешкюр зенбини мегфур амелини мекбул ейлейе. Сури ве маневи мюшкилатлеримизи хал ве асян ейлейе. Евляди мюкерремлерини улемаи амилин ве сулехаи солихин ве егнияи шакиринден ейлейе. Усул ве фуруалеринден ахирете иртихалиденлерин тексиратлерин мегфур ве рухлерин месрур ейлейе. Бакиде каланларъ тули умриле муаммер ейлейе. Нидже нидже меджлислерин емсяли кесиресиле кендилерин месрур ейлейе. Берде ве бехирде булунан мюсяфирин ве асякирине селяметлер ихсян ейлейе. Худжджаджи мюслимине берран ве бехран селяметлер вируб гиденлере текрар гитмейенлере ан кариби-з-земан хала малиле зияретлер ихсян ейлейе. Вактъмъз хитяминде келимеи шехядет (заедно и на глас) (ешхедю ен ля иляхе иллеллох ўе ешхедю енне мухаммеден абдюхю ўе расюлюх) несиб ейлеюб секероти мевтимизи асян ейлейе. Ве кабирде шейтони алейхи-л-леаненън мекринден емин ейлейе. Суали мюнкерайнън суаллерини асян ве джеваблерине мюктедир ейлейе. Ве дженнетю ве джемалиле джумлемизе икрам ейлейе. Дюалеримизи дергяхи иззетинде мекбул ейлейе. Сюбхане раббике раббил иззети амма йесифюне ўе селямюн алел мюрселине ўе-л-хамдю лилляхи раббил алемин."}]}]</script>
+<script>
+(function(){
+  const DATA = JSON.parse(document.getElementById('data').textContent);
+  const IMG_DIV = 2.15; // image px -> css px
+  const store = {
+    get(k){ try{ return JSON.parse(localStorage.getItem('mevlid2:'+k)); }catch(e){ return null; } },
+    set(k,v){ try{ localStorage.setItem('mevlid2:'+k, JSON.stringify(v)); }catch(e){} }
+  };
+  const isRefrain = it => it.type==='beyt' && /^Гер ?дилер/.test(it.tr.replace(/<[^>]+>/g,''));
+
+  // flatten
+  const flat = []; // {sec, idx, it, id}
+  DATA.forEach((s,si)=>{
+    let n=0;
+    s.items.forEach(it=>{
+      if(it.type==='beyt'){ n++; flat.push({si, n, it, id:`b${si}-${n}`}); }
+      else flat.push({si, n:null, it, id:`c${si}-${flat.length}`});
+    });
+    s.count=n;
+  });
+
+  const esc = t => t.replace(/[&<>]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+  const trh = t => t.replace(/<(?!\/?b>)[^>]*>/g,'');   // transliteration keeps only <b> (names of the Prophet)
+  function lineHTML(ar, tr){
+    let h='';
+    (Array.isArray(ar)?ar:[ar]).filter(Boolean).forEach(x=>{ h+=`<p class="art ol" lang="ar" dir="rtl">${esc(x)}</p>`; });
+    if(tr) h+=`<p class="tr tl" dir="ltr">${trh(tr)}</p>`;
+    return h;
+  }
+  function itemHTML(f, inFocus){
+    const it=f.it;
+    if(it.type==='note') return inFocus ? `<div class="f-card"><p class="note">${esc(it.t)}</p></div>` : `<p class="note" id="${f.id}">${esc(it.t)}</p>`;
+    if(it.type==='center') return `<div class="${inFocus?'f-card':'center'}${it.ar&&it.ar.join('').length>160?' prose':''}"${inFocus?'':` id="${f.id}"`}>${lineHTML(it.ar,it.tr)}</div>`;
+    const ref = isRefrain(it) ? ' refrain':'';
+    if(inFocus) return `<div class="f-card${ref}">${lineHTML(it.ar,it.tr)}</div>`;
+    return `<article class="beyt${ref}" id="${f.id}" data-k="${flat.indexOf(f)}"><span class="num" aria-label="Бейт ${f.n}">${f.n}</span><div class="full">${lineHTML(it.ar,it.tr)}</div></article>`;
+  }
+
+  // build reader
+  const reader=document.getElementById('reader'), toc=document.getElementById('toc'), jump=document.getElementById('jump');
+  let html='';
+  DATA.forEach((s,si)=>{
+    html+=`<header class="sec-h" id="s${si}"><div class="orn" aria-hidden="true">✦</div><h2>${esc(s.title)}</h2>${s.count?`<span class="n">${s.count} бейта</span>`:''}</header>`;
+    flat.filter(f=>f.si===si).forEach(f=>{ html+=itemHTML(f,false); });
+    toc.insertAdjacentHTML('beforeend', `<li><a href="#s${si}">${esc(s.title)}<span>${s.count?s.count+' бейта':''}</span></a></li>`);
+    jump.insertAdjacentHTML('beforeend', `<option value="s${si}">${esc(s.title)}</option>`);
+  });
+  html+=`<p class="endnote">Край на Мевлида</p>`;
+  reader.innerHTML=html;
+  jump.insertAdjacentHTML('afterbegin', `<option value="top">Съдържание</option>`);
+  jump.addEventListener('change',()=>{ if(jump.value!=='top'&&!location.hash){try{history.pushState(null,'','#'+jump.value);}catch(_){}} document.getElementById(jump.value).scrollIntoView(); });
+  document.getElementById('startBtn').addEventListener('click',e=>{ e.preventDefault(); try{history.pushState(null,'','#s0');}catch(_){} document.getElementById('s0').scrollIntoView(); });
+
+  // settings
+  const root=document.documentElement, panel=document.getElementById('panel'), setBtn=document.getElementById('setBtn');
+  setBtn.addEventListener('click',e=>{ e.stopPropagation(); const o=panel.classList.toggle('open'); setBtn.setAttribute('aria-expanded',o); });
+  document.addEventListener('click',e=>{ if(!panel.contains(e.target)){ panel.classList.remove('open'); setBtn.setAttribute('aria-expanded',false);} });
+  const STEPS=[0.7,0.8,0.9,1,1.15,1.3,1.5,1.75,2];
+  const opts = Object.assign({ar:true,tr:true,bg:true,sar:1,str:1,sbg:1,order:'ltr',theme:'auto'}, store.get('opts')||{});
+  if(opts.scale){ opts.str=opts.sbg=opts.sar=opts.scale; delete opts.scale; }
+  function apply(){
+    ['ar','tr','bg'].forEach(k=>document.body.classList.toggle('hide-'+k,!opts[k]));
+    root.style.setProperty('--s-ar',opts.sar); root.style.setProperty('--s-tr',opts.str); root.style.setProperty('--s-bg',opts.sbg);
+    document.body.classList.toggle('rtl',opts.order==='rtl');
+    document.querySelectorAll('.step').forEach(r=>{
+      const v=opts[r.dataset.k], i=STEPS.indexOf(v);
+      r.querySelector('output').textContent=Math.round(v*100)+'%';
+      r.querySelector('[data-d="-1"]').disabled=i<=0; r.querySelector('[data-d="1"]').disabled=i>=STEPS.length-1;
+    });
+    document.querySelectorAll('#orderSeg button').forEach(b=>b.setAttribute('aria-pressed', b.dataset.o===opts.order));
+    if(opts.theme==='auto') root.removeAttribute('data-theme'); else root.setAttribute('data-theme',opts.theme);
+    document.querySelectorAll('#themeSeg button').forEach(b=>b.setAttribute('aria-pressed', b.dataset.t===opts.theme));
+    store.set('opts',opts);
+  }
+  [['optAr','ar'],['optTr','tr'],['optBg','bg']].forEach(([id,k])=>{
+    const el=document.getElementById(id); el.checked=opts[k];
+    el.addEventListener('change',()=>{
+      opts[k]=el.checked;
+      if(!opts.ar&&!opts.tr&&!opts.bg){ opts[k]=true; el.checked=true; }
+      apply();
+    });
+  });
+  document.querySelectorAll('.step').forEach(r=>r.querySelectorAll('button').forEach(b=>b.addEventListener('click',e=>{
+    e.stopPropagation(); const k=r.dataset.k; let i=STEPS.indexOf(opts[k]); if(i<0) i=3;
+    i=Math.max(0,Math.min(STEPS.length-1,i+(+b.dataset.d))); opts[k]=STEPS[i]; apply();
+  })));
+  document.querySelectorAll('#orderSeg button').forEach(b=>b.addEventListener('click',()=>{opts.order=b.dataset.o;apply();}));
+  document.querySelectorAll('#themeSeg button').forEach(b=>b.addEventListener('click',()=>{opts.theme=b.dataset.t;apply();}));
+  apply();
+
+  // reading position
+  let current = store.get('pos');
+  const beyts=[...reader.querySelectorAll('.beyt')];
+  const visible=new Set();
+  const io=new IntersectionObserver(ents=>{
+    ents.forEach(e=>{ if(e.isIntersecting) visible.add(e.target); else visible.delete(e.target); });
+    if(!visible.size) return;
+    const top=[...visible].sort((a,b)=>a.getBoundingClientRect().top-b.getBoundingClientRect().top)[0];
+    const k=+top.dataset.k;
+    if(k>0){ current=k; store.set('pos',k); }
+    const si=flat[k].si; if(jump.value!=='s'+si) jump.value='s'+si;
+  },{rootMargin:'-70px 0px -55% 0px'});
+  beyts.forEach(b=>io.observe(b));
+  const resumeBtn=document.getElementById('resumeBtn');
+  if(current!=null && flat[current] && flat[current].n>1){
+    const f=flat[current];
+    resumeBtn.hidden=false;
+    resumeBtn.textContent=`Продължи: ${DATA[f.si].title}, бейт ${f.n}`;
+    resumeBtn.addEventListener('click',()=>{ try{history.pushState(null,'','#'+f.id);}catch(_){} document.getElementById(f.id).scrollIntoView(); });
+  }
+
+  // focus mode
+  const focus=document.getElementById('focus'), fBody=document.getElementById('fBody'), fWhere=document.getElementById('fWhere'), fProg=document.getElementById('fProg');
+  const fPrev=document.getElementById('fPrev'), fNext=document.getElementById('fNext');
+  let fk=0;
+  function renderFocus(){
+    const f=flat[fk];
+    fBody.innerHTML=itemHTML(f,true);
+    fBody.scrollTop=0;
+    fWhere.textContent = DATA[f.si].title + (f.n? ` · бейт ${f.n} от ${DATA[f.si].count}`:'');
+    fProg.style.width=((fk+1)/flat.length*100)+'%';
+    fPrev.disabled=fk===0; fNext.disabled=fk===flat.length-1;
+  }
+  function openFocus(){
+    fk = (current!=null && flat[current] && window.scrollY>200) ? current : 0;
+    focus.classList.add('open'); document.body.style.overflow='hidden'; renderFocus(); fNext.focus();
+  }
+  function closeFocus(){
+    focus.classList.remove('open'); document.body.style.overflow='';
+    const el=document.getElementById(flat[fk].id); if(el){ el.scrollIntoView({block:'center'}); el.classList.add('cur'); setTimeout(()=>el.classList.remove('cur'),1600);} 
+  }
+  const step=d=>{ const n=fk+d; if(n>=0&&n<flat.length){ fk=n; current=n; store.set('pos',n); renderFocus(); } };
+  document.getElementById('focusBtn').addEventListener('click',openFocus);
+  document.getElementById('fClose').addEventListener('click',closeFocus);
+  fPrev.addEventListener('click',()=>step(-1)); fNext.addEventListener('click',()=>step(1));
+  document.addEventListener('keydown',e=>{
+    if(!focus.classList.contains('open')){ if(e.key==='Escape') panel.classList.remove('open'); return; }
+    if(e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){ e.preventDefault(); step(1); }
+    else if(e.key==='ArrowLeft'||e.key==='PageUp'){ e.preventDefault(); step(-1); }
+    else if(e.key==='Escape') closeFocus();
+  });
+  let sx=null, sy=null;
+  fBody.addEventListener('touchstart',e=>{ sx=e.touches[0].clientX; sy=e.touches[0].clientY; },{passive:true});
+  fBody.addEventListener('touchend',e=>{
+    if(sx==null) return; const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy;
+    if(Math.abs(dx)>50 && Math.abs(dx)>Math.abs(dy)*1.5) step(dx<0?1:-1); sx=null;
+  });
+})();
+</script>
+<script id="zk-nav-js">
+(function(){
+  var a=document.getElementById('zkHome'), hero=document.getElementById('top');
+  if(!a||!hero) return;
+  var t=document.querySelector('.bar-title'), name=(t&&t.textContent.trim())||document.title;
+  var lab=a.querySelector('span'), ic=a.querySelector('svg');
+  var HOME=ic.innerHTML, BOOK='<path d="M5 5a2 2 0 0 1 2-2h12v14H7a2 2 0 0 0-2 2z"/><path d="M5 19a2 2 0 0 0 2 2h12v-4"/>';
+  function set(atStart){
+    if(atStart){a.href='index.html';lab.textContent='Зикирь';ic.innerHTML=HOME;a.title='Зикирь – начална страница';}
+    else{a.href='#top';lab.textContent=name;ic.innerHTML=BOOK;a.title=name+' – към началото';}
+  }
+  function check(){var r=hero.getBoundingClientRect();set(r.bottom>80);}
+  check();
+  window.addEventListener('scroll',check,{passive:true});
+  window.addEventListener('resize',check);
+  window.addEventListener('hashchange',function(){setTimeout(check,50);});
+})();
+</script>
+<script id="zk-find">var ZK={
+ SEL:'p,li,h2,h3,h4,.bg,.tr,span.ay,details.src,dd,dt,blockquote,td',
+ EX:'.cont,.rmode,.bar,.panel,.focus,.toc,.grid,nav,header,#top,footer,select,button,label,[role=dialog],.zk-ver,.inst,script,style,svg',
+ blocks:function(){var S=ZK.SEL,E=ZK.EX;return Array.prototype.filter.call(document.querySelectorAll(S),function(e){return !e.closest(E)&&!(e.parentElement&&e.parentElement.closest(S));});},
+ text:function(e){var w=document.createTreeWalker(e,NodeFilter.SHOW_TEXT,{acceptNode:function(n){return n.parentElement.closest('svg,script,style')?2:1;}}),n,o='',pb=null;while(n=w.nextNode()){var bk=n.parentElement;while(bk!==e&&/^inline/.test(getComputedStyle(bk).display))bk=bk.parentElement;if(pb&&bk!==pb)o+=' ';pb=bk;o+=n.nodeValue;}return o.replace(/[-]/g,'').replace(/\s+/g,' ').trim();},
+ DROP:/[’‘'`ʼʻʿʾ´­\-‐‑–]/,
+ norm:function(s,wantMap){var o='',m=wantMap?[]:null,sp=true;for(var i=0;i<s.length;i++){var c=s[i];if(ZK.DROP.test(c))continue;
+   if(/\s/.test(c)){if(!sp){o+=' ';m&&m.push(i);sp=true;}continue;}
+   var l=c.toLowerCase();if(l!=='й'&&l!=='ё'){l=l.normalize('NFD').replace(/[̀-ͯ]/g,'');}if(l==='ı')l='i';else if(/[\u064B-\u065F\u0670\u06D6-\u06ED\u0640]/.test(l))continue;else if(/[أإآٱ]/.test(l))l='ا';else if(l==='ى')l='ي';else if(l==='ة')l='ه';
+   for(var k=0;k<l.length;k++){o+=l[k];m&&m.push(i);}sp=false;}
+  return wantMap?{n:o,m:m}:o;}
+};
+(function(){
+  var q=new URLSearchParams(location.search), qq=q.get('zkq'), bi=q.get('zkb'), kk=q.get('zkk');
+  if(qq===null||bi===null) return;
+  try{history.replaceState(null,'',location.pathname+location.hash);}catch(e){}
+  var st=document.createElement('style');
+  st.textContent='mark.zk-m{background:color-mix(in srgb,var(--gold,#c90) 38%,transparent);color:inherit;border-radius:2px;padding:0 1px}'+
+    '.zk-hit{animation:zkhit 4.5s ease-out 1}@keyframes zkhit{0%,40%{background:color-mix(in srgb,var(--gold,#c90) 16%,transparent);box-shadow:0 0 0 6px color-mix(in srgb,var(--gold,#c90) 16%,transparent)}100%{background:transparent;box-shadow:0 0 0 6px transparent}}';
+  document.head.appendChild(st);
+  var words=ZK.norm(qq).split(' ').filter(Boolean), user=false, target=null;
+  ['wheel','touchstart','keydown','mousedown'].forEach(function(t){addEventListener(t,function(){user=true;},{passive:true,once:true});});
+  function find(){
+    var bs=ZK.blocks(), e=bs[+bi];
+    var ok=function(x){if(!x)return false;var n=ZK.norm(ZK.text(x));if(kk&&n.slice(0,kk.length)!==kk)return false;return words.every(function(w){return n.indexOf(w)>=0;});};
+    if(!ok(e)){e=null;for(var i=0;i<bs.length;i++){if(ok(bs[i])){e=bs[i];break;}}}
+    return e;
+  }
+  function mark(e){
+    var w=document.createTreeWalker(e,NodeFilter.SHOW_TEXT,{acceptNode:function(n){return n.parentElement.closest('svg,script,style,mark')?2:1;}}),ns=[],n;
+    while(n=w.nextNode())ns.push(n);
+    ns.forEach(function(t){var r=ZK.norm(t.nodeValue,true),hits=[];
+      words.forEach(function(wd){var p=0;while((p=r.n.indexOf(wd,p))>=0){hits.push([r.m[p],r.m[p+wd.length-1]+1]);p+=wd.length;}});
+      if(!hits.length)return;hits.sort(function(a,b){return a[0]-b[0];});
+      var f=document.createDocumentFragment(),pos=0,s=t.nodeValue;
+      hits.forEach(function(h){if(h[0]<pos)return;f.appendChild(document.createTextNode(s.slice(pos,h[0])));var mk=document.createElement('mark');mk.className='zk-m';mk.textContent=s.slice(h[0],h[1]);f.appendChild(mk);pos=h[1];});
+      f.appendChild(document.createTextNode(s.slice(pos)));t.parentNode.replaceChild(f,t);});
+  }
+  function show(){
+    if(!target) return;
+    for(var d=target.parentElement;d;d=d.parentElement){if(d.tagName==='DETAILS'&&!d.open)d.open=true;}
+    if(target.tagName==='DETAILS')target.open=true;
+    var v=target;while(v&&v!==document.body&&!v.getClientRects().length)v=v.parentElement;
+    var mk=target.querySelector('mark.zk-m');
+    if(mk&&mk.getClientRects().length&&v===target)mk.scrollIntoView({block:'center'});else (v||target).scrollIntoView({block:'center'});
+  }
+  function go(){
+    target=find(); if(!target) return;
+    mark(target); target.classList.add('zk-hit'); show();
+    [350,900,1700].forEach(function(t){setTimeout(function(){if(!user)show();},t);});
+  }
+  if(document.readyState==='complete')setTimeout(go,60);else addEventListener('load',function(){setTimeout(go,60);});
+})();
+(function(){
+  if(!window.ZK) return;
+  var KEY='zk:saved', FILE=decodeURIComponent(location.pathname.split('/').pop()||'index.html');
+  var USEL=(/irshad/.test(FILE)?'':'.pair,')+'.vs,.beyt,article.item,.unit';
+  function load(){try{return JSON.parse(localStorage.getItem(KEY))||[];}catch(e){return [];}}
+  function put(a){try{localStorage.setItem(KEY,JSON.stringify(a));return true;}catch(e){return false;}}
+  var STAR='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></svg>';
+  var st=document.createElement('style');
+  st.textContent='.zk-u{position:relative}.zk-pad{padding-left:38px!important}'+
+    '.zk-star{position:absolute;top:50%;left:2px;transform:translateY(-50%);width:34px;height:34px;padding:0;margin:0;border:0;border-radius:50%;background:none;display:grid;place-items:center;cursor:pointer;color:var(--muted,#888);opacity:.75;-webkit-tap-highlight-color:transparent;z-index:2}'+
+    '.zk-star.zk-top{top:6px;transform:none}.zk-star svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linejoin:round}'+
+    '@media (hover:hover){.zk-star:hover{opacity:1}}.zk-star.on{color:var(--gold,#c90);opacity:1}.zk-star.on svg{fill:var(--gold,#c90)}'+
+    '.zk-star:focus-visible{outline:2px solid var(--gold,#c90);outline-offset:1px;opacity:1}'+
+    '.zk-fstar{position:relative;transform:none;flex:none;width:38px;height:38px;border:1px solid var(--rule,#ccc);border-radius:8px;background:var(--sheet,#fff);opacity:1}'+
+    '#focus .zk-u{padding-left:38px!important}#focus .zk-star:not(.zk-fstar){left:2px!important}'+
+    '.zk-toast{position:fixed;z-index:70;left:50%;bottom:calc(90px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);padding:9px 16px;border-radius:999px;background:var(--ink,#222);color:var(--paper,#fff);font:500 14px "Golos Text",system-ui,sans-serif;pointer-events:none;opacity:0;transition:opacity .2s;white-space:nowrap}.zk-toast.show{opacity:1}';
+  document.head.appendChild(st);
+  var toast=document.createElement('div');toast.className='zk-toast';document.body.appendChild(toast);var tt=0;
+  function say(t){toast.textContent=t;toast.classList.add('show');clearTimeout(tt);tt=setTimeout(function(){toast.classList.remove('show');},1500);}
+  var bs=[],idx=new Map(),units=[];
+  function key(e){return ZK.norm(ZK.text(e)).slice(0,60);}
+  function lt(x){return ZK.norm(x).replace(/[^a-zа-я\u0621-\u064a]/g,'');}
+  function cyr(e){return (ZK.text(e).match(/[А-Яа-я]/g)||[]).length;}
+  function ctx(i){for(var j=i-1;j>=0&&j>i-500;j--){var e=bs[j];if(/^H[1-4]$/.test(e.tagName)||e.classList.contains('ititle')){var t=ZK.text(e);if(t)return t.slice(0,110);}}return '';}
+  function setup(){
+    bs=ZK.blocks();idx=new Map();bs.forEach(function(e,i){idx.set(e,i);});
+    var all=[].slice.call(document.querySelectorAll(USEL)).filter(function(u){return !u.closest(ZK.EX)&&!u.querySelector(USEL);});
+    units=[];
+    all.forEach(function(u){
+      var inner=[].slice.call(u.querySelectorAll(ZK.SEL)).filter(function(e){return idx.has(e);});
+      if(idx.has(u))inner.unshift(u);
+      if(!inner.length)return;
+      var first=inner[0],main=inner.filter(function(e){return cyr(e)>=8;})[0]||first;
+      var cy=inner.filter(function(e){return cyr(e)>=8;}),tr=inner.filter(function(e){return e.classList.contains('bg')||e.classList.contains('tr')&&!/[̣̱̄]/.test(e.textContent);})[0]||cy[cy.length-1]||first;
+      var o={u:u,inner:inner,b:idx.get(first),k:key(first),main:main,snip:tr,fk:lt(ZK.text(main)).slice(0,32)};
+      u.classList.add('zk-u');
+      var s=document.createElement('button');s.type='button';s.className='zk-star';s.innerHTML=STAR;s.setAttribute('aria-label','Запази');s.dataset.zb=o.b;
+      u.appendChild(s);o.s=s;units.push(o);
+    });
+    place();paint();
+  }
+  function lefts(o){var m=Infinity;o.inner.forEach(function(e){if(e.closest('.num'))return;var r=e.getBoundingClientRect();if(r.width&&r.height&&r.left<m)m=r.left;});return m;}
+  function place(){
+    units.forEach(function(o){var u=o.u;u.classList.remove('zk-pad');if(o.pl0!==undefined){u.style.paddingLeft='';}
+      o.s.style.top='';o.s.classList.remove('zk-top');
+      var ur=u.getBoundingClientRect();if(!ur.width){if(!place.retry&&(place.n=(place.n||0)+1)<20){place.retry=setTimeout(function(){place.retry=0;place();},500);}return;}
+      var L=lefts(o);if(L===Infinity){u.classList.add('zk-pad');o.s.style.left='2px';return;}
+      var g=L-ur.left;
+      if(g<32){u.classList.add('zk-pad');g=lefts(o)-ur.left;}
+      if(g<44){var pl=parseFloat(getComputedStyle(u).paddingLeft)||0;if(o.pl0===undefined)o.pl0=pl;u.style.paddingLeft=(pl+44-g)+'px';g=lefts(o)-ur.left;}
+      o.s.style.left=Math.max(0,(g-34)/2)+'px';
+      var tall=ur.height>Math.min(innerHeight*0.7,520);
+      o.s.classList.toggle('zk-top',tall);
+      var num=u.querySelector('.num');
+      if(num&&ZK.text(num).trim()){var rg=document.createRange();rg.selectNodeContents(num);var nr=rg.getBoundingClientRect(),sr=o.s.getBoundingClientRect();
+        if(nr.height&&nr.height<120&&sr.top<nr.bottom+4&&sr.bottom>nr.top-4&&sr.left<nr.right+4&&sr.right>nr.left-4){o.s.classList.remove('zk-top');o.s.style.top=(nr.bottom-ur.top+6+17)+'px';}}
+    });
+  }
+  function savedKeys(){var m={};load().forEach(function(it){if(it.f===FILE)m[it.k]=1;});return m;}
+  function paint(){var m=savedKeys(),byb={};units.forEach(function(o){var on=!!m[o.k];byb[o.b]=on;o.s.classList.toggle('on',on);o.s.setAttribute('aria-label',on?'Махни от запазените':'Запази');o.s.title=on?'Запазено':'Запази';});
+    if(fbody)fbody.querySelectorAll('.zk-star[data-zb]').forEach(function(c){c.classList.toggle('on',!!byb[c.dataset.zb]);});paintF();}
+  function toggle(o){
+    var a=load(),j=-1;a.forEach(function(it,n){if(it.f===FILE&&it.k===o.k)j=n;});
+    if(j>=0){a.splice(j,1);put(a);say('Премахнато от запазените');}
+    else{var name=(document.querySelector('.bar-title')||{}).textContent||document.title;
+      var t=ZK.text(o.snip);if(t.length<20)t=ZK.text(o.u);
+      a.unshift({f:FILE,b:o.b,k:o.k,t:t.slice(0,260),c:ctx(o.b),n:name.trim(),d:Date.now()});say(put(a)?'Запазено ★':'Не може да се запази');}
+    paint();
+  }
+  document.addEventListener('click',function(ev){var s=ev.target.closest&&ev.target.closest('.zk-star');if(!s||s===fstar)return;ev.preventDefault();ev.stopPropagation();
+    var o=units.filter(function(x){return x.s===s;})[0]||units.filter(function(x){return String(x.b)===s.dataset.zb;})[0];if(o)toggle(o);},true);
+  /* one-by-one reading mode: star in the top bar of the focus view */
+  var fbody=document.getElementById('fBody'),fclose=document.getElementById('fClose'),fstar=null,fcur=null;
+  function paintF(){if(!fstar)return;fstar.hidden=!fcur;if(!fcur)return;var on=!!savedKeys()[fcur.k];fstar.classList.toggle('on',on);fstar.setAttribute('aria-label',on?'Махни от запазените':'Запази');}
+  function syncF(){
+    if(!fbody)return;fcur=null;
+    if(fbody.querySelector('.zk-star[data-zb]')){paint();return;}
+    var t=lt(ZK.text(fbody));
+    if(t){var best=null;units.forEach(function(o){if(o.fk.length>=8&&t.indexOf(o.fk)>=0&&(!best||o.fk.length>best.fk.length))best=o;});fcur=best;}
+    paintF();
+  }
+  if(fbody&&fclose){
+    fstar=document.createElement('button');fstar.type='button';fstar.className='zk-star zk-fstar';fstar.innerHTML=STAR;fstar.hidden=true;
+    fclose.parentNode.insertBefore(fstar,fclose);
+    fstar.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();if(fcur)toggle(fcur);});
+    var mo=new MutationObserver(function(){clearTimeout(mo.t);mo.t=setTimeout(syncF,30);});mo.observe(fbody,{childList:true,subtree:true,characterData:true});
+  }
+  var rt=0;addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(place,150);});
+  addEventListener('orientationchange',function(){setTimeout(place,300);});addEventListener('pageshow',function(){setTimeout(place,100);});document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')setTimeout(place,100);});
+  if(window.ResizeObserver){var ro=new ResizeObserver(function(){clearTimeout(rt);rt=setTimeout(place,150);});ro.observe(document.body);}
+  addEventListener('storage',function(e){if(e.key===KEY)paint();});
+  function start(){setup();if(document.fonts&&document.fonts.ready)document.fonts.ready.then(place);setTimeout(place,800);}
+  if(document.readyState==='complete')setTimeout(start,30);else addEventListener('load',function(){setTimeout(start,30);});
+  /* settings like "hide Arabic" change layout -> re-place */
+  new MutationObserver(function(){clearTimeout(rt);rt=setTimeout(place,120);}).observe(document.body,{attributes:true,attributeFilter:['class','style']});
+  new MutationObserver(function(){clearTimeout(rt);rt=setTimeout(place,120);}).observe(document.documentElement,{attributes:true,attributeFilter:['style','data-theme']});
+})();
+(function(){
+  var K='zk:theme',W='zk:wake';
+  function g(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+  function s(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+  /* one theme for all books */
+  var seg=document.getElementById('themeSeg');
+  if(seg){
+    var t=g(K);
+    if(t){var b=seg.querySelector('[data-t="'+t+'"]');if(b&&b.getAttribute('aria-pressed')!=='true')b.click();}
+    seg.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-t]');if(b)s(K,b.dataset.t);});
+  }
+  /* keep the screen on */
+  var sup=('wakeLock' in navigator),lock=null,on=g(W)==='1',pend=false;
+  function req(){if(!sup||!on||lock||pend||document.visibilityState!=='visible')return;pend=true;
+    navigator.wakeLock.request('screen').then(function(l){pend=false;lock=l;l.addEventListener('release',function(){lock=null;});}).catch(function(){pend=false;});}
+  function rel(){if(lock){try{lock.release();}catch(e){}lock=null;}}
+  document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')req();});
+  document.addEventListener('click',req,{passive:true});
+  window.zkWake={sup:sup,get:function(){return on;},set:function(v){on=!!v;s(W,on?'1':'0');if(on)req();else rel();}};
+  var panel=document.getElementById('panel');
+  if(panel&&sup&&!document.getElementById('zkWake')){
+    var grp=document.createElement('div');grp.className='grp';
+    grp.innerHTML='<h3>Екран</h3><label class="tog"><span>Екранът да не изгасва<small style="display:block;font-size:13px;color:var(--muted);font-weight:400">Докато приложението е отворено</small></span> <input type="checkbox" id="zkWake"></label>';
+    panel.appendChild(grp);
+    var cb=grp.querySelector('input');cb.checked=on;cb.addEventListener('change',function(){window.zkWake.set(cb.checked);});
+  }
+  req();
+})();
+/* Back button: closes settings / one-by-one mode first, then returns to the book's title page,
+   and only then leaves the book. Settings get a close (×) button. */
+(function(){
+  var H=history;if(!H||!H.pushState)return;
+  var P=H.pushState.bind(H),R=H.replaceState.bind(H);
+  var hero=document.getElementById('top');
+  var panel=document.getElementById('panel')||document.getElementById('zkPanel');
+  var setBtn=document.getElementById('setBtn')||document.getElementById('zkSet');
+  var focus=document.getElementById('focus'),fClose=document.getElementById('fClose');
+  function st(){return (H.state&&H.state.zk)||null;}
+  function atStart(){if(!hero)return true;var r=hero.getBoundingClientRect();return r.bottom>80;}
+  if(hero){try{H.scrollRestoration='manual';}catch(e){}}
+  var cur=st();
+  if(!cur||cur==='panel'||cur==='focus'||cur==='_c'){cur='root';try{R({zk:'root'},'');}catch(e){}}
+  /* app code that used pushState for in-book jumps -> keep a single "inside the book" entry */
+  H.pushState=function(s,t,u){try{if(cur==='root'&&hero){P({zk:'book'},t||'',u);cur='book';}else R(H.state,t||'',u);}catch(e){}};
+  H.replaceState=function(s,t,u){try{R(s&&s.zk?s:H.state,t||'',u);}catch(e){}};
+  function active(){var u=navigator.userActivation;return !u||u.hasBeenActive;}
+  function enter(){if(hero&&cur==='root'&&!atStart()&&active()){try{P({zk:'book'},'');cur='book';}catch(e){}}}
+  addEventListener('scroll',enter,{passive:true});
+  ['click','touchend','keydown'].forEach(function(t){addEventListener(t,function(){setTimeout(enter,60);},{passive:true,capture:true});});
+  function toTop(){try{scrollTo({top:0,left:0,behavior:'instant'});}catch(e){scrollTo(0,0);}}
+  /* in-page links: no extra history entries; "#top" = back to the title page */
+  document.addEventListener('click',function(e){
+    if(e.defaultPrevented||e.button)return;
+    var a=e.target.closest&&e.target.closest('a[href^="#"]');if(!a)return;
+    var h=a.getAttribute('href');
+    if(h==='#top'||h==='#'){if(!hero)return;e.preventDefault();if(cur==='book')H.back();else toTop();return;}
+    var el=document.getElementById(decodeURIComponent(h.slice(1)));if(!el||a.closest('#focus'))return;
+    e.preventDefault();H.pushState(null,'',h);el.scrollIntoView();
+  });
+  /* layers */
+  function pOpen(){return !!panel&&(panel.id==='zkPanel'?!panel.hidden:panel.classList.contains('open'));}
+  function pClose(){if(!panel)return;if(panel.id==='zkPanel')panel.hidden=true;else panel.classList.remove('open');if(setBtn)setBtn.setAttribute('aria-expanded','false');}
+  function fOpen(){return !!focus&&focus.classList.contains('open');}
+  function fShut(){if(fClose)fClose.click();else if(focus)focus.classList.remove('open');}
+  function watch(el,name,isOpen){if(!el)return;var was=isOpen();
+    new MutationObserver(function(){var o=isOpen();if(o===was)return;was=o;
+      if(o){if(cur!==name){try{P({zk:name},'');cur=name;}catch(e){}}}
+      else if(cur===name){cur='_c';H.back();}
+    }).observe(el,{attributes:true,attributeFilter:['class','hidden']});}
+  watch(panel,'panel',pOpen);watch(focus,'focus',fOpen);
+  addEventListener('popstate',function(){
+    var prev=cur;cur=st()||'root';
+    var closed=false;
+    if(cur!=='panel'&&pOpen()){pClose();closed=true;}
+    if(cur!=='focus'&&fOpen()){fShut();closed=true;}
+    if(closed||prev==='_c'||prev==='panel'||prev==='focus')return;
+    if(cur==='root'&&hero)toTop();
+  });
+  /* × button in the settings panel */
+  if(panel){
+    var x=document.createElement('button');x.type='button';x.className='zk-px';x.setAttribute('aria-label','Затвори');x.title='Затвори';
+    x.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>';
+    x.addEventListener('click',function(e){e.stopPropagation();pClose();});
+    panel.insertBefore(x,panel.firstChild);
+    var cs=document.createElement('style');
+    cs.textContent='#'+panel.id+'{padding-top:'+(panel.id==='zkPanel'?'34px':'18px')+'}'+'.zk-px{position:absolute;top:8px;right:8px;z-index:3;width:38px;height:38px;padding:0;border:1px solid var(--rule,#ccc);border-radius:50%;background:var(--sheet,#fff);color:var(--ink,#222);display:grid;place-items:center;cursor:pointer;touch-action:manipulation}'+
+      '.zk-px svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}.zk-px::before{content:"";position:absolute;inset:-6px}';
+    document.head.appendChild(cs);
+  }
+})();
+</script>
+<script>(function(){if(!('serviceWorker' in navigator)||location.protocol==='file:')return;var app=['standalone','fullscreen','minimal-ui'].some(function(m){return matchMedia('(display-mode: '+m+')').matches;})||navigator.standalone===true;addEventListener('load',function(){navigator.serviceWorker.register('sw.js').then(function(){if(app)navigator.serviceWorker.ready.then(function(r){r.active&&r.active.postMessage({type:'download'});});}).catch(function(){});});})();</script>
+</body>
+</html>

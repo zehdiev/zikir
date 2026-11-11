@@ -2,16 +2,16 @@
    В браузъра нищо не се тегли предварително. Пълното изтегляне за офлайн става в инсталираното
    приложение (страницата праща 'download').
    При обновяване: тегли се само променените файлове; старото офлайн копие се пази и използва,
-   докато новото не стане пълно. Файлът се генерира автоматично. Версия: ce54ba1394 */
-const VERSION = 'zikir-ce54ba1394';
+   докато новото не стане пълно. Файлът се генерира автоматично. Версия: 7a57ebd088 */
+const VERSION = 'zikir-7a57ebd088';
 const FILES = [
 [
 "./",
-"f7975942e238"
+"42511f55d65a"
 ],
 [
 "index.html",
-"f7975942e238"
+"42511f55d65a"
 ],
 [
 "abdest.html",
@@ -71,11 +71,15 @@ const FILES = [
 ],
 [
 "mevlid.html",
-"d5f9b7230c86"
+"de88ea199c31"
+],
+[
+"mevlid_osm.html",
+"a0cec8dfa804"
 ],
 [
 "mevlid_tr.html",
-"3c0195bf9055"
+"21fd47489772"
 ],
 [
 "ramazanskadua.html",
@@ -415,7 +419,7 @@ const FILES = [
 ],
 [
 "search.json",
-"a9caa6656fa3"
+"645d39fea19e"
 ]
 ];          // [path, content-hash]
 const MANIFEST = '__manifest__'; // {path: hash} of what this cache holds
